@@ -1,0 +1,18 @@
+{
+  "name": "bikeindustryjobs",
+  "main": "server.js",
+  "description": "Bike industry job aggregator",
+  "license": "MIT",
+  "repository": "https://github.com/grantrules/bikeindustryjobs/",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "express": "~4.15.0",
+    "mocha": "^3.2.0",
+    "mongoose": "^4.11.4",
+    "react": "^15.6.1",
+    "rest": "^2.0.0",
+    "scrape-it": "^3.3.2"
+  }
+}
