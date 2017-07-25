@@ -10,6 +10,10 @@ if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
 
 /*
+https://www.fitzii.com/careers/cervelo/
+^--- seem good to go
+
+https://www.eastoncycling.com/about-us/careers/
 https://www.pinkbike.com/about/jobs/
 ^--- all on one page
 
