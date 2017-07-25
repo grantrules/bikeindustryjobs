@@ -1,6 +1,6 @@
 var scrapeIt = require('scrape-it');
 var mongoose = require('mongoose');
-var Job = require('./job.js');
+var Job = require('./models/job');
 
 var done = 0;
 

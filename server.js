@@ -1,5 +1,5 @@
 var express = require('express');
-var controller = require('./controller');
+var controller = require('./controllers/controller');
 //var bodyParser = require('body-parser');
 
 
