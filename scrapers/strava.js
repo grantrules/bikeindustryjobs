@@ -1,13 +1,14 @@
 var scraper = {
-	company: 'specialized',
-	title: 'Specialized',
-	location: 'Morgan Hill, CA',
-	website: 'http://www.specialized.com',
-	jobs_url: 'https://www.specialized.com/us/en/careers',
-	logo: 'http://i.imgur.com/bBoHPqa.png',
+	company: 'strava',
+	title: 'Strava',
+	location: 'San Francisco, CA',
+	website: 'http://www.strava.com',
+	jobs_url: 'https://boards.greenhouse.io/strava',
+	baseurl: 'https://boards.greenhouse.io/',
+	logo: 'http://i.imgur.com/pJynVs8.png',
 	listscraper: {
 				urls: {
-					listItem: ".open li",
+					listItem: ".opening",
 					data: {
 						url: {
 							selector: "a",
@@ -16,12 +17,11 @@ var scraper = {
 					}
 				}
 	 },
-	relativelinks: false,
+	relativelinks: true,
 	jobscraper: {
 		title: { selector: ".app-title" },
 		description: { selector: "#content", how: "html" },
 		location: { selector: ".location", how:"html" }
-
 	},
 }
 

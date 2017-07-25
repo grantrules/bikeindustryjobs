@@ -7,6 +7,7 @@ var jobSchema = new mongoose.Schema({
     first_seen: { type: Date, default: Date.now },
 	last_seen: { type: Date, default: Date.now },
     company: String,
+	location: String,
 });
 
 module.exports = mongoose.model('Job', jobSchema);

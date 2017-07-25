@@ -10,19 +10,25 @@ if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
 
 /*
-https://www.fitzii.com/careers/cervelo/
 ^--- seem good to go
 
+https://chc.tbe.taleo.net/chc01/ats/careers/searchResults.jsp?org=SHIMANO&cws=1
+^--- maybe multiple pages? also has fish
+
+http://wheelsmfg.com/employment-opportunities
 https://www.eastoncycling.com/about-us/careers/
 https://www.pinkbike.com/about/jobs/
 ^--- all on one page
+
+https://recruiting.ultipro.com/QUA1003QBP/JobBoard/4b01c3ed-7e54-43da-954f-c74c4b3945a6/OpportunityDetail?opportunityId=19b344bd-5891-40ec-9fa0-46d4393c3b98
+^--- json but easy looking to scrape
 
 https://www.giant-bicycles.com/us/job-openings
 
 https://www.brompton.com/About-Us/Careers
 ^--- weird pdfs
 
-
+https://www.fitzii.com/careers/cervelo/
 https://www.trekbikes.com/us/en_US/current_openings?p=jobs&nl=1
 https://www.specialized.com/us/en/careers
 https://www.santacruzbicycles.com/en-US/current-job-openings
@@ -53,12 +59,13 @@ var scrapejobloop = (scraper,urls,index) => {
 						title: page.title,
 						description: page.description,
 						company: scraper.company,
+						location: page.location,
 						last_seen: new Date(),
 						
 						
 					};
 					if (test) {
-						console.log("job test: "+jobData.title);
+						console.log("job test: "+jobData.title + " location: "+page.location);
 					} else {
 						Job.findOneAndUpdate({'url':url}, {$set:jobData,$setOnInsert: {
     						first_seen: new Date()
