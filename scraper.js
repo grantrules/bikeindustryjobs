@@ -6,7 +6,7 @@ var done = 0;
 
 var test = false;
 
-if (!test) mongoose.connect('127.0.0.1/bikeindustryjobs');
+if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
 
 /*
@@ -51,11 +51,14 @@ var scrapejobloop = (scraper,urls,index) => {
 						company: scraper.company,
 						last_seen: new Date(),
 						
+						
 					};
 					if (test) {
 						console.log("job test: "+jobData.title);
 					} else {
-						Job.findOneAndUpdate({'url':url}, {$set:jobData}, {upsert:true}, (err,doc) => {
+						Job.findOneAndUpdate({'url':url}, {$set:jobData,$setOnInsert: {
+    						first_seen: new Date()
+  						}}, {upsert:true}, (err,doc) => {
 							if (err) {
 								console.log(err);
 							}

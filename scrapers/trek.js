@@ -1,5 +1,8 @@
 var scraper = {
 	company: 'trek',
+	title: 'Trek',
+	location: 'Somewhere, I dunno',
+	logo: 'http://i.imgur.com/KmXoVY2.png',
 	jobs_url: 'https://jobs.jobvite.com/trek-bicycle/jobs?nl=1&nl=1',
 	baseurl: 'https://jobs.jobvite.com',
 	listscraper: {

@@ -4,6 +4,7 @@ var scraper = {
 	location: 'Morgan Hill, CA',
 	website: 'http://www.specialized.com',
 	jobs_url: 'https://www.specialized.com/us/en/careers',
+	logo: 'http://i.imgur.com/bBoHPqa.png',
 	listscraper: {
 				urls: {
 					listItem: ".open li",
