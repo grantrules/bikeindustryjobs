@@ -17,7 +17,7 @@ var scraper = {
 	 },
 	relativelinks: false,
 	jobscraper: {
-		title: { selector: "h1"},
+		title: { selector: ".article h1", how: "text" },
 		description: { selector: "p", how: "html" }
 	},
 }

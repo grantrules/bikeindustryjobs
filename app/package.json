@@ -1,0 +1,24 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bloodhound": "^1.0.0",
+    "bloodhound-js": "^1.2.2",
+    "classnames": "^2.2.5",
+    "minified": "^1.0.1",
+    "moment": "^2.18.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-dropdown": "^1.2.5",
+    "react-scripts": "1.0.10",
+    "react-select": "^1.0.0-rc.5",
+    "rest": "^2.0.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

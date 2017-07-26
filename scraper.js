@@ -50,7 +50,6 @@ var scrapejobloop = (scraper,urls,index) => {
 			scraper.jobscraper,
 			(err, page) => {
 				// job page
-				//console.log(err || page);
 		
 				if (!err) {
 					
