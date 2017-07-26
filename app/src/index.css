@@ -11,7 +11,7 @@ body {
 	clear: both;
 }
 
-.jobs ul li a {
+.jobs ul li a.title {
    font-size:16pt;
 }
 /*

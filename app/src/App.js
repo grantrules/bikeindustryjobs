@@ -55,15 +55,17 @@ class Job extends React.Component {
 		
 		{this.titleOrLogo()}
 		<div className="jobdata">
-			<a href={this.derp(this.props.job._id)}  onClick={this.toggle.bind(this)}>{this.props.job.title}</a>
+			<a className="title" href={this.derp(this.props.job._id)}  onClick={this.toggle.bind(this)}>{this.props.job.title}</a>
 
 			<div className="location">
 				{this.props.job.location || this.props.company.location}
 			</div>
 		
 			{!this.state.isHidden && 
-
-			<div ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>}
+				<div>
+				<a href={this.props.job.url}>View and apply on company website</a>
+			<div ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>
+				</div>}
 		</div>
 	  </li>
 	);
