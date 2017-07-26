@@ -1,3 +1,36 @@
+#base { width: 100%; margin: 0 auto;}
+
+ul { padding-left: 0 ;}
+
+.jobs img.logo {
+	width: 100px;
+	float: left;
+}
+.jobdata { padding-left:110px;}
+
+
+@media screen and (min-width: 620px) { 
+	#base { width: 620px; }
+	ul { padding-left: 40px; }
+.jobs img.logo {
+	width: 200px;
+}
+	.jobdata { padding-left:215px;}
+
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) { 
+	#base { width: 660px; }
+
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media screen and (min-width: 1200px) { 
+	#base { width: 730px; }
+
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -23,19 +56,14 @@ body {
     display:block;
 }*/
 
-.jobs img.logo {
-	width: 200px;
-	float: left;
-}
 
-.jobdata { padding-left:215px;}
+
 
 #header {
 	width: 100%;
 	background-color: black;
 }
 
-#root {width: 650px; margin: 0 auto;}
 
 input { width: 100%; padding: 0 10px; margin: 5px 0;   font-size: 18pt;}
 
@@ -136,3 +164,10 @@ input { width: 100%; padding: 0 10px; margin: 5px 0;   font-size: 18pt;}
   display: block;
   padding: 8px 10px;
 }
+
+.navbutton {
+	padding-top:4px;
+	vertical-align: middle;height:36px; background-color: blue; float: right;text-align: center;
+	width: 36px;
+}
+

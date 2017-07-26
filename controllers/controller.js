@@ -22,7 +22,7 @@ exports.getCompanies = (req, res) => {
 exports.getJobs = function(req,res) {
      var daysago = new Date(Date.now() - (5*60*60*24*1000));
      Job.find({last_seen: {$gte : daysago}})
-		 .sort('+first_seen')
+		 .sort('-first_seen')
 		 .exec(function(err, jobs) {
 			if (err)
 				return res.json(err);
