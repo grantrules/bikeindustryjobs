@@ -25,6 +25,7 @@ https://recruiting.ultipro.com/QUA1003QBP/JobBoard/4b01c3ed-7e54-43da-954f-c74c4
 
 https://www.giant-bicycles.com/us/job-openings
 
+http://www.finishlineusa.com/resources/careers.php
 https://www.brompton.com/About-Us/Careers
 ^--- weird pdfs
 
@@ -32,7 +33,7 @@ https://www.fitzii.com/careers/cervelo/
 https://www.trekbikes.com/us/en_US/current_openings?p=jobs&nl=1
 https://www.specialized.com/us/en/careers
 https://www.santacruzbicycles.com/en-US/current-job-openings
-
+^--- donezo
 
 
 */
@@ -74,13 +75,12 @@ var scrapejobloop = (scraper,urls,index) => {
 							}
 							else {
 								if (doc == null) {
-									// newly created
 									console.log("new job added: "+jobData.title);
 								} else {
-									// updated
 									console.log("job updated: "+jobData.title);
 								}
 							}
+							
 						});
 					}
 				}
