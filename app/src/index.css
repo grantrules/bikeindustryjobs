@@ -9,6 +9,29 @@ ul { padding-left: 0 ;}
 .jobdata { padding-left:110px;}
 
 
+@keyframes nav {
+    from {width: 50px;}
+    to {width: 110px;}
+}
+
+@keyframes nav2 {
+    from {width: 110px;}
+    to {width: 50px;}
+}
+
+div.navbutton {
+	overflow: hidden;
+	animation-name: nav2;
+    animation-duration: 1s;
+	width: 50px;
+}
+
+div.navbutton:hover {
+	animation-name: nav;
+    animation-duration: 1s;
+	width: 110px;
+}
+
 @media screen and (min-width: 620px) { 
 	#base { width: 620px; }
 	ul { padding-left: 40px; }
