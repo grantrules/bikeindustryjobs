@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Select from 'react-select';
+//import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import Dropdown from 'react-dropdown'
+
+import T from './Tags';
+var Tags = T.Tags;
+var Tag = T.Tag;
 
 
 var rest, mime, client;
@@ -16,6 +20,7 @@ var Moment = require('moment');
 
  
 client = rest.wrap(mime);
+
 
 class Job extends React.Component {
 	
@@ -44,8 +49,7 @@ class Job extends React.Component {
 	}
 	
 	render() {
-		
-		
+		var tagsreact = this.props.job.tags ? this.props.job.tags.map((e) => { return (<Tag key={e.name} tag={e}/>)}) : [];
 		
 		return (
 		
@@ -60,6 +64,11 @@ class Job extends React.Component {
 			<div className="location">
 				{this.props.job.location || this.props.company.location}
 			</div>
+			<ul className="tags">
+			{tagsreact}
+			</ul>
+			
+				
 		
 			{!this.state.isHidden && 
 				<div>
@@ -115,7 +124,7 @@ class JobList extends React.Component {
 			var cleandate = new Date(job.first_seen).toDateString();
 			var date = cleandate !== last;
 			last = cleandate;
-			return ( <Job job={job} updatedate={date} company={this.getCompany(job.company)}/>)
+			return ( <Job key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>)
 			
 			
 		});
@@ -193,6 +202,8 @@ class Jobs extends React.Component {
 		 <div className="jobs">
 			 <Search filter={this.filter.bind(this)}/>
 			<CompanyList companies={this.state.companies} setCompany={this.setCompany.bind(this)}/>
+			<Tags jobs={this.state.jobs}/>
+
 			 
 		<JobList jobs={this.state.filterJobs} companies={this.state.companies}/>
       </div>
