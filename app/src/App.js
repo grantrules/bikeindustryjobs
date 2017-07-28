@@ -94,11 +94,10 @@ class Job extends React.Component {
 			
 				
 		
-			{!this.state.isHidden && 
-				<div className="description">
+				<div className={"description "+(this.state.isHidden ? "deschidden" : "descvisible")}>
 				<a href={this.props.job.url}>View and apply on company website</a>
-			<div ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>
-				</div>}
+			<div className="descriptiontext" ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>
+				</div>
 		</div>
 	  </li>
 	);
@@ -128,11 +127,7 @@ class CompanyList extends React.Component {
 		this.setState({selected: option});
 		this.props.setCompany(option.value);
 	}
-	/*
-	_onSelect(e) {
-		this.props.setCompany(e.value);
-	}
-	*/
+	
 	render() {
 				
 		var options =[{value:'All', label:'All companies'}].concat(this.props.companies.map((company)=>{return {value:company.company, label:company.title}}));
