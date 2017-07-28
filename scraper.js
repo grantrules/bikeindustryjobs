@@ -103,7 +103,7 @@ var scrapejobs = (scraper,company,err,page) => {
 	var urls = page.urls.map((e) => { return (scraper.relativelinks ? scraper.baseurl : '') + e.url });
 	
 	rt++;
-	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { /* process.exit(); */ }});
+	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { process.exit();  }});
 }
 
 /* pull companies from db with hasScraper,
