@@ -1,8 +1,4 @@
 var scraper = {
-	company: 'cervelo',
-	title: 'Cervelo',
-	location: 'Cervelo, Canada',
-	//logo: 'http://i.imgur.com/AjKwOfi.png',
 	jobs_url: 'https://www.fitzii.com/careers/cervelo/',
 	baseurl: 'https://www.fitzii.com',
 	listscraper: {

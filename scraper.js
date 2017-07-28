@@ -1,6 +1,7 @@
 var scrapeIt = require('scrape-it');
 var mongoose = require('mongoose');
 var Job = require('./models/job');
+var Company = require('./models/company');
 
 var done = 0;
 
@@ -8,7 +9,7 @@ var test = false;
 
 if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
-// request tracker
+// request tracker so i know when it's safe to exit
 var rt = 0;
 
 
@@ -42,13 +43,10 @@ https://www.santacruzbicycles.com/en-US/current-job-openings
 */
 
 
-
-
-var scrapers = require('./scrapers/scrapers');
-
-var scrapejobloop = (scraper,urls,index,callback) => {
+/* recursive function to iterate through job urls */
+var scrapejobloop = (scraper,company,urls,index,callback) => {
 	var url = urls[index++];
-	if (typeof url == "undefined") { callback(); return }
+	if (typeof url == "undefined") { return callBack(); }
 	
 	scrapeIt(url,
 			scraper.jobscraper,
@@ -61,7 +59,7 @@ var scrapejobloop = (scraper,urls,index,callback) => {
 						url: url,
 						title: page.title,
 						description: page.description,
-						company: scraper.company,
+						company: company.company,
 						location: page.location,
 						last_seen: new Date(),
 						
@@ -89,30 +87,40 @@ var scrapejobloop = (scraper,urls,index,callback) => {
 				}
 		
 				// move this into the update?
-				scrapejobloop(scraper,urls,index,callback);
+				scrapejobloop(scraper,company,urls,index,callback);
 			}
 	);
 }
 
-var scrapejobs = (scraper,err,page) => {
+/* callback for main job page request,
+   find job urls and scrape those */
+var scrapejobs = (scraper,company,err,page) => {
 	if (err) {
 		return console.log(err);
 	}
-	console.log(`found ${page.urls.length} jobs`);
+	console.log(`found ${page.urls.length} ${company.company} jobs`);
 	
 	var urls = page.urls.map((e) => { return (scraper.relativelinks ? scraper.baseurl : '') + e.url });
-
-	scrapejobloop(scraper,urls,0,()=>{rt--; if (--rt <1) { process.exit(); }});
+	
+	rt++;
+	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { /* process.exit(); */ }});
 }
 
-
-scrapers.forEach((scraper) => {
-	rt++;
-	console.log('scraping '+scraper.company);
-	scrapeIt(
-		scraper.jobs_url,
-		scraper.listscraper,
-		(err,page) => { scrapejobs(scraper,err,page); }
-	);
-	
-});
+/* pull companies from db with hasScraper,
+   scrape main job page */
+Company.find({'hasScraper': true},(err,res)=>{
+	if (res) {
+		res.forEach((company) => {
+		
+			var scraper = require(`./scrapers/${company.company}`)
+			
+			console.log('scraping '+company.company);
+			
+			scrapeIt(
+				scraper.jobs_url,
+				scraper.listscraper,
+				(err,page) => scrapejobs(scraper,company,err,page)
+			);
+		})
+	}
+})

@@ -1,25 +1,15 @@
 var Job = require('../models/job');
+var Company = require('../models/company');
+
 
 // GET /api/companies
 exports.getCompanies = (req, res) => {
-	var scrapers = require('../scrapers/scrapers');
-	var companies = scrapers.map((company) => {
-				
-		return {
-			company: company.company,
-			title: company.title,
-			location: company.location,
-			website: company.website,
-			logo: company.logo,
-		}
-
-	});
-	res.json(companies);
+	Company.find({},(err,companies)=>res.json(err || companies))
 }
 
 
 // GET /api/jobs
-exports.getJobs = function(req,res) {
+exports.getJobs = (req,res) => {
      var daysago = new Date(Date.now() - (5*60*60*24*1000));
      Job.find({last_seen: {$gte : daysago}})
 		 .sort('-first_seen')
