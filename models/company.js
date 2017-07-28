@@ -7,7 +7,7 @@ var companySchema = new mongoose.Schema({
 	website: String,
     about: String,
 	jobs_url: String,
-    thumbnail: String,
+    logo: String,
 	hasScraper: Boolean,
 });
 
