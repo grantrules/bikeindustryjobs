@@ -116,16 +116,30 @@ class Search extends React.Component {
 }
 
 class CompanyList extends React.Component {
+	constructor (props) {
+		super(props)
+		this.state = {
+			selected: null
+		}
+		this._onSelect = this._onSelect.bind(this)
+	}
+
+	_onSelect (option) {
+		this.setState({selected: option});
+		this.props.setCompany(option.value);
+	}
+	/*
 	_onSelect(e) {
 		this.props.setCompany(e.value);
 	}
+	*/
 	render() {
-		
+				
 		var options =[{value:'All', label:'All companies'}].concat(this.props.companies.map((company)=>{return {value:company.company, label:company.title}}));
 		
 		return (
 			<div>
-			<Dropdown options={options} onChange={this._onSelect.bind(this)} placeholder="Companies..."/>
+			<Dropdown options={options} onChange={this._onSelect} value={this.state.selected} placeholder="Companies..."/>
 			</div>
 		);
 	}
