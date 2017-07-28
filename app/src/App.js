@@ -1,21 +1,42 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+
 import Dropdown from 'react-dropdown'
 
+import T from './Tags';
+var Tags = T.Tags;
+var Tag = T.Tag;
 
+
+/* ajax */
 var rest, mime, client;
  
 rest = require('rest');
 mime = require('rest/interceptor/mime');
+client = rest.wrap(mime);
 
+
+/* search engine */
 var Bloodhound = require('bloodhound-js');
+
+/* time prettifier */
 var Moment = require('moment');
 
+/* DELETE THIS SHIT */
+var testinghost = (window.location.origin == 'http://localhost:3000' ? 'http://localhost:9004' : '');
 
  
-client = rest.wrap(mime);
+
+function hasTag(job,tag) {
+	
+	return job.tags && job.tags.filter(
+		e => (typeof tag == "object"
+			  && typeof tag.name == "string"
+			  	? tag.name : tag
+			).indexOf(e.name) > 0
+	);
+}
+
 
 class Job extends React.Component {
 	
@@ -27,6 +48,12 @@ class Job extends React.Component {
 	}
 	
 	derp(e) { return '#'+e; }
+	
+	
+	hasTag(tag) {
+		return hasTag(this.props.job,tag);
+		//return this.props.job.tags && this.props.job.tags.map(e => e.name).indexOf(typeof tag == "object" ? tag.name : tag) > -1;
+	}
 	
 	titleOrLogo() {
 		return (this.props.company.logo ?
@@ -46,6 +73,7 @@ class Job extends React.Component {
 	render() {
 		
 		
+		var tagsreact = this.props.job.tags ? this.props.job.tags.map((e) => { return (<Tag key={e.name} tag={e}/>)}) : [];
 		
 		return (
 		
@@ -60,9 +88,14 @@ class Job extends React.Component {
 			<div className="location">
 				{this.props.job.location || this.props.company.location}
 			</div>
+			<ul className="tags">
+			{tagsreact}
+			</ul>
+			
+				
 		
 			{!this.state.isHidden && 
-				<div>
+				<div className="description">
 				<a href={this.props.job.url}>View and apply on company website</a>
 			<div ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>
 				</div>}
@@ -115,7 +148,7 @@ class JobList extends React.Component {
 			var cleandate = new Date(job.first_seen).toDateString();
 			var date = cleandate !== last;
 			last = cleandate;
-			return ( <Job job={job} updatedate={date} company={this.getCompany(job.company)}/>)
+			return ( <Job key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>)
 			
 			
 		});
@@ -131,40 +164,114 @@ class JobList extends React.Component {
 class Jobs extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {companies: [], jobs: [], filterJobs: [], company: '', search: ''};
+		this.state = {companies: [], jobs: [], filterJobs: [], tags: [], tagsEnabled: [], company: '', search: ''};
 	}
 	
-	filter(input) {
-		this.setState({search: input});
-		if (!input) {
-			this.updateJobs(this.state.jobs);
+	
+	/* turns		
+		[ {tags:[{name:'a', label:'a'},{name:'b', label:'v'}]},
+		  {tags:[{name:'a', label:'a'},{name:'c', label:'c'}]} ]
+	   into
+		[ {name:'a', label:'a', total:2},
+		  {name:'b', label:'b', total:1},
+		  {name:'c', label:'c', total:1} ] */
+	getTags(objArray) {
+		
+		var totals = [];
+		var tags = [];
+		for (var job in objArray) {
+			if (objArray[job] && objArray[job].tags) {
+				tags = tags.concat(objArray[job].tags);
+			}
+		}
+		var uniquetags = [];
+		
+		tags.forEach((tag)=>{
+			if (totals[tag.name]) {
+				totals[tag.name]++;
+			} else {
+				totals[tag.name] = 1;
+				uniquetags = uniquetags.concat(tag);
+			}
+
+
+		});
+		return uniquetags.map((tag) => { tag.totals = totals[tag.name]; return tag; })
+
+	}
+	
+	/* search/filtering stuff */
+	
+	
+	/* callback for state change of search filter */
+	filterCallback() {
+		this.filter(this.state.search, this.state.company, this.state.tagsEnabled);
+	}
+	
+	/* if search is empty, directly update,
+	   callback for searchengine */
+	filter(search, company, tags) {
+
+		if (!search) {
+			this.updateJobs(this.state.jobs, company, tags);
 		} else {
-			this.state.engine.search(input, (d) => {
-				this.updateJobs(d);
+			this.state.engine.search(search, (d) => {
+				this.updateJobs(d, company, tags);
 			  }, function(d) {});
 		}
 		
-		
 	}
 	
-	updateJobs(jobs) {
-		if (this.state.company) {
-			jobs = jobs.filter((job)=>{return job.company == this.state.company});
-		}
+	/* filters array of jobs
+	   checks for no c
+	*/
+	updateJobs(jobs,company,tags) {
+		
+		
+		// no tags or all tags = no search
+		var tagsearch = typeof tags != "undefined" && tags.length > 0 && tags.length != this.state.tags.length;
+		var companysearch = company != "";
+		
+		
+		jobs = jobs.filter(job=>!companysearch || job.company == company ? !tagsearch || hasTag(job,tags) : false)
+		
+		
 		this.setState({filterJobs: jobs});
 		
 	}
 	
-	setCompany(company) {
-		company = (!company || company == 'All' ? '' : company);
-		this.setState({company: company},()=>{		
-			this.filter(this.state.search);
-		});
+	/* callback for <Search onChange/> */
+	search(input) {
+		this.setState({search: input},this.filterCallback);
+
 	}
 	
-	startEngine() {
+	/* callback for <TagList onClick/> */
+	toggleTag(enabled, tag) {
+		var tags = this.state.tagsEnabled;
+
+		if (enabled) {
+			tags.push(tag.name)
+		} else {
+			tags = tags.filter(e=>e!=tag.name);
+		}
+		this.setState({tagsEnabled: tags},this.filterCallback);
+				
+	}
+	
+	/* callback for <CompanyList setCompany/> */
+	setCompany(company) {
+		company = (!company || company == 'All' ? '' : company);
+		
+		this.setState({company: company},this.filterCallback);
+	}
+	
+	
+
+	/* initialize search engine with data */
+	startEngine(jobs) {
 			var engine = new Bloodhound({
-				local: this.state.jobs,
+				local: jobs,
 				queryTokenizer: Bloodhound.tokenizers.whitespace,
 				datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['title','description']),
 			});
@@ -172,33 +279,51 @@ class Jobs extends React.Component {
 			this.setState({engine:engine});
 	}
 	
+	/* implemented from react.component */
 	componentDidMount() {
-		client({method: 'GET', path: 'http://localhost:9004/api/companies'}).then((response) => {
+		client({method: 'GET', path: testinghost + '/api/companies'}).then((response) => {
 			this.setState({companies: response.entity});
 		});
 		
-		client({method: 'GET', path: 'http://localhost:9004/api/jobs'}).then((response) => {
-			this.setState({jobs: response.entity, filterJobs: response.entity});
+		client({method: 'GET', path: testinghost + '/api/jobs'}).then((response) => {
 			
-			this.startEngine();
+			var tags = this.getTags(response.entity);
+			var tagsEnabled = tags.map(e=>e.name);
+			
+			this.setState({jobs: response.entity, filterJobs: response.entity,
+						  tags: tags, tagsEnabled: tagsEnabled, });
+			this.startEngine(response.entity);
 
 		});
 		
 	}
 		
-  render() {
+	render() {
 	  
 	  
-	 return (
+		return (
 		 <div className="jobs">
-			 <Search filter={this.filter.bind(this)}/>
-			<CompanyList companies={this.state.companies} setCompany={this.setCompany.bind(this)}/>
-			 
-		<JobList jobs={this.state.filterJobs} companies={this.state.companies}/>
-      </div>
-	  );
+			<Search filter={this.search.bind(this)}/>
+
+			<CompanyList
+				companies={this.state.companies}
+				setCompany={this.setCompany.bind(this)}
+			/>
+
+			<Tags
+				onClick={this.toggleTag.bind(this)}
+				tags={this.state.tags}
+				tagsEnabled={this.state.tagsEnabled}
+			/>
+
+			 <JobList
+				jobs={this.state.filterJobs}
+				companies={this.state.companies}
+			/>
+		</div>
+		);
 	  
-  }
+  	}
 }
 
 // ========================================

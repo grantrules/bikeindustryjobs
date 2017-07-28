@@ -1,6 +1,30 @@
 #base { width: 100%; margin: 0 auto;}
 
+.tagItem {background-color: cornflowerblue; border-radius: 7px; padding: 3px 10px; margin: 2px;}
+
+
+@keyframes tagenable {
+	from {background-color: #eee;}
+	to {background-color:cornflowerblue;}
+}
+
+#taglist span.enabled {
+	animation-duration: 70ms;
+  animation-name: tagenable;
+	background-color: cornflowerblue;
+}
+#taglist span.disabled {
+	animation-duration: 70ms;
+	animation-direction: reverse;
+  animation-name: tagenable;
+	background-color: #eee;
+}
+#taglist { margin: 5px 0; }
 ul { padding-left: 0 ;}
+
+.jobs ul li a.title {
+   font-size:14pt;
+}
 
 .jobs img.logo {
 	width: 100px;
@@ -12,10 +36,13 @@ ul { padding-left: 0 ;}
 @media screen and (min-width: 620px) { 
 	#base { width: 620px; }
 	ul { padding-left: 40px; }
-.jobs img.logo {
-	width: 200px;
-}
+	.jobs img.logo {
+		width: 200px;
+	}
 	.jobdata { padding-left:215px;}
+	.jobs ul li a.title {
+		font-size:16pt;
+	}
 
 }
 
@@ -44,9 +71,7 @@ body {
 	clear: both;
 }
 
-.jobs ul li a.title {
-   font-size:16pt;
-}
+
 /*
 .jobs ul li div {
     xdisplay:none;
