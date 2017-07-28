@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var Job = require('./models/job');
 var Company = require('./models/company');
 
+var totals = {added:0, updated:0}
+
 var done = 0;
 
 var test = false;
@@ -76,9 +78,11 @@ var scrapejobloop = (scraper,company,urls,index,callback) => {
 							}
 							else {
 								if (doc == null) {
-									console.log("new job added: "+jobData.title);
+									totals.added++;
+									//console.log("new job added: "+jobData.title);
 								} else {
-									console.log("job updated: "+jobData.title);
+									totals.updated++;
+									//console.log("job updated: "+jobData.title);
 								}
 							}
 							
