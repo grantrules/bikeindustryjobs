@@ -8,6 +8,9 @@ var test = false;
 
 if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
+// request tracker
+var rt = 0;
+
 
 /*
 ^--- seem good to go
@@ -43,9 +46,9 @@ https://www.santacruzbicycles.com/en-US/current-job-openings
 
 var scrapers = require('./scrapers/scrapers');
 
-var scrapejobloop = (scraper,urls,index) => {
+var scrapejobloop = (scraper,urls,index,callback) => {
 	var url = urls[index++];
-	if (typeof url == "undefined") { return }
+	if (typeof url == "undefined") { callback(); return }
 	
 	scrapeIt(url,
 			scraper.jobscraper,
@@ -86,7 +89,7 @@ var scrapejobloop = (scraper,urls,index) => {
 				}
 		
 				// move this into the update?
-				scrapejobloop(scraper,urls,index);
+				scrapejobloop(scraper,urls,index,callback);
 			}
 	);
 }
@@ -99,16 +102,17 @@ var scrapejobs = (scraper,err,page) => {
 	
 	var urls = page.urls.map((e) => { return (scraper.relativelinks ? scraper.baseurl : '') + e.url });
 
-	scrapejobloop(scraper,urls,0);
+	scrapejobloop(scraper,urls,0,()=>{rt--; if (--rt <1) { process.exit(); }});
 }
 
 
 scrapers.forEach((scraper) => {
+	rt++;
 	console.log('scraping '+scraper.company);
 	scrapeIt(
 		scraper.jobs_url,
 		scraper.listscraper,
-		(err,page) => { return scrapejobs(scraper,err,page); }
+		(err,page) => { scrapejobs(scraper,err,page); }
 	);
 	
 });
