@@ -46,7 +46,7 @@ https://www.santacruzbicycles.com/en-US/current-job-openings
 /* recursive function to iterate through job urls */
 var scrapejobloop = (scraper,company,urls,index,callback) => {
 	var url = urls[index++];
-	if (typeof url == "undefined") { return callBack(); }
+	if (typeof url == "undefined") { return callback(); }
 	
 	scrapeIt(url,
 			scraper.jobscraper,
