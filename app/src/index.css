@@ -2,6 +2,8 @@
 
 .tagItem {background-color: cornflowerblue; border-radius: 7px; padding: 3px 10px; margin: 2px;}
 
+.deschidden { display: none; }
+
 
 @keyframes tagenable {
 	from {background-color: #eee;}
