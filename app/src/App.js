@@ -64,10 +64,11 @@ class Job extends React.Component {
 			   );
 	}
 	
-	toggle() {
+	toggle(e) {
 		this.setState({
 			isHidden: !this.state.isHidden
     	});
+		e.preventDefault();
 	}
 	
 	render() {
