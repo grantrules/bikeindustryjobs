@@ -3,7 +3,6 @@ var mongoose = require('mongoose');
 var Job = require('./models/job');
 var Company = require('./models/company');
 
-var totals = {added:0, updated:0}
 
 var done = 0;
 
@@ -50,19 +49,18 @@ var scrapejobloop = (scraper,company,urls,index,callback) => {
 	var url = urls[index++];
 	if (typeof url == "undefined") { return callback(); }
 	
-	scrapeIt(url,
+	scrapeIt(url.url,
 			scraper.jobscraper,
 			(err, page) => {
 				// job page
 		
 				if (!err) {
-					
 					var jobData = {
-						url: url,
+						url: url.url,
 						title: page.title,
 						description: page.description,
 						company: company.company,
-						location: page.location,
+						location: page.location || url.location,
 						last_seen: new Date(),
 						
 						
@@ -70,7 +68,7 @@ var scrapejobloop = (scraper,company,urls,index,callback) => {
 					if (test) {
 						console.log("job test: "+jobData.title + " location: "+page.location);
 					} else {
-						Job.findOneAndUpdate({'url':url}, {$set:jobData,$setOnInsert: {
+						Job.findOneAndUpdate({'url':url.url}, {$set:jobData,$setOnInsert: {
     						first_seen: new Date()
   						}}, {upsert:true}, (err,doc) => {
 							if (err) {
@@ -78,11 +76,9 @@ var scrapejobloop = (scraper,company,urls,index,callback) => {
 							}
 							else {
 								if (doc == null) {
-									totals.added++;
-									//console.log("new job added: "+jobData.title);
+									console.log("new job added: "+jobData.title);
 								} else {
-									totals.updated++;
-									//console.log("job updated: "+jobData.title);
+									console.log("job updated: "+jobData.title);
 								}
 							}
 							
@@ -104,7 +100,7 @@ var scrapejobs = (scraper,company,err,page) => {
 	}
 	console.log(`found ${page.urls.length} ${company.company} jobs`);
 	
-	var urls = page.urls.map((e) => { return (scraper.relativelinks ? scraper.baseurl : '') + e.url });
+	var urls = page.urls.map((e) => { e.url = (scraper.relativelinks ? scraper.baseurl : '') + e.url.replace(/;jsessionid=[A-Z0-9]+/, ''); return e; });
 	
 	rt++;
 	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { process.exit();  }});

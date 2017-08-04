@@ -3,11 +3,14 @@ var scraper = {
 	baseurl: 'https://jobs.jobvite.com',
 	listscraper: {
 				urls: {
-					listItem: ".jv-job-list-name",
+					listItem: ".jv-job-list tr",
 					data: {
 						url: {
 							selector: "a",
 							attr: "href"
+						},
+						location: {
+							selector: ".jv-job-list-location"
 						}
 					}
 				}
