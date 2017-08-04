@@ -62,15 +62,12 @@ var saveJob = (company,url,page) => {
 
 	};
 	
-	console.log(jobData);
 	if (test) {
 		console.log("job test: "+jobData.title + " location: "+page.location);
 	} else {
-		console.log('hello');
 		Job.findOneAndUpdate({'url':url.url}, {$set:jobData,$setOnInsert: {
 			first_seen: new Date()
 		}}, {upsert:true}, (err,doc) => {
-			console.log('hi');
 			if (err) {
 				console.log(err);
 			}
