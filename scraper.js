@@ -44,52 +44,79 @@ https://www.santacruzbicycles.com/en-US/current-job-openings
 */
 
 
-/* recursive function to iterate through job urls */
+/* save job */
+
+var saveJob = (company,url,page) => {
+
+	if (page == null) {
+		page = {};
+	}
+	var jobData = {
+		url: url.url,
+		title: page.title || url.title,
+		description: page.description || url.description,
+		company: company.company,
+		location: page.location || url.location,
+		last_seen: new Date(),
+
+
+	};
+	
+	console.log(jobData);
+	if (test) {
+		console.log("job test: "+jobData.title + " location: "+page.location);
+	} else {
+		console.log('hello');
+		Job.findOneAndUpdate({'url':url.url}, {$set:jobData,$setOnInsert: {
+			first_seen: new Date()
+		}}, {upsert:true}, (err,doc) => {
+			console.log('hi');
+			if (err) {
+				console.log(err);
+			}
+			else {
+				if (doc == null) {
+					console.log("new job added: "+jobData.title);
+				} else {
+					console.log("job updated: "+jobData.title);
+				}
+			}
+
+		});
+	}
+}
+
+
+
+/* recursive function to iterate through job urls,
+   scrape using jobscraper if it exists, otherwise save job */
 var scrapejobloop = (scraper,company,urls,index,callback) => {
 	var url = urls[index++];
+	
+	// bad place for this, this can get called before everything's done scraping.
+	// i just gave it a timeout of 30 seconds before quitting
+	// but this really needs to move
 	if (typeof url == "undefined") { return callback(); }
 	
-	scrapeIt(url.url,
-			scraper.jobscraper,
-			(err, page) => {
-				// job page
-		
-				if (!err) {
-					var jobData = {
-						url: url.url,
-						title: page.title,
-						description: page.description,
-						company: company.company,
-						location: page.location || url.location,
-						last_seen: new Date(),
-						
-						
-					};
-					if (test) {
-						console.log("job test: "+jobData.title + " location: "+page.location);
-					} else {
-						Job.findOneAndUpdate({'url':url.url}, {$set:jobData,$setOnInsert: {
-    						first_seen: new Date()
-  						}}, {upsert:true}, (err,doc) => {
-							if (err) {
-								console.log(err);
-							}
-							else {
-								if (doc == null) {
-									console.log("new job added: "+jobData.title);
-								} else {
-									console.log("job updated: "+jobData.title);
-								}
-							}
-							
-						});
+	if (scraper.jobscraper) {
+
+		scrapeIt(url.url,
+				scraper.jobscraper,
+				(err, page) => {
+					// job page
+
+					if (!err) {
+						saveJob(company,url,page);
 					}
+
+					// move this into the update?
+					scrapejobloop(scraper,company,urls,index,callback);
 				}
-		
-				// move this into the update?
-				scrapejobloop(scraper,company,urls,index,callback);
-			}
-	);
+		);
+	} else {
+		saveJob(company,url,null);
+		scrapejobloop(scraper,company,urls,index,callback);
+	}
 }
 
 /* callback for main job page request,
@@ -103,7 +130,7 @@ var scrapejobs = (scraper,company,err,page) => {
 	var urls = page.urls.map((e) => { e.url = (scraper.relativelinks ? scraper.baseurl : '') + e.url.replace(/;jsessionid=[A-Z0-9]+/, ''); return e; });
 	
 	rt++;
-	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { process.exit();  }});
+	scrapejobloop(scraper,company,urls,0,()=>{if (--rt <1) { setTimeout(()=>{process.exit();},30000)  }});
 }
 
 /* pull companies from db with hasScraper,
@@ -111,7 +138,6 @@ var scrapejobs = (scraper,company,err,page) => {
 Company.find({'hasScraper': true},(err,res)=>{
 	if (res) {
 		res.forEach((company) => {
-		
 			var scraper = require(`./scrapers/${company.company}`)
 			
 			console.log('scraping '+company.company);
