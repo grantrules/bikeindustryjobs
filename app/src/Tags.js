@@ -46,4 +46,4 @@ class Tags  extends React.Component {
 	}
 }
 	
-export default {Tag, Tags}
+export {Tag, Tags}
