@@ -3,10 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Dropdown from 'react-dropdown'
 
-import T from './Tags';
-var Tags = T.Tags;
-var Tag = T.Tag;
-
+import { Tag, Tags } from './Tags';
 
 /* ajax */
 var rest, mime, client;

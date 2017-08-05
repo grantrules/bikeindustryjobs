@@ -8,7 +8,11 @@ class Tag extends React.Component {
 		this.state = { enabled: true };
 	}
 	
-	toggleState() { var enabled = !this.state.enabled; this.setState({enabled:enabled}); return enabled; }
+	toggleState() { 
+		var enabled = !this.state.enabled;
+		this.setState({enabled});
+		return enabled;
+	}
 	
 	render() {
 		return (
@@ -25,37 +29,20 @@ class Tags  extends React.Component {
 		this.state = {};
 	}
 	
-	
-	
-	render() {
-		var uniquetags = this.props.tags;
-		/*
-		var jobs = this.props.jobs;
-		var uniquetags = this.getTags(jobs);
-		console.log('uniquetags');
-		console.log(uniquetags);
-		*/
-		
-		
+	render() {		
 		var reacttags = [];
 		
-			reacttags = uniquetags.map((tag) => {
-				return ( <Tag onClick={this.props.onClick} key={tag.name} tag={tag}/>)
-			
-			
-			});
-			
-		
-		
-		
-		
+		reacttags = this.props.tags.map((tag) => {
+			return ( <Tag onClick={this.props.onClick} key={tag.name} tag={tag}/>)
+
+
+		});		
 		
 		return (reacttags ?
 			<div id="taglist">
 					{reacttags}
 			</div> : null
 		)
-		
 	}
 }
 	
