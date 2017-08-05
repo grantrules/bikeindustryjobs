@@ -4,7 +4,7 @@ var Company = require('../models/company');
 
 // GET /api/companies
 exports.getCompanies = (req, res) => {
-	Company.find({},(err,companies)=>res.json(err || companies))
+	Company.find({}).sort('title').exec((err,companies)=>res.json(err || companies))
 }
 
 
