@@ -6,9 +6,6 @@ var test = false;
 
 if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
 
-// request tracker so i know when it's safe to exit
-
-
 /*
 ^--- seem good to go
 
@@ -125,14 +122,16 @@ Company.find({'hasScraper': true},(err,res)=>{
 		var js = new jobsaver();
 		
 		res.forEach((company) => {
-			var scraper = require(`./scrapers/${company.company}`)
-			var s = new scraper(company);
+			var scraper = require(`./scrapers/${company.company}`);
+			console.log('scraping '+company.company);
 			started(company.company);
 			
-			//s.process(saveJobs);
-			s.process(js.add.bind(js),()=>{completed(company.company)})
+			var s = new scraper(company);
+			s.process(
+				js.add.bind(js),
+				()=>{completed(company.company)}
+			)
 			
-			console.log('scraping '+company.company);
 			
 			
 		})
