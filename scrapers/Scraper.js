@@ -9,9 +9,9 @@ class Scraper {
 		this.jobs = [];
 	}
 	
-	process(callback) {
-		this.callback = callback;
-		
+	process(saveJobCallback,allDoneCallback) {
+		this.saveJobCallback = saveJobCallback;
+		this.allDoneCallback = allDoneCallback;
 	}
 	
 	getFullUrl(url) {
@@ -41,13 +41,12 @@ class JSONScraper extends Scraper {
 		return json[this.listprop];
 	}
 	
-	process(callback) {
-		this.callback = callback;
+	process(saveJobCallback,allDoneCallback) {
 		request(this.jobs_url,  (err, res, body) => {
 			// parse json
 			var json = JSON.parse(body);
-			var jobs = this.getListFromJson(json).map(j=>this.getJobData(j));
-			this.callback(jobs);
+			this.getListFromJson(json).forEach(j=>saveJobCallback(this.getJobData(j)));
+			allDoneCallback();
 			
 		});
 	}
@@ -80,8 +79,9 @@ class HTMLScraper extends Scraper {
 		
 	}
 	
-	process(callback) {
-		this.callback = callback;
+	process(saveJobCallback,allDoneCallback) {
+		this.saveJobCallback = saveJobCallback;
+		this.allDoneCallback = allDoneCallback;
 		scrapeIt(
 				this.jobs_url,
 				this.listscraper,
@@ -101,7 +101,7 @@ class HTMLScraper extends Scraper {
 				location: page.location || url.location,
 				last_seen: new Date(),
 			};
-			this.jobs.push(jobData);
+			this.saveJobCallback(jobData);
 		}
 		this.scrapeJobLoop();
 	}
@@ -111,13 +111,17 @@ class HTMLScraper extends Scraper {
 		var {value,done} = this.urlsIterator.next();
 		var url = value;
 		if (done) {
-			return this.callback(this.jobs);
+			this.allDoneCallback();
+			//return this.callback(this.jobs);
 		}
+		
+		if (url) {
 
-		scrapeIt(url.url,
-				this.jobscraper,
-				(err,page) => this.scrapeJobPage(url,err,page)
-		);
+			scrapeIt(url.url,
+					this.jobscraper,
+					(err,page) => this.scrapeJobPage(url,err,page)
+			);
+		}
 
 	}
 	
