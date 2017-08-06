@@ -1,6 +1,12 @@
-var scraper = {
-	jobs_url: 'http://www.jbi.bike/site/careers.php',
-	listscraper: {
+var Scraper = require('./Scraper');
+
+class scraper extends Scraper.HTMLScraper {
+	
+	
+	constructor(company) {
+		super(company);
+		this.jobs_url = 'http://www.jbi.bike/site/careers.php',
+		this.listscraper = {
 				urls: {
 					listItem: ".panel",
 					data: {
@@ -19,9 +25,10 @@ var scraper = {
 						}
 					}
 				}
-	 },
-	relativelinks: true,
-	baseurl: 'http://www.jbi.bike/site/careers.php',
+	 	};
+		this.relativelinks = true;
+		this.baseurl = 'http://www.jbi.bike/site/careers.php';
+	}
 }
 
 module.exports = scraper;
