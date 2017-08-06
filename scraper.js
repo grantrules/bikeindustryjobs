@@ -67,12 +67,14 @@ class jobsaver {
 			return;
 		}
 		this.jobQueue.push(...job);
-		if (this.done) this.start();
+		this.start();
 	}
 	
 	start() {
-		this.done = false;
-		this.saveJob();
+		if (this.done) {
+			this.done = false;
+			this.saveJob();
+		}
 	}
 	
 	stop() {
@@ -91,23 +93,25 @@ class jobsaver {
 		
 		if (job == undefined) { this.stop(); return; }
 		
-		Job.findOneAndUpdate({'url':job.url}, {$set:job,$setOnInsert: {
-			first_seen: new Date()
-		}}, {upsert:true}, (err,doc) => {
-			if (err) {
-				console.log(err);
-			}
-			else {
-				if (doc == null) {
-					console.log("new job added: "+job.title);
-				} else {
-					console.log("job updated: "+job.title);
+		Job.findOneAndUpdate(
+			{'url':job.url},
+			{$set:job,$setOnInsert: {first_seen: new Date()}},
+			{upsert:true},
+			
+			(err,doc) => {
+				if (err) {
+					console.log(err);
 				}
+				else {
+					if (doc == null) {
+						console.log("new job added: "+job.title);
+					} else {
+						console.log("job updated: "+job.title);
+					}
+				}
+				this.saveJob();
 			}
-			this.saveJob();
-
-
-		});
+		);
 		
 	}
 	
