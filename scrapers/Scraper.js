@@ -10,6 +10,7 @@ class Scraper {
 	}
 	
 	process(saveJobCallback,allDoneCallback) {
+		console.log("huh?");
 		this.saveJobCallback = saveJobCallback;
 		this.allDoneCallback = allDoneCallback;
 	}
@@ -53,6 +54,8 @@ class JSONScraper extends Scraper {
 
 }
 
+
+
 class HTMLScraper extends Scraper {
 	
 	constructor(company) {
@@ -65,6 +68,7 @@ class HTMLScraper extends Scraper {
 		return element;
 	}
 	
+	/* override scrapejobs for single-page, non-list sites */
 	scrapejobs(err,page) {
 		if (err) {
 			return console.log(err);
@@ -112,11 +116,9 @@ class HTMLScraper extends Scraper {
 		var url = value;
 		if (done) {
 			this.allDoneCallback();
-			//return this.callback(this.jobs);
 		}
 		
 		if (url) {
-
 			scrapeIt(url.url,
 					this.jobscraper,
 					(err,page) => this.scrapeJobPage(url,err,page)
@@ -127,4 +129,22 @@ class HTMLScraper extends Scraper {
 	
 }
 
-module.exports = {Scraper, JSONScraper, HTMLScraper}
+class NonListHTMLScraper extends HTMLScraper {
+	
+	constructor(company) {
+		super(company);
+	}
+	
+	scrapejobs(err,page) {
+		if (err) {
+			return console.log(err);
+		}
+
+		var jobs = this.getJobsFromPage(page);
+		this.saveJobCallback(...jobs);
+		
+	}
+	
+}
+
+module.exports = {Scraper, JSONScraper, HTMLScraper, NonListHTMLScraper}
