@@ -142,6 +142,7 @@ class NonListHTMLScraper extends HTMLScraper {
 
 		var jobs = this.getJobsFromPage(page);
 		this.saveJobCallback(...jobs);
+		this.allDoneCallback();
 		
 	}
 	
