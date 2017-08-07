@@ -21,7 +21,7 @@ class Scraper {
 	
 }
 
-
+/* json job lists */
 class JSONScraper extends Scraper {
 	
 	constructor(company) {
@@ -54,7 +54,7 @@ class JSONScraper extends Scraper {
 
 }
 
-
+/* job listing in list form, can follow links to scrape more info */
 
 class HTMLScraper extends Scraper {
 	
@@ -128,6 +128,8 @@ class HTMLScraper extends Scraper {
 	}
 	
 }
+
+/* single-page job listings without a list */
 
 class NonListHTMLScraper extends HTMLScraper {
 	

@@ -14,7 +14,6 @@ https://chc.tbe.taleo.net/chc01/ats/careers/searchResults.jsp?org=SHIMANO&cws=1
 
 http://wheelsmfg.com/employment-opportunities
 https://www.eastoncycling.com/about-us/careers/
-https://www.pinkbike.com/about/jobs/
 ^--- all on one page
 
 
@@ -26,6 +25,7 @@ http://www.finishlineusa.com/resources/careers.php
 https://www.brompton.com/About-Us/Careers
 ^--- weird pdfs
 
+https://www.pinkbike.com/about/jobs/
 https://recruiting.ultipro.com/QUA1003QBP/JobBoard/4b01c3ed-7e54-43da-954f-c74c4b3945a6/OpportunityDetail?opportunityId=19b344bd-5891-40ec-9fa0-46d4393c3b98
 https://www.fitzii.com/careers/cervelo/
 https://www.trekbikes.com/us/en_US/current_openings?p=jobs&nl=1
