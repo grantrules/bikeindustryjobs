@@ -21,7 +21,7 @@ class scraper extends Scraper.HTMLScraper {
 		this.jobscraper = {
 			title: { selector: ".app-title" },
 			description: { selector: "#content", how: "html" },
-			location: { selector: ".location", how:"html" }
+			location: { selector: ".location", how: "text" }
 		};
 	}
 }
