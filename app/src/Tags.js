@@ -1,5 +1,15 @@
 import React from 'react';
 
+function hasTag(job,tag) {
+	
+	return job.tags && job.tags.filter(
+		e => (typeof tag == "object"
+			  && typeof tag.name == "string"
+			  	? tag.name : tag
+			).indexOf(e.name) > 0
+	);
+}
+
 
 class Tag extends React.Component {
 	
@@ -46,4 +56,4 @@ class Tags  extends React.Component {
 	}
 }
 	
-export {Tag, Tags}
+export {Tag, Tags, hasTag}

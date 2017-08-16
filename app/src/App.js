@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 
 import Dropdown from 'react-dropdown'
 
-import { Tag, Tags } from './Tags';
+import { Tag, Tags, hasTag } from './Tags';
+import Job from './Job';
 
 /* ajax */
 var rest, mime, client;
@@ -16,93 +17,21 @@ client = rest.wrap(mime);
 /* search engine */
 var Bloodhound = require('bloodhound-js');
 
-/* time prettifier */
-var Moment = require('moment');
-
 /* DELETE THIS SHIT */
 var testinghost = (window.location.origin == 'http://localhost:3000' ? 'http://localhost:9004' : '');
 
- 
+function getHashQueryString() {
+  var result = {}, queryString = window.location.hash.slice(1),
+      re = /([^&=]+)=([^&]*)/g, m;
 
-function hasTag(job,tag) {
-	
-	return job.tags && job.tags.filter(
-		e => (typeof tag == "object"
-			  && typeof tag.name == "string"
-			  	? tag.name : tag
-			).indexOf(e.name) > 0
-	);
-}
-
-
-class Job extends React.Component {
-	
-	constructor(props) {
-    	super(props);
-		this.state = {
-      		isHidden: true
-    	}
-	}
-	
-	derp(e) { return '#'+e; }
-	
-	
-	hasTag(tag) {
-		return hasTag(this.props.job,tag);
-		//return this.props.job.tags && this.props.job.tags.map(e => e.name).indexOf(typeof tag == "object" ? tag.name : tag) > -1;
-	}
-	
-	titleOrLogo() {
-		return (this.props.company.logo ?
-			   <img alt="" className="logo" src={this.props.company.logo}/>
-				:
-				<strong>{this.props.company.title}</strong>
-			   
-			   );
-	}
-	
-	toggle(e) {
-		this.setState({
-			isHidden: !this.state.isHidden
-    	});
-		e.preventDefault();
-	}
-	
-	render() {
-		
-		
-		var tagsreact = this.props.job.tags ? this.props.job.tags.map((e) => { return (<Tag key={e.name} tag={e}/>)}) : [];
-		
-		return (
-		
-	
-      <li className="job" id={'job'+this.props.job._id}>
-		  {this.props.updatedate && <li>{ Moment(new Date(this.props.job.first_seen)).format('dddd, MMMM DD, YYYY')}</li>}
-		
-		{this.titleOrLogo()}
-		<div className="jobdata">
-			<a className="title" href={this.derp(this.props.job._id)}  onClick={this.toggle.bind(this)}>{this.props.job.title}</a>
-
-			<div className="location">
-				{this.props.job.location || this.props.company.location}
-			</div>
-			<ul className="tags">
-			{tagsreact}
-			</ul>
-			
-				
-		
-				<div className={"description "+(this.state.isHidden ? "deschidden" : "descvisible")}>
-				<a href={this.props.job.url}>View and apply on company website</a>
-			<div className="descriptiontext" ref={(description) => { this.description = description; }}  dangerouslySetInnerHTML={{__html: this.props.job.description}}></div>
-				</div>
-		</div>
-	  </li>
-	);
-
+  while (m = re.exec(queryString)) {
+    result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
   }
 
+  return result;
 }
+
+
 
 class Search extends React.Component {
 	render() {
@@ -128,7 +57,7 @@ class CompanyList extends React.Component {
 	
 	render() {
 				
-		var options =[{value:'All', label:'All companies'}].concat(this.props.companies.map((company)=>{return {value:company.company, label:company.title}}));
+		var options = [{value:'All', label:'All companies'}].concat(this.props.companies.map((company)=>{return {value:company.company, label:company.title}}));
 		
 		return (
 			<div>
@@ -174,6 +103,13 @@ class Jobs extends React.Component {
 		this.state = {companies: [], jobs: [], filterJobs: [], tags: [], tagsEnabled: [], company: '', search: '', loading: true};
 	}
 	
+	checkQueryString() {
+		var qs = getHashQueryString();
+		if (qs.search != this.state.search ||
+			qs.company != this.state.company) {
+				this.setState({search: qs.search || '', company: qs.company || ''}, this.filterCallback);
+			}
+	}
 	
 	/* turns		
 		[ {tags:[{name:'a', label:'a'},{name:'b', label:'v'}]},
@@ -218,7 +154,6 @@ class Jobs extends React.Component {
 	/* if search is empty, directly update,
 	   callback for searchengine */
 	filter(search, company, tags) {
-
 		if (!search) {
 			this.updateJobs(this.state.jobs, company, tags);
 		} else {
@@ -300,6 +235,10 @@ class Jobs extends React.Component {
 			this.setState({loading: false, jobs: response.entity, filterJobs: response.entity,
 						  tags: tags, tagsEnabled: tagsEnabled, });
 			this.startEngine(response.entity);
+
+			window.addEventListener("hashchange", ()=>{
+				this.checkQueryString();
+			},false);
 
 		});
 		
