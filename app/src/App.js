@@ -21,14 +21,13 @@ var Bloodhound = require('bloodhound-js');
 var testinghost = (window.location.origin == 'http://localhost:3000' ? 'http://localhost:9004' : '');
 
 function getHashQueryString() {
-  var result = {}, queryString = window.location.hash.slice(1),
-      re = /([^&=]+)=([^&]*)/g, m;
+	var result = {}, queryString = window.location.hash.slice(1), re = /([^&=]+)=([^&]*)/g, m;
 
-  while (m = re.exec(queryString)) {
-    result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-  }
+	while (m = re.exec(queryString)) {
+		result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+	}
 
-  return result;
+	return result;
 }
 
 

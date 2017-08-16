@@ -8,13 +8,13 @@ var Moment = require('moment');
 class Job extends React.Component {
 	
 	constructor(props) {
-    	super(props);
+		super(props);
 		this.state = {
-      		isHidden: true
-    	}
+			isHidden: true
+		}
 	}
 	
-	derp(e) { return '#'+e; }
+	derp(e) { return `#${e}`; }
 	
 	
 	hasTag(tag) {
