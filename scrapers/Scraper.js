@@ -150,4 +150,28 @@ class NonListHTMLScraper extends HTMLScraper {
 	
 }
 
-module.exports = {Scraper, JSONScraper, HTMLScraper, NonListHTMLScraper}
+/* Ultipro scraper */
+
+class UltiproScraper extends JSONScraper {
+
+	constructor(company, string1, string2) {
+		super(company);
+		this.jobs_url = `https://recruiting.ultipro.com/${string1}/JobBoard/${string2}/JobBoardView/LoadOpportunities`;
+		this.listprop = "opportunities";
+		this.baseurl = `https://recruiting.ultipro.com/${string1}/JobBoard/${string2}/OpportunityDetail?opportunityId=`;
+		this.relativelinks = true;
+	}
+	
+	getJobData(job) {
+		return {
+			url: this.getFullUrl(job.Id),
+			title: job.Title,
+			description: job.BriefDescription,
+			company: this.company,
+			location:job.Locations.map(e=>e.LocalizedName).join(", "),
+			last_seen: new Date(),
+		}
+	}
+}
+
+module.exports = {Scraper, JSONScraper, HTMLScraper, NonListHTMLScraper, UltiproScraper}
