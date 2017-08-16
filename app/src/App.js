@@ -211,13 +211,13 @@ class Jobs extends React.Component {
 
 	/* initialize search engine with data */
 	startEngine(jobs) {
-			var engine = new Bloodhound({
-				local: jobs,
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['title','description']),
-			});
-			engine.initialize();
-			this.setState({engine:engine});
+		var engine = new Bloodhound({
+			local: jobs,
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['title','description']),
+		});
+		engine.initialize();
+		this.setState({engine:engine});
 	}
 	
 	/* implemented from react.component */
@@ -331,8 +331,8 @@ class Jobs extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Jobs />,
-  document.getElementById('root')
+	<Jobs />,
+	document.getElementById('root')
 );
 
 
