@@ -6,16 +6,13 @@ import Dropdown from 'react-dropdown'
 import { Tag, Tags, hasTag } from './Tags';
 import Job from './Job';
 
-/* ajax */
-var rest, mime, client;
- 
-rest = require('rest');
-mime = require('rest/interceptor/mime');
-client = rest.wrap(mime);
+import Bloodhound from 'bloodhound-js';
 
+import rest from 'rest';
+import mime from 'rest/interceptor/mime';
 
-/* search engine */
-var Bloodhound = require('bloodhound-js');
+var client = rest.wrap(mime);
+
 
 /* DELETE THIS SHIT */
 var testinghost = (window.location.origin == 'http://localhost:3000' ? 'http://localhost:9004' : '');
@@ -69,7 +66,7 @@ class CompanyList extends React.Component {
 class JobList extends React.Component {
 	
 	getCompany(company) {
-		return this.props.companies.filter((e)=>{return e.company==company})[0];
+		return this.props.companies.find((e)=>{return e.company==company})
 	}
 	/*
 	filterJobs(filter) {
