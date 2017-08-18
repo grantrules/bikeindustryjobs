@@ -78,6 +78,10 @@ class JobList extends React.Component {
 	*/
 	
 	render() {
+
+		if (this.props.jobs.length == 0) {
+			return <div id="noresults">No results</div>
+		}
 		var last = new Date(0).toDateString();
 		var jobs = this.props.jobs.map(job => {
 			var cleandate = new Date(job.first_seen).toDateString();
@@ -316,12 +320,13 @@ class Jobs extends React.Component {
          values="1;.2;1" calcMode="linear"
          repeatCount="indefinite" />
     </circle>
-</svg></div> : ''}
+</svg></div> : 
 
 			 <JobList
 				jobs={this.state.filterJobs}
 				companies={this.state.companies}
 			/>
+			}
 		</div>
 		);
 	  
