@@ -6,6 +6,7 @@
     "bloodhound": "^1.0.0",
     "bloodhound-js": "^1.2.2",
     "classnames": "^2.2.5",
+    "common-tags": "^1.4.0",
     "minified": "^1.0.1",
     "moment": "^2.18.1",
     "react": "^15.6.1",

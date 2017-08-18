@@ -1,4 +1,6 @@
 import React from 'react';
+import {safeHtml} from 'common-tags'
+
 
 import { Tag, Tags, hasTag } from './Tags';
 
@@ -61,7 +63,7 @@ class Job extends React.Component {
 					<a href={this.props.job.url}>View and apply on company website</a>
 					<div className="descriptiontext"
 						ref={(description) => { this.description = description; }}
-						dangerouslySetInnerHTML={{__html: this.props.job.description}}>
+						dangerouslySetInnerHTML={{__html: safeHtml`${this.props.job.description}`}}>
 					</div>
 				</div>
 			</div>
