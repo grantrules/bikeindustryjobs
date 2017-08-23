@@ -52,9 +52,10 @@ var companyCompleted = () => Object.keys(companyComplete).every(e=>companyComple
 
 
 class jobsaver {
-	constructor() {
+	constructor(completedCallback) {
 		this.jobQueue = [];
 		this.done = true;
+		this.completedCallback = completedCallback;
 	}
 	
 	next() {
@@ -81,8 +82,8 @@ class jobsaver {
 		this.done = true;
 		// have all companies been scraped?
 		if (companyCompleted()) {
-			console.log('all done, exiting');
-			process.exit();
+			console.log('all done');
+			this.completedCallback();
 		}
 		
 	}
@@ -123,7 +124,7 @@ class jobsaver {
 
 Company.find({'hasScraper': true},(err,res)=>{
 	if (res) {
-		var js = new jobsaver();
+		var js = new jobsaver(()=>process.exit());
 		
 		res.forEach((company) => {
 			var scraper = require(`./scrapers/${company.company}`);
@@ -135,8 +136,6 @@ Company.find({'hasScraper': true},(err,res)=>{
 				js.add.bind(js),
 				()=>{completed(company.company)}
 			)
-			
-			
 			
 		})
 	}
