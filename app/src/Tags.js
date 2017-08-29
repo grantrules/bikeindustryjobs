@@ -3,8 +3,8 @@ import React from 'react';
 function hasTag(job,tag) {
 	
 	return job.tags && job.tags.filter(
-		e => (typeof tag == "object"
-			  && typeof tag.name == "string"
+		e => (typeof tag === "object"
+			  && typeof tag.name === "string"
 			  	? tag.name : tag
 			).indexOf(e.name) > 0
 	);

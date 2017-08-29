@@ -5,16 +5,15 @@ import { Link } from 'react-router-dom';
 
 import { Tag, Tags, hasTag } from './Tags';
 
-/* time prettifier */
-var Moment = require('moment');
-
 class JobListItem extends React.Component {
 	
 	constructor(props) {
 		super(props);
+		/*
 		this.state = {
 			isHidden: true
 		}
+		*/
 	}	
 	
 	hasTag(tag) {
@@ -28,13 +27,14 @@ class JobListItem extends React.Component {
 			<strong>{this.props.company.title}</strong>
 		);
 	}
-	
+	/*
 	toggle(e) {
 		this.setState({
 			isHidden: !this.state.isHidden
     	});
 		e.preventDefault();
 	}
+	*/
 	
 	render() {
 		
@@ -44,11 +44,7 @@ class JobListItem extends React.Component {
 		return (
 		
 	
-			<li className="job" id={'job'+this.props.job._id}>
-				{this.props.updatedate &&
-					<li>{ Moment(new Date(this.props.job.first_seen)).format('dddd, MMMM DD, YYYY')}</li>
-				}
-		
+			<li className="job" id={'job'+this.props.job._id}>		
 				{this.titleOrLogo()}
 				<div className="jobdata">
 					<Link className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link>

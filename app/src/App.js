@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
+
+
 import { Tags, hasTag } from './Tags';
 import JobListItem from './Job';
 
 import Bloodhound from 'bloodhound-js';
+import Moment from 'moment';
+
 
 import rest from 'rest';
 import mime from 'rest/interceptor/mime';
-
 import { html, safeHtml } from 'common-tags'
 
 
@@ -45,7 +48,7 @@ class CompanyList extends React.Component {
 				
 		var companies = this.props.companies.map(company=>{
 			return (
-				<Link to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></Link>
+				<Link onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></Link>
 			)
 		});
 		//var options = [{value:'All', label:'All companies'}].concat(this.props.companies.map((company)=>{return {value:company.company, label:company.title}}));
@@ -63,13 +66,13 @@ class JobList extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { jobs: null }
+		//this.state = { jobs: props.jobs }
 	}
 	
 	getCompany(company) {
 		return this.props.companies.find((e)=>{return e.company===company})
 	}
-
+/*
 	shouldComponentUpdate(props,nextProps) {
 		console.log("UPdating..");
 		console.log(props);
@@ -85,6 +88,7 @@ class JobList extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		this.updateJobs(nextProps.jobs, nextProps.company, nextProps.tags);
 	}
+	*/
 
 		/* if search is empty, directly update,
 	   callback for searchengine */
@@ -109,7 +113,7 @@ class JobList extends React.Component {
 		var companysearch = company !== "";
 		
 		
-		jobs = jobs.filter(job=>!companysearch || job.company === company ? !tagsearch || hasTag(job,tags) : false)
+		jobs = jobs.filter(job=>!company || job.company === company ? !tagsearch || hasTag(job,tags) : false)
 		/* if (!this.state.jobs || this.state.jobs.length !== jobs.length) {
 			console.log('state change: setting jobs');
 			this.setState({ jobs });
@@ -120,18 +124,23 @@ class JobList extends React.Component {
 	
 	render() {
 
+		var { jobs, company } = this.props;
 
-		if (!this.state.jobs || this.state.jobs.length === 0) {
+		console.log(`rendering joblist for ${this.props.company}`);
+
+
+		if (!this.props.jobs || this.props.jobs.length === 0) {
 			return <div id="noresults">No results</div>
 		}
 		var last = new Date(0).toDateString();
-		var jobs = this.state.jobs.map(job => {
+		jobs = this.props.jobs.filter(job=>!company || job.company === company).map(job => {
 			var cleandate = new Date(job.first_seen).toDateString();
 			var date = cleandate !== last;
 			last = cleandate;
-			return ( <JobListItem key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>)
-			
-			
+			return ([
+				date ? <li>{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
+				<JobListItem key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
+			])
 		});
 		
 		return (
@@ -145,7 +154,7 @@ class JobList extends React.Component {
 class Jobs extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {companies: null, jobs: null, tags: [], tagsEnabled: [], company: '', search: '', loading: true};
+		this.state = {companies: null, jobs: null, tags: [], tagsEnabled: [], company: '', search: ''};
 	}
 	
 	checkQueryString() {
@@ -232,8 +241,7 @@ class Jobs extends React.Component {
 		});
 		engine.initialize();
 
-		console.log('state change: setting engine');
-		this.setState({engine:engine});
+		return engine;
 	}
 	
 	
@@ -246,13 +254,20 @@ class Jobs extends React.Component {
 		
 		client({method: 'GET', path: testinghost + '/api/jobs'}).then((response) => {
 			
-			var tags = this.getTags(response.entity);
+			var jobs = response.entity;
+			var tags = this.getTags(jobs);
 			var tagsEnabled = tags.map(e=>e.name);
 			
 			console.log('state change: setting jobs & related');
-			this.setState({loading: false, jobs: response.entity,
-						  tags: tags, tagsEnabled: tagsEnabled, });
-			this.startEngine(response.entity);
+
+			var engine = this.startEngine(jobs);
+
+			this.setState({
+				jobs,
+				tags,
+				tagsEnabled,
+				engine,
+			});
 
 			window.addEventListener("hashchange", ()=>{
 				this.checkQueryString();
@@ -312,7 +327,7 @@ class Jobs extends React.Component {
 					tags={this.state.tags}
 					tagsEnabled={this.state.tagsEnabled}
 				/>
-				{this.state.loading ?
+				{!this.state.jobs ?
 					<Loading/>
 					:
 					<div>
@@ -323,14 +338,28 @@ class Jobs extends React.Component {
 						<span className="tagblap">Labor</span>
 						<span className="tagblap">Outside Rep</span>
 
-						<JobList
-							jobs={jobs}
-							companies={companies}
-							engine={engine}
-							company={company}
-							tags={tagsEnabled}
-							search={search}
-						/>
+						<Route path="/company/:companyName" render={({ match }) => {
+							var company = companies.find(g => g.company === match.params.companyName);
+							console.log(`routing jobs for ${company.company}`)
+							return (<JobList
+								jobs={jobs}
+								companies={companies}
+								engine={engine}
+								company={company.company}
+								tags={tagsEnabled}
+								search={search}
+							/>)
+						}}/>
+
+						<Route path="/" exact={true} render={() => {
+							return (<JobList
+								jobs={jobs}
+								companies={companies}
+								engine={engine}
+								tags={tagsEnabled}
+								search={search}
+							/>)
+						}}/>
 					</div>
 				}
 			</div>
@@ -361,7 +390,7 @@ class Jobs extends React.Component {
 				<Route path="/company/:companyName" render={({ match }) => {
 					var company = companies.find(g => g.company === match.params.companyName);
 					return (
-						<Company company={company} onMount={this.setCompany.bind(this)}/>
+						<Company company={company}/>
 					)
 				}}/>
 			}
@@ -431,7 +460,7 @@ class Company extends React.Component {
 
 	componentDidMount() {
 		console.log(`company component did mount: ${this.props.company.company}`);
-		this.props.onMount(this.props.company.company);
+		//this.props.onMount(this.props.company.company);
 	}
 
 	/*
@@ -444,7 +473,7 @@ class Company extends React.Component {
 
 	componentWillUpdate(nextProps) {
 		console.log(`company component will update: ${nextProps.company.company}`);
-		this.props.onMount(nextProps.company.company);
+		//this.props.onMount(nextProps.company.company);
 	}
 
 	render() {
@@ -477,6 +506,17 @@ ReactDOM.render(
 	<Jobs />,
 	document.getElementById('root')
 );
-
+/*
+document.getElementById("companyListRight").addEventListener("click", function(e) {
+	// e.target is the clicked element!
+	// If it was a list item
+	//console.log(e.target.nodeName);
+	if(e.target && e.target.nodeName === "IMG") {
+		// List item found!  Output the ID!
+		toggleNav()
+		//console.log("List item ", e.target.id.replace("post-", ""), " was clicked!");
+	}
+});
+*/
 
 export default Jobs;
