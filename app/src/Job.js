@@ -1,5 +1,6 @@
 import React from 'react';
-import {safeHtml} from 'common-tags'
+import { Link } from 'react-router-dom';
+
 
 
 import { Tag, Tags, hasTag } from './Tags';
@@ -7,7 +8,7 @@ import { Tag, Tags, hasTag } from './Tags';
 /* time prettifier */
 var Moment = require('moment');
 
-class Job extends React.Component {
+class JobListItem extends React.Component {
 	
 	constructor(props) {
 		super(props);
@@ -50,7 +51,7 @@ class Job extends React.Component {
 		
 				{this.titleOrLogo()}
 				<div className="jobdata">
-					<a className="title" href={"#"+this.props.job._id}  onClick={this.toggle.bind(this)}>{this.props.job.title}</a>
+					<Link className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link>
 
 					<div className="location">
 						{this.props.job.location || this.props.company.location}
@@ -59,13 +60,7 @@ class Job extends React.Component {
 					{tagsreact}
 				</ul>
 			
-				<div className={"description "+(this.state.isHidden ? "deschidden" : "descvisible")}>
-					<a href={this.props.job.url}>View and apply on company website</a>
-					<div className="descriptiontext"
-						ref={(description) => { this.description = description; }}
-						dangerouslySetInnerHTML={{__html: safeHtml`${this.props.job.description}`}}>
-					</div>
-				</div>
+				
 			</div>
 		  </li>
 	);
@@ -74,4 +69,4 @@ class Job extends React.Component {
 
 }
 
-export default Job
+export default JobListItem
