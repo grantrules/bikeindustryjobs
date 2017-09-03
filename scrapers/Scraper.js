@@ -45,8 +45,12 @@ class JSONScraper extends Scraper {
 	process(saveJobCallback,allDoneCallback) {
 		request(this.jobs_url,  (err, res, body) => {
 			// parse json
-			var json = JSON.parse(body);
-			this.getListFromJson(json).forEach(j=>saveJobCallback(this.getJobData(j)));
+			try {
+				var json = JSON.parse(body);
+				this.getListFromJson(json).forEach(j=>saveJobCallback(this.getJobData(j)));
+			} catch (e) {
+				console.log(`error fetching JSON from ${this.company}`);
+			}
 			allDoneCallback();
 			
 		});
@@ -68,9 +72,10 @@ class HTMLScraper extends Scraper {
 		return element;
 	}
 	
-	/* override scrapejobs for single-page, non-list sites */
 	scrapejobs(err,page) {
 		if (err) {
+			this.allDoneCallback();
+			console.log(`error scraping job list from ${this.company}`);
 			return console.log(err);
 		}
 		console.log(`found ${page.urls.length} ${this.company} jobs`);
@@ -90,7 +95,7 @@ class HTMLScraper extends Scraper {
 				this.jobs_url,
 				this.listscraper,
 				this.scrapejobs.bind(this)
-			);
+		);
 	}
 	
 	scrapeJobPage(url,err,page) {
@@ -139,11 +144,12 @@ class NonListHTMLScraper extends HTMLScraper {
 	
 	scrapejobs(err,page) {
 		if (err) {
+			console.log(`error fetching html from ${this.company}`);
 			return console.log(err);
+		} else {		
+			var jobs = this.getJobsFromPage(page);
+			this.saveJobCallback(...jobs);
 		}
-
-		var jobs = this.getJobsFromPage(page);
-		this.saveJobCallback(...jobs);
 		this.allDoneCallback();
 		
 	}
