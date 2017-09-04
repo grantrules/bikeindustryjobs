@@ -10,6 +10,38 @@ function hasTag(job,tag) {
 	);
 }
 
+/* turns		
+	[ {tags:[{name:'a', label:'a'},{name:'b', label:'v'}]},
+		{tags:[{name:'a', label:'a'},{name:'c', label:'c'}]} ]
+	into
+	[ {name:'a', label:'a', total:2},
+		{name:'b', label:'b', total:1},
+		{name:'c', label:'c', total:1} ] */
+var getTags = objArray => {
+	
+	var totals = [];
+	var tags = [];
+	for (var job in objArray) {
+		if (objArray[job] && objArray[job].tags) {
+			tags = [...tags, ...objArray[job].tags];
+		}
+	}
+	var uniquetags = [];
+	
+	tags.forEach((tag)=>{
+		if (totals[tag.name]) {
+			totals[tag.name]++;
+		} else {
+			totals[tag.name] = 1;
+			uniquetags = uniquetags.concat(tag);
+		}
+
+
+	});
+	return uniquetags.map((tag) => { tag.totals = totals[tag.name]; return tag; })
+
+}
+
 
 class Tag extends React.Component {
 	
@@ -56,4 +88,4 @@ class Tags  extends React.Component {
 	}
 }
 	
-export {Tag, Tags, hasTag}
+export {Tag, Tags, hasTag, getTags}

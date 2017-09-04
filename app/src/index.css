@@ -1,3 +1,24 @@
+.userForm input, .userForm button {
+	display: block;
+	width: 100%;
+	line-height: 200%;
+}
+
+#loginForm button {
+	background-image: linear-gradient(-180deg, #8530D0 0%, #6E27AE 90%);
+	border-radius: 5px;
+	color: white;
+	border: 1px solid rgba(36, 36, 36, 0.20);
+}
+
+
+#registerForm button {
+	background-image: linear-gradient(-180deg, #307ED0 0%, #2868AB 90%);
+	border-radius: 5px;
+	color: white;
+	border: 1px solid rgba(36, 36, 36, 0.20);
+}
+
 #homeheader {
   /*background-image: url(http://i.imgur.com/HFhHjrI.jpg);*/
   background-image: url(http://imgur.com/R1uP1Km.jpg);
