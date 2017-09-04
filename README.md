@@ -5,6 +5,15 @@ Mongo, React, Express, Node
 
 Currently running http://careers.bike/
 
+### to run:
+
+```
+node scraper.js
+node server.js &
+cd app
+npm run build
+```
+
 ### nginx config on ubuntu:
 
 ```
