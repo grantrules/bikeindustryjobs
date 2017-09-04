@@ -18,7 +18,7 @@ var config = require('../config');
         date_added: Date,
     });
 
-    userSchema.static.hashPassword = function(password,callback) {
+    userSchema.statics.hashPassword = function(password,callback) {
         hash = crypto.createHash('sha256').update(password + config.secret)
             .digest('base64').toString();
         //if callback
@@ -28,7 +28,7 @@ var config = require('../config');
     }
     
     userSchema.methods.validatePassword = function(password) {
-        return this.hashed_password == userSchema.static.hashPassword(password);
+        return this.hashed_password == userSchema.statics.hashPassword(password);
     }
     
     userSchema.statics.ROLES = {
