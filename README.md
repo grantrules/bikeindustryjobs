@@ -8,11 +8,16 @@ Currently running http://careers.bike/
 ### to run:
 
 ```
+npm install
 node scraper.js
 node server.js &
 cd app
+npm install
 npm run build
 ```
+
+node will be running on port 9004
+frontend will be in app/build
 
 ### nginx config on ubuntu:
 
