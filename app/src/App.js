@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 
 import { Tags, hasTag, getTags } from './Tags';
 import JobListItem from './Job';
-import { Login, Register } from './User';
+import { UserLogin } from './User';
 
 
 import Bloodhound from 'bloodhound-js';
@@ -14,7 +14,6 @@ import Moment from 'moment';
 import { html, safeHtml } from 'common-tags';
 
 import JobService from './services/jobs';
-import AuthService from './services/auth';
 
 var toggleNav = () => {
 	document.getElementById('companyList').classList.toggle('hider');
@@ -127,7 +126,8 @@ class Jobs extends React.Component {
 			tags: [], tagsEnabled: [],
 			company: '',
 			search: '',
-			modalIsOpen: false
+			modalIsOpen: false,
+			user: null,
 		};
 	
 		this.openModal = this.openModal.bind(this);
@@ -183,6 +183,10 @@ class Jobs extends React.Component {
 		if (company !== this.state.company) {
 			this.setState({company: company});
 		}
+	}
+
+	setUser(user) {
+		this.state({user});
 	}
 	
 	
@@ -256,7 +260,7 @@ class Jobs extends React.Component {
 						<h1><Link to="/">careers.bike</Link></h1>
 						<div className="navbuttons">
 							<div className="navbutton">
-								<button onClick={this.openModal}>Open Modal</button>
+								<button className="loginButton" onClick={this.openModal}>Log In / Register</button>
 									<Modal
 									isOpen={this.state.modalIsOpen}
 									onAfterOpen={this.afterOpenModal}
@@ -264,8 +268,8 @@ class Jobs extends React.Component {
 									style={customStyles}
 									contentLabel="Example Modal"
 									>
-										<Login/>
-										<Register/>
+									<UserLogin user={this.state.user} setUser={this.setUser.bind(this)}/>
+										
 									</Modal>
 							</div>
 							<div className="navbutton">
@@ -402,6 +406,8 @@ class Jobs extends React.Component {
 	  
   	}
 }
+
+
 
 const Job = ({ job, company }) => (
 	<div>

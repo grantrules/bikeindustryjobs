@@ -1,35 +1,35 @@
 var config = require('./config');
 
 var express = require('express');
-var controller = require('./controllers/controller');
-var userController = require('./controllers/users');
-
+var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-
 var passport = require('passport');
-var jwt = require('jsonwebtoken');
+
 var LocalStrategy = require('passport-local').Strategy;
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
 
 var User = require('./models/user');
 
 
-var app = express();
-
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-
-
-var mongoose = require('mongoose');
 mongoose.connect(config.mongodb);
 
 
+var app = express();
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+
+
+// CORS stuff, only needed for dev
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // LOCAL LOGIN
-
-app.use(passport.initialize());
 passport.use(new LocalStrategy({
         usernameField: 'email',
         passwordField: 'password'
@@ -52,60 +52,19 @@ passport.use(new LocalStrategy({
 ));
 
 // JWT
-
-var JwtStrategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
-
 passport.use(new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
         secretOrKey: config.JWTsecret
     },
     function(jwt_payload, done) {
+        // expires in in jwt_payload.exp stores as unixtime
+
         done(null, jwt_payload);
     }
 ));
 
-
-
-
-var router = express.Router();
-
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
-app.use('/api/', router);
-
-// for auth: passport.authenticate('jwt', {session:false})
-
-// JOBS
-router.route('/jobs')
-    .get(controller.getJobs);
-
-router.route('/companies')
-    .get(controller.getCompanies);
-
-
-// USER
-router.route('/users')
-    .get(passport.authenticate('jwt', {session:false}), userController.getUsers)
-
-    .post(userController.postUsers);
-
-
-// LOGIN
-router.route('/login')
-    .post(passport.authenticate('local', {session: false}), function(req, res) {
-        res.json({'user': req.user, 'token': jwt.sign(req.user,config.JWTsecret)});
-    }
-);
-
-
-
-
+// All routes
+require('./routes/routes')(app);
 
 var server = app.listen(9004);
 

@@ -2,51 +2,49 @@ import Service from './service';
 
 class AuthService extends Service {
 
-    urlencodeFormData(fd){
-        var s = '';
-        function encode(s){ return encodeURIComponent(s).replace(/%20/g,'+'); }
-        for(var pair of fd.entries()){
-            if(typeof pair[1]=='string'){
-                s += (s?'&':'') + encode(pair[0])+'='+encode(pair[1]);
-            }
-        }
-        return s;
+    fetchSecure(data, callback) {
+        
     }
 
-    // error first callback
-    login(data, callback) {
-        fetch(`${this.testinghost}/api/login`,
+    refresh_token(token, callback) {
+        var data = new FormData({refresh_token: token});
+        this.fetch(
+            `${this.testinghost}/api/refresh_token`,
             {
                 method: "POST",
                 body: this.urlencodeFormData(data),
                 headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
-            }).then(callback);
+            },
+            callback
+        );
+    }
 
-        /*
-        this.client({
-            method: 'POST',
-            entity: data,
-            path: `${this.testinghost}/api/login`
-        }).then(callback);*/
-     }
+    // error first callback
+    login(data, callback) {
+        this.fetch(
+            `${this.testinghost}/api/login`,
+            {
+                method: "POST",
+                body: this.urlencodeFormData(data),
+                headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
+            },
+            callback
+        );
+    }
 
     register(data, callback) {
         if (data.get('password') !== data.get('passwordConfirm')) {
             return callback("Passwords don't match");
         }
-        fetch(`${this.testinghost}/api/users`,
-        {
-            method: "POST",
-            body: this.urlencodeFormData(data),
-            headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
-        }).then(callback);
-        /*
-        this.client({
-            method: 'POST',
-            entity: { first_name, last_name, email, password },
-            path: `${this.testinghost}/api/users`
-        }).then(callback);
-        */
+        this.fetch(
+            `${this.testinghost}/api/users`,
+            {
+                method: "POST",
+                body: this.urlencodeFormData(data),
+                headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
+            },
+            callback
+        );
     }
 }
 

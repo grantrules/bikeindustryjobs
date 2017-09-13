@@ -12,8 +12,9 @@
     "express": "~4.15.0",
     "jsonwebtoken": "^7.4.3",
     "mocha": "^3.2.0",
-    "mongoose": "^4.11.4",
+    "mongoose": "^4.11.8",
     "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0",
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
     "scrape-it": "^3.3.2"

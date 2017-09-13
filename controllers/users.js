@@ -1,9 +1,12 @@
-mongoose = require('mongoose');
-var User = require('../models/user');
+var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+
 var config = require('../config');
+var User = require('../models/user');
+var Client = require('../models/auth/client');
 
 // POST /api/users
+// register
 exports.postUsers = function(req,res) {
     var user = {
         first_name: req.body.first_name,
@@ -17,11 +20,62 @@ exports.postUsers = function(req,res) {
     User.create(user, function(user, err) {
         if (err)
             res.send(err);
-        else
-            res.json({'user': user, 'token':    jwt.sign(user,config.JWTsecret)}); 
+        else {
+            user.hashed_password = null;
+
+            var refresh_token = jwt.sign({refresh_token: true, user: req.user, date: new Date()}, config.JWTsecret);
+            
+            var client = new Client({
+                user_id: req.user._id,
+                refresh_token,
+                user_agent: req.headers['User-Agent'] ? req.headers['User-Agent'] : null,
+            });
+    
+            client.save((err, client) => {
+                res.json({
+                    user: user,
+                    token: jwt.sign({user_id: user._id, created: new Date()},config.JWTsecret,{expiresIn: "2h"}),
+                    refresh_token: refresh_token
+                });
+            });
+        }
     });
         
 };
+
+exports.postRefreshToken = (req,res) => {
+    var refresh_token = req.body.refresh_token;
+    Client.findOne({refresh_token}, (err, client) => {
+        if (client) {
+            res.json({token: jwt.sign({user_id: client.user_id, created: new Date()},config.JWTsecret,{expiresIn: "2h"})})
+        } else {
+            res.json({error: "Could not find refresh token"});
+        }
+    })
+}
+
+exports.postLogin = (req, res) => {
+    var refresh_token = jwt.sign({refresh_token: true, user: req.user, date: new Date()}, config.JWTsecret);
+
+    var client = new Client({
+        user_id: req.user._id,
+        refresh_token,
+        user_agent: req.headers['User-Agent'] ? req.headers['User-Agent'] : null,
+     });
+
+    client.save((err, client) => {
+        if (client) {
+            res.json({
+                user: req.user,
+                token: jwt.sign(req.user,config.JWTsecret, {expiresIn: "2h"}),
+                refresh_token: refresh_token
+            });
+        } else {
+            console.log(`error creating client on login: ${err}`);
+            res.json({err: "Cannot create client"});
+        }
+    });
+}
 
 exports.getUsers = function(req,res) {
     res.json({});

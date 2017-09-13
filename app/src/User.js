@@ -1,11 +1,48 @@
 import React from 'react';
 import AuthService from './services/auth';
 
+class UserLogin extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = props;
+	}
+
+	logout() {
+		if (this.state.user
+			&& this.state.user.logout()) {
+				this.state.setUser(null);
+		}
+	}
+
+	render() {
+		if (this.state.user) {
+			return ( <Logout logoutCallback={this.logout.bind(this)}/> )
+		}
+
+		return (
+			<div>
+				<Login/>
+				<Register/>
+			</div>
+		)
+	}
+}
+
+class Logout extends React.Component {
+
+    render() {
+        return (
+            <button onClick={this.props.logoutCallback}>Log Out</button>
+        )
+    }
+
+}
+
 class Login extends React.Component {
     
         loginCallback(err,user) {
             if (err) {
-                console.log(err);
+                console.log(err.blob());
             } else {
                 console.log(`logged in ${user}`);
             }
@@ -70,4 +107,4 @@ class Login extends React.Component {
         }
     }
 
-    export { Login, Register }
+    export { UserLogin }
