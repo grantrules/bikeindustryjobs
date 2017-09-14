@@ -24,11 +24,11 @@ exports.postUsers = function(req,res) {
             user.hashed_password = null;
 
             var refresh_token = jwt.sign({refresh_token: true, user: req.user, date: new Date()}, config.JWTsecret);
-            
             var client = new Client({
                 user_id: req.user._id,
                 refresh_token,
-                user_agent: req.headers['User-Agent'] ? req.headers['User-Agent'] : null,
+                login_date: new Date(),                
+                user_agent: req.headers['user-agent'] ? req.headers['user-agent'] : null,
             });
     
             client.save((err, client) => {
@@ -45,9 +45,17 @@ exports.postUsers = function(req,res) {
 
 exports.postRefreshToken = (req,res) => {
     var refresh_token = req.body.refresh_token;
+    console.log(req.body);
     Client.findOne({refresh_token}, (err, client) => {
         if (client) {
-            res.json({token: jwt.sign({user_id: client.user_id, created: new Date()},config.JWTsecret,{expiresIn: "2h"})})
+            User.findOne({_id:client.user_id}, (err, user) => {
+                if (user) {
+                    res.json({
+                        user: user,
+                        token: jwt.sign({user: user, created: new Date()},config.JWTsecret,{expiresIn: "2h"})
+                    });
+                }
+            })
         } else {
             res.json({error: "Could not find refresh token"});
         }
@@ -60,7 +68,8 @@ exports.postLogin = (req, res) => {
     var client = new Client({
         user_id: req.user._id,
         refresh_token,
-        user_agent: req.headers['User-Agent'] ? req.headers['User-Agent'] : null,
+        login_date: new Date(),
+        user_agent: req.headers['user-agent'] ? req.headers['user-agent'] : null,
      });
 
     client.save((err, client) => {
@@ -79,4 +88,16 @@ exports.postLogin = (req, res) => {
 
 exports.getUsers = function(req,res) {
     res.json({});
+}
+
+exports.deleteClient = (req, res) => {
+    var id = req.user._id;
+    Client.findOneAndRemove({_id: req.body.client_id, user_id: id}, err => {
+        if (err) {
+            console.log("error deleting client");
+            res.json({'error': "Error logging out"});
+        } else {
+            res.json({'success': "Logged out"});
+        }
+    });
 }

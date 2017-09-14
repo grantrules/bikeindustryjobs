@@ -23,14 +23,26 @@
 	color: white;
 	border: 1px solid rgba(36, 36, 36, 0.20);
 }
+.list {
+	width: 75%;
+	margin: 0 auto;
+}
+/*
+#joblist {
+	list-style: none;
+}
 
+#joblist li { clear: both; padding-top: 25px; }
+
+#joblist img { display: inline-block; float: left;}
+*/
 #homeheader {
   /*background-image: url(http://i.imgur.com/HFhHjrI.jpg);*/
   background-image: url(http://imgur.com/R1uP1Km.jpg);
   background-repeat: no-repeat;
   background-position-x: center;
-  background-size: auto 150px;
-  height: 150px;
+  background-size: cover;
+  height: 185px;
     vertical-align: text-bottom;
     position: relative;
 
@@ -40,7 +52,7 @@
 bottom: 0px;
 color: white;
 font-weight: 400;
-padding: 20px;
+padding: 20px 12.5%;
 width: 100%;
 background-color: rgba(0,0,0,0.55);
 font-size: 18pt;
@@ -62,18 +74,58 @@ font-size: 18pt;
 .tagblap:hover{background-color:#3c424d}
 
 
+#userdropdown {
+	position: absolute;
+	right: 0;
+	left: auto;
+	background-color: white;
+	margin-top: 8px;
+	z-index: 100;
+	box-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+#userdropdown::before {
+    top: -16px;
+    right: 9px;
+    left: auto;
+}
+#userdropdown::before {
+    border: 8px solid transparent;
+    border-bottom-color: rgba(27,31,35,0.15);
+}
+#userdropdown::before, #userdropdown::after {
+    position: absolute;
+    display: inline-block;
+    content: "";
+}
+#userdropdown::after {
+    top: -14px;
+    right: 10px;
+    left: auto;
+}
+#userdropdown::after {
+    border: 7px solid transparent;
+    border-bottom-color: #fff;
+}
+#userdropdown::before, #userdropdown::after {
+    position: absolute;
+    display: inline-block;
+    content: "";
+}
+
+
+
 
 ul { padding-left: 0; }
 
-.jobs ul li a.title {
+#joblist a.title {
    font-size:14pt;
 }
 
-.jobs img.logo {
+#joblist img.logo {
 	width: 100px;
 	float: left;
 }
-.jobs ul li {
+#joblist li {
     display:block;
     padding:5px;
 	margin-bottom:10px;
@@ -89,23 +141,24 @@ ul { padding-left: 0; }
 }
 
 .listthing { padding-top: 60px; }
+/*
 #base2 {
 		display: none;
-	}
+	}*/
 @media screen and (min-width: 620px) { 
 ul { padding-left: 40px; }
-	.jobs img.logo {
+	#joblist img.logo {
 		width: 200px;
 	}
 	.jobdata { padding-left:215px;}
-	.jobs ul li a.title {
+	#joblist ul li a.title {
 		font-size:14pt;
 	}
 
 }
 @media screen and (min-width: 992px) { 
 	.listthing {
-	overflow-y:scroll; height: 100%;/*width: 100%;*/
+	
 	padding-top: 0;
 }
 	#base {
@@ -116,17 +169,15 @@ ul { padding-left: 40px; }
 	}
 	#base2 {
 		padding-top:39px;
-		float: right;
-		width:50%;
-		height: 100vh;
-		display: block;
+		xfloat: right;
+		width:100%;
+		clear: both;
+		margin: 0 auto;
 	} 
 }
 	body {
 		margin:0;     /* This is used to reset any browser-default margins */
-		height:100vh; /* This is needed to overcome a Chrome bug. */
-    width:100%;  /* As above. */
-    font-family: Oxygen,sans-serif;
+		font-family: Oxygen,sans-serif;
 	}
 
 
@@ -162,7 +213,17 @@ ul { padding-left: 40px; }
 		overflow: hidden;
 		transition: max-height .15s ease-in-out;
 	}
+
+	.star {
+		content: "★"
+	}
+	.starEnabled {
+		color: yellow;
+	}
 img { width: 200px; }
+#headercompanylogo {
+	height: 30px; width: auto;
+}
 	#companies {
 		color: white;
 	}

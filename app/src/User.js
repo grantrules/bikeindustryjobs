@@ -15,14 +15,15 @@ class UserLogin extends React.Component {
 	}
 
 	render() {
+        console.log(this.props.route);
 		if (this.state.user) {
 			return ( <Logout logoutCallback={this.logout.bind(this)}/> )
 		}
 
 		return (
 			<div>
-				<Login/>
-				<Register/>
+				<Login setUserData={this.props.setUserData}/>
+				<Register setUserData={this.props.setUserData}/>
 			</div>
 		)
 	}
@@ -40,11 +41,21 @@ class Logout extends React.Component {
 
 class Login extends React.Component {
     
-        loginCallback(err,user) {
+        loginCallback(err,data) {
             if (err) {
-                console.log(err.blob());
+                console.log(err);
             } else {
-                console.log(`logged in ${user}`);
+                if (data.user) {
+                    console.log(`logged in ${data}`);  
+                    
+
+                    // store refresh_token in local storage,
+                    // everything else in the state
+                    this.props.setUserData(data);
+                    
+                } else {
+                    console.log("Login failed");
+                }
             }
         }
     
@@ -75,11 +86,16 @@ class Login extends React.Component {
 
     class Register extends React.Component {
         
-        registerCallback(err,user) {
+        registerCallback(err,data) {
             if (err) {
                 console.log(err);
             } else {
-                console.log(`logged in ${user}`);
+                if (data.user) {
+                    this.props.setUserData(data);                    
+                    console.log(`logged in ${data.user}`);
+                } else {
+                    console.log("error registering");
+                }
             }
         }
     

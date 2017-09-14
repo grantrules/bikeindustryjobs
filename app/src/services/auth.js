@@ -2,20 +2,77 @@ import Service from './service';
 
 class AuthService extends Service {
 
-    fetchSecure(data, callback) {
+    getRefreshToken() {
+        return localStorage.getItem("refresh_token");
+    }
+
+    fetchSecure(url, options, callback, refreshed) {
+        var jwt = localStorage.getItem("jwt");
+
+               
+
+        if (!jwt) {
+            callback({err: "Not logged in"});
+        } else {
+
+            if (!options.headers) {
+                options.headers = new Headers();
+            }
+            options.headers.append("Authorization", `BEARER ${jwt}`);
+            options.mode = 'cors';
+
+            this.fetch(
+                `${this.testinghost}${url}`,options,(err, data) => {
+                    // TODO finish this
+                    console.log("got something");
+                    console.log(data);
+                    // if jwt is expired do something here
+                    /*
+                    if (refreshed) {
+                        // already refreshed once on this call, sometings fucky
+                    }
+                    this.refresh_token(null, err => {
+                        if (!err) {
+                            this.fetchSecure(url, options, callback, true)
+                        }
+                    })
+                    */
+                }
+            );
+        }
         
     }
 
+    setToken(token) {
+        localStorage.setItem("jwt", token);
+    }
+
     refresh_token(token, callback) {
-        var data = new FormData({refresh_token: token});
+        if (!token) {
+            token = localStorage.getItem("refresh_token");
+        }
+        if (!token) {
+            console.log("no refresh token found");
+            return callback({err: "No refresh token found"});
+        }
+        var data = new FormData();
+        data.append('refresh_token', token);
+        data = this.urlencodeFormData(data);
         this.fetch(
             `${this.testinghost}/api/refresh_token`,
             {
                 method: "POST",
-                body: this.urlencodeFormData(data),
+                body: data,
                 headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
             },
-            callback
+            (err, data) => {
+                if (data.token) {
+                    this.setToken(data.token);
+                } else {
+                    if (!err) { err = {'err': "No token"} }
+                }
+                callback(err,data);
+            }
         );
     }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-import Modal from 'react-modal';
 
 import { Tags, hasTag, getTags } from './Tags';
 import JobListItem from './Job';
@@ -14,6 +13,21 @@ import Moment from 'moment';
 import { html, safeHtml } from 'common-tags';
 
 import JobService from './services/jobs';
+import AuthService from './services/auth';
+
+
+var NavLink = React.createClass({
+    contextTypes: {
+        router: React.PropTypes.object
+    },
+
+    render() {   
+		console.log(this.context.router);
+        return (
+            <Link {...this.props}></Link>
+        );
+    }
+});
 
 var toggleNav = () => {
 	document.getElementById('companyList').classList.toggle('hider');
@@ -41,7 +55,7 @@ class CompanyList extends React.Component {
 	render() {
 		var companies = this.props.companies.map(company=>{
 			return (
-				<Link onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></Link>
+				<NavLink key={company.company} onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></NavLink>
 			)
 		});
 		
@@ -53,7 +67,7 @@ class CompanyList extends React.Component {
 	}
 }
 
-// <JobList jobs="" companies="" engine="" company="" tags="{}" search=""}
+// <JobList user="" jobs="" companies="" engine="" company="" tags="{}" search=""}
 class JobList extends React.Component {
 
 	constructor(props) {
@@ -93,7 +107,7 @@ class JobList extends React.Component {
 	
 	render() {
 
-		var { jobs, company } = this.props;
+		var { jobs, company, user } = this.props;
 
 		if (!jobs || jobs.length === 0) {
 			return <div id="noresults">No results</div>
@@ -105,7 +119,7 @@ class JobList extends React.Component {
 			last = cleandate;
 			return ([
 				date ? <li>{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
-				<JobListItem key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
+				<JobListItem user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
 			])
 		});
 		
@@ -114,6 +128,27 @@ class JobList extends React.Component {
 					{jobs}
 			</ul>
 		)
+	}
+}
+class Test extends React.Component {
+	render() {
+		return (
+			<ul id="userdropdown" className="hidden">
+				<li>Your profile</li>
+				<li>Starred Jobs</li>
+				<li>Log Out</li>
+
+			</ul>
+		)
+	}
+
+	componentDidMount() {
+		console.log('mounted');
+		AuthService.fetchSecure('/api/users', {method: 'GET'} , (err,data)=>{
+			if (err) { console.log(err); }
+			else { console.log(data); }
+		})
+
 	}
 }
 
@@ -129,24 +164,6 @@ class Jobs extends React.Component {
 			modalIsOpen: false,
 			user: null,
 		};
-	
-		this.openModal = this.openModal.bind(this);
-		//this.afterOpenModal = this.afterOpenModal.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-	}
-
-	openModal() {
-		this.setState({modalIsOpen: true});
-	}
-/*
-	afterOpenModal() {
-		// references are now sync'd and can be accessed.
-		this.subtitle.style.color = '#f00';
-	}
-	*/
-
-	closeModal() {
-		this.setState({modalIsOpen: false});
 	}
 	
 	checkQueryString() {
@@ -185,8 +202,10 @@ class Jobs extends React.Component {
 		}
 	}
 
-	setUser(user) {
-		this.state({user});
+	setUserData(data) {
+		this.setState({user: data.user, jwt: data.token});
+		localStorage.setItem("refresh_token", data.refresh_token);
+		localStorage.setItem("jwt", data.token);
 	}
 	
 	
@@ -232,26 +251,21 @@ class Jobs extends React.Component {
 		window.addEventListener("hashchange", ()=>{
 			this.checkQueryString();
 		},false);	
+
+		if (AuthService.getRefreshToken()) {
+			console.log("found login info");
+			AuthService.refresh_token(null, (err, data) => {
+				console.log(data);
+				this.setState({user: data.user});
+				AuthService.setToken(data.token);
+			});
+		}
 	}
 		
 	render() {
 
-		const { jobs, companies, tagsEnabled, engine, company, search } = this.state;
+		const { jobs, companies, tagsEnabled, engine, company, search, user } = this.state;
 	  
-		const customStyles = {
-			content : {
-			  top: '50%',
-			  left: '50%',
-			  right: 'auto',
-			  bottom: 'auto',
-			  width: '350px',
-			  marginRight: '-50%',
-			  transform: 'translate(-50%, -50%)'
-			},
-			overlay: {
-				backgroundColor: 'rgba(0, 0, 0, 0.70)'				
-			}
-		  };
 		return (
 			<Router>
 			<div>
@@ -260,17 +274,9 @@ class Jobs extends React.Component {
 						<h1><Link to="/">careers.bike</Link></h1>
 						<div className="navbuttons">
 							<div className="navbutton">
-								<button className="loginButton" onClick={this.openModal}>Log In / Register</button>
-									<Modal
-									isOpen={this.state.modalIsOpen}
-									onAfterOpen={this.afterOpenModal}
-									onRequestClose={this.closeModal}
-									style={customStyles}
-									contentLabel="Example Modal"
-									>
-									<UserLogin user={this.state.user} setUser={this.setUser.bind(this)}/>
-										
-									</Modal>
+								{this.state.user ? <div onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test/></div> :
+								<Link to="/login">Log In</Link>
+								}
 							</div>
 							<div className="navbutton">
 								<a href="https://github.com/grantrules/bikeindustryjobs">
@@ -285,7 +291,21 @@ class Jobs extends React.Component {
 							</div>
 						</div>
 						<div id="searchNav">
-							<Search filter={this.search.bind(this)}/> <a id="companies" onClick={toggleNav}>Companies</a>
+							<Search filter={this.search.bind(this)}/> 
+							<Route path="/company/:companyName" render={({ match }) => {
+								if (companies) {
+								var company = companies.find(g => g.company === match.params.companyName);
+
+								return (
+									<img id="headercompanylogo" src={company.logo} />
+								);}
+								else return (null);
+								
+								}}
+					
+							/>
+							
+							<a id="companies" onClick={toggleNav}>Companies</a>
 						</div>
 					</div>
 				</header>
@@ -303,90 +323,71 @@ class Jobs extends React.Component {
 						}
 			</div>
 		</div>
-		<div id="base">
-			<div className="listthing jobs">
-				<Tags
-					onClick={this.toggleTag.bind(this)}
-					tags={this.state.tags}
-					tagsEnabled={this.state.tagsEnabled}
-				/>
-				{!this.state.jobs ?
-					<Loading/>
-					:
-					<div>
-						<span className="tagblap">Bike Mechanic</span>
+		
+		<div id="base2">
+			<div className="listthing">
+			<Route exact={true} path="/" render={() => (
+				<div id="home">
+					<div id="homeheader">
+						<div>careers.bike</div>
+					</div>
+				<div className="list">
+				<h1>Jobs</h1>
+				<p>Welcome to the best resource for bike indusry jobs. Register to get personalized job alerts to your email.</p>
+				<span className="tagblap">Bike Mechanic</span>
 						<span className="tagblap">Customer Service</span>
 						<span className="tagblap">Marketing</span>
 						<span className="tagblap">Design</span>
 						<span className="tagblap">Labor</span>
 						<span className="tagblap">Outside Rep</span>
-
-						<Route path="/company/:companyName" render={({ match }) => {
-							var company = companies.find(g => g.company === match.params.companyName);
-							console.log(`routing jobs for ${company.company}`)
-							return (<JobList
+				<JobList
+								jobs={jobs}
+								companies={companies}
+								engine={engine}
+								tags={tagsEnabled}
+								search={search}
+								user={user}
+							/>
+							</div>
+				</div>
+			)}/>
+			<Route exact={true} path="/login" render={() => {
+				console.log(this.context.router);
+				return (
+				<UserLogin user={this.state.user} setUserData={this.setUserData.bind(this)}/>
+			)}}/>
+			{companies &&
+				<Route path="/company/:companyName" render={({ match }) => {
+					var company = companies.find(g => g.company === match.params.companyName);
+					return (
+						<div>
+						<Company company={company}/>
+						<Tags
+					onClick={this.toggleTag.bind(this)}
+					tags={this.state.tags}
+					tagsEnabled={this.state.tagsEnabled}
+				/>
+				{!jobs ? <Loading/> :
+				<div className="list">
+				<span className="tagblap">Bike Mechanic</span>
+						<span className="tagblap">Customer Service</span>
+						<span className="tagblap">Marketing</span>
+						<span className="tagblap">Design</span>
+						<span className="tagblap">Labor</span>
+						<span className="tagblap">Outside Rep</span>
+						<JobList
+								user={user}
 								jobs={jobs}
 								companies={companies}
 								engine={engine}
 								company={company.company}
 								tags={tagsEnabled}
 								search={search}
-							/>)
-						}}/>
-
-						<Route path="/job/:jobId" render={({ match }) => {
-							var job = jobs.find(g => g._id === match.params.jobId);
-							console.log(`routing jobs for ${job.company}`)
-							return (<JobList
-								jobs={jobs}
-								companies={companies}
-								engine={engine}
-								company={job.company}
-								tags={tagsEnabled}
-								search={search}
-							/>)
-						}}/>
-
-						<Route path="/" exact={true} render={() => {
-							return (<JobList
-								jobs={jobs}
-								companies={companies}
-								engine={engine}
-								tags={tagsEnabled}
-								search={search}
-							/>)
-						}}/>
-					</div>
+							/>
+							</div>
 				}
-			</div>
-		</div>
-		<div id="base2">
-			<div className="listthing">
-			<Route exact={true} path="/" render={() => (
-				<div id="home">
-					<div id="homeheader">
-						<div>Specialized Bicycle Company</div>
-					</div>
-
-				<h1>Jobs</h1>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
-				<p> Here's a bunch of text about things hey</p>
 				</div>
-			)}/>
-			{companies &&
-				<Route path="/company/:companyName" render={({ match }) => {
-					var company = companies.find(g => g.company === match.params.companyName);
-					return (
-						<Company company={company}/>
+
 					)
 				}}/>
 			}
@@ -451,11 +452,10 @@ const Loading = () => (
 );
 
 
-class Company extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 
+
+
+class Company extends React.Component {
 	render() {
 		return (
 			<div id="home">
@@ -463,7 +463,12 @@ class Company extends React.Component {
 					<div>{this.props.company.title}</div>
 				</div>
 
-				<h1>Jobs</h1>
+				<div className="list">
+					<p>SmartEtailing provides website, marketing and data solutions
+						 to help independent bicycle retailers, cycling suppliers 
+						 and cycling brands sell more product in-store and online.</p>
+				</div>
+
 			</div>
 		)
 	}

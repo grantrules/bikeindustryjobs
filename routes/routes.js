@@ -3,12 +3,13 @@ var passport = require('passport');
 var controller = require('../controllers/controller');
 var userController = require('../controllers/users');
 
+var jwtAuth = passport.authenticate('jwt', {session:false});
+var localAuth = passport.authenticate('local', {session:false});
+
 module.exports = app => {
     var router = express.Router();
 
     app.use('/api/', router);
-
-    // for auth: passport.authenticate('jwt', {session:false})
 
     // JOBS
     router.route('/jobs')
@@ -20,14 +21,17 @@ module.exports = app => {
 
     // USER
     router.route('/users')
-        .get(passport.authenticate('jwt', {session:false}), userController.getUsers)
+        .get(jwtAuth, userController.getUsers)
 
         .post(userController.postUsers);
+
+    router.route('/client')
+        .delete(jwtAuth, userController.deleteClient);
 
 
     // LOGIN
     router.route('/login')
-        .post(passport.authenticate('local', {session: false}), userController.postLogin);
+        .post(localAuth, userController.postLogin);
 
     router.route('/refresh_token')
         .post(userController.postRefreshToken)

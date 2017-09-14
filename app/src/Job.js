@@ -7,15 +7,6 @@ import { Tag, Tags, hasTag } from './Tags';
 
 class JobListItem extends React.Component {
 	
-	constructor(props) {
-		super(props);
-		/*
-		this.state = {
-			isHidden: true
-		}
-		*/
-	}	
-	
 	hasTag(tag) {
 		return hasTag(this.props.job,tag);
 	}
@@ -27,14 +18,6 @@ class JobListItem extends React.Component {
 			<strong>{this.props.company.title}</strong>
 		);
 	}
-	/*
-	toggle(e) {
-		this.setState({
-			isHidden: !this.state.isHidden
-    	});
-		e.preventDefault();
-	}
-	*/
 	
 	render() {
 		
@@ -44,7 +27,10 @@ class JobListItem extends React.Component {
 		return (
 		
 	
-			<li className="job" id={'job'+this.props.job._id}>		
+			<li className="job" id={'job'+this.props.job._id}>
+				{this.props.user ?
+					<Star/>
+					: '' }	
 				{this.titleOrLogo()}
 				<div className="jobdata">
 					<Link className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link>
@@ -63,6 +49,18 @@ class JobListItem extends React.Component {
 
   }
 
+}
+
+class Star extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = props;
+	}
+	render() {
+		return (
+			<div onClick={()=>{this.setState({enabled: !this.state.enabled})}} className={this.state.enabled ? 'starEnabled' : 'star' }>★</div>
+		)
+	}
 }
 
 export default JobListItem
