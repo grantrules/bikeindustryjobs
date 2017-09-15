@@ -1,5 +1,6 @@
 var Job = require('../models/job');
 var Company = require('../models/company');
+var Star = require('../models/company');
 
 
 // GET /api/companies
@@ -20,4 +21,28 @@ exports.getJobs = (req,res) => {
     	 }
 	 );
 };
+
+exports.getStars = (req, res) => {
+	Star.find({user_id: req.user._id}).select('job_id').exec((err, stars) => {
+		if (err)
+			return res.json(err);
+		res.json(stars);
+	})
+}
+
+exports.postStars = (req, res) => {
+	Star.create({user_id: req.user._id, job_id: req.body.job_id}).exec((err, star) => {
+		if (err)
+			return res.json(err);
+		res.json(star);
+	})
+}
+
+exports.deleteStar = (req, res) => {
+	Star.remove({user_id: req.user._id, job_id: req.body.job_id}).exec(err => {
+		if (err)
+			return res.json(err);
+		res.json({success:"success"})
+	})
+}
 

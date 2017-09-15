@@ -18,6 +18,11 @@ module.exports = app => {
     router.route('/companies')
         .get(controller.getCompanies);
 
+    router.route('/stars')
+        .get(jwtAuth, controller.getStars);
+    
+    router.route('/star')
+        .delete(jwtAuth, controller.deleteStar);
 
     // USER
     router.route('/users')
