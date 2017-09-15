@@ -66,10 +66,12 @@ class AuthService extends Service {
                 headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
             },
             (err, data) => {
-                if (data.token) {
-                    this.setToken(data.token);
-                } else {
-                    if (!err) { err = {'err': "No token"} }
+                if (!err) {
+                    if (data.token) {
+                        this.setToken(data.token);
+                    } else {
+                        err = {'err': "No token"}
+                    }
                 }
                 callback(err,data);
             }

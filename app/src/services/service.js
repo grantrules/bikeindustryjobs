@@ -26,10 +26,8 @@ class Service {
             if(contentType && contentType.includes("application/json")) {
                 return res.json();
             }
-            return res.text();
             throw new TypeError("Oops, we haven't got JSON!");
         }).then((json) => {
-            console.log(json.blob);
             callback(null, json)
         }).catch((err) => {
             callback(err, null);

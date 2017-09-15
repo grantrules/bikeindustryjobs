@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 import { Tags, hasTag, getTags } from './Tags';
-import JobListItem from './Job';
+import JobList from './Job';
 import { UserLogin } from './User';
 
 
 import Bloodhound from 'bloodhound-js';
-import Moment from 'moment';
 
 import { html, safeHtml } from 'common-tags';
 
@@ -22,7 +21,7 @@ var NavLink = React.createClass({
     },
 
     render() {   
-		console.log(this.context.router);
+		//console.log(this.context.router);
         return (
             <Link {...this.props}></Link>
         );
@@ -31,7 +30,6 @@ var NavLink = React.createClass({
 
 var toggleNav = () => {
 	document.getElementById('companyList').classList.toggle('hider');
-	return false;
 }
 
 
@@ -53,11 +51,10 @@ const Search = ({filter}) => (
 class CompanyList extends React.Component {
 	
 	render() {
-		var companies = this.props.companies.map(company=>{
-			return (
-				<NavLink key={company.company} onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></NavLink>
+		var companies = this.props.companies.map(company=>(
+				<Link key={company.company} onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></Link>
 			)
-		});
+		);
 		
 		return (
 			<div>
@@ -67,88 +64,20 @@ class CompanyList extends React.Component {
 	}
 }
 
-// <JobList user="" jobs="" companies="" engine="" company="" tags="{}" search=""}
-class JobList extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-	
-	getCompany(company) {
-		return this.props.companies.find(e=>e.company===company)
-	}
-
-	/* if search is empty, directly update,
-	   callback for searchengine */
-	filter(search, company, tags) {
-		if (!search) {
-			this.updateJobs(this.props.jobs, company, tags);
-		} else {
-			this.props.engine.search(search, (d) => {
-				this.updateJobs(d, company, tags);
-			}, function(d) {});
-		}
-		
-	}
-	
-	/* filters array of jobs
-	   checks for no c
-	*/
-	updateJobs(jobs,company,tags) {
-		jobs = jobs ? jobs : [];
-		// no tags or all tags = no search
-		var tagsearch = tags && tags.length > 0 && tags.length !== this.state.tags.length;		
-		
-		jobs = jobs.filter(job=>!company || job.company === company ? !tagsearch || hasTag(job,tags) : false)
-
-		console.log(`update jobs: ${company}`)
-		this.setState({ jobs });
-	}
-	
-	render() {
-
-		var { jobs, company, user } = this.props;
-
-		if (!jobs || jobs.length === 0) {
-			return <div id="noresults">No results</div>
-		}
-		var last = new Date(0).toDateString();
-		jobs = jobs.filter(job=>!company || job.company === company).map(job => {
-			var cleandate = new Date(job.first_seen).toDateString();
-			var date = cleandate !== last;
-			last = cleandate;
-			return ([
-				date ? <li>{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
-				<JobListItem user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
-			])
-		});
-		
-		return (
-			<ul id="joblist">
-					{jobs}
-			</ul>
-		)
-	}
-}
 class Test extends React.Component {
 	render() {
 		return (
 			<ul id="userdropdown" className="hidden">
 				<li>Your profile</li>
 				<li>Starred Jobs</li>
-				<li>Log Out</li>
+				<li><a href="#" onClick={e=>{
+					e.preventDefault();
+					this.props.logout();
+				}}>Log Out</a></li>
 
 			</ul>
 		)
-	}
-
-	componentDidMount() {
-		console.log('mounted');
-		AuthService.fetchSecure('/api/users', {method: 'GET'} , (err,data)=>{
-			if (err) { console.log(err); }
-			else { console.log(data); }
-		})
-
 	}
 }
 
@@ -165,7 +94,7 @@ class Jobs extends React.Component {
 			user: null,
 		};
 	}
-	
+	/*
 	checkQueryString() {
 		var qs = getHashQueryString();
 		if (qs.search !== this.state.search ||
@@ -173,8 +102,13 @@ class Jobs extends React.Component {
 				console.log('state change: setting search from qs');
 				this.setState({search: qs.search || '', company: qs.company || ''});
 			}
-	}
+	}*/
 	
+	logout() {
+		this.setState({user: null});
+		localStorage.removeItem('jwt');
+		localStorage.removeItem('refresh_token');
+	}
 	
 	/* callback for <Search onChange/> */
 	search(input) {
@@ -223,41 +157,27 @@ class Jobs extends React.Component {
 	}
 	
 
-	receiveCompanies(response) {
-		this.setState({companies: response.entity});
-	}
-
-	receiveJobs(response) {
-		var jobs = response.entity;
-		var tags = getTags(jobs);
-		var tagsEnabled = tags.map(e=>e.name);
-		var engine = this.startEngine(jobs);
-		
-		console.log('state change: setting jobs & related');
-
-		this.setState({
-			jobs,
-			tags,
-			tagsEnabled,
-			engine,
-		});
-	}
+	
 	
 	/* implemented from react.component */
 	componentDidMount() {
-		JobService.getCompanies(this.receiveCompanies.bind(this));
-		JobService.getJobs(this.receiveJobs.bind(this));
+		JobService.getCompanies(JobService.callback(this.setState.bind(this)).receiveCompanies);
+		JobService.getJobs(JobService.callback(this.setState.bind(this)).receiveJobs);
 
+		/*
 		window.addEventListener("hashchange", ()=>{
 			this.checkQueryString();
 		},false);	
+		*/
 
 		if (AuthService.getRefreshToken()) {
 			console.log("found login info");
 			AuthService.refresh_token(null, (err, data) => {
-				console.log(data);
-				this.setState({user: data.user});
-				AuthService.setToken(data.token);
+				if (!err) {
+					console.log(data);
+					this.setState({user: data.user});
+					AuthService.setToken(data.token);
+				}
 			});
 		}
 	}
@@ -274,7 +194,7 @@ class Jobs extends React.Component {
 						<h1><Link to="/">careers.bike</Link></h1>
 						<div className="navbuttons">
 							<div className="navbutton">
-								{this.state.user ? <div onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test/></div> :
+								{this.state.user ? <div onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test logout={this.logout.bind(this)}/></div> :
 								<Link to="/login">Log In</Link>
 								}
 							</div>
@@ -354,7 +274,7 @@ class Jobs extends React.Component {
 			<Route exact={true} path="/login" render={() => {
 				console.log(this.context.router);
 				return (
-				<UserLogin user={this.state.user} setUserData={this.setUserData.bind(this)}/>
+				<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
 			)}}/>
 			{companies &&
 				<Route path="/company/:companyName" render={({ match }) => {

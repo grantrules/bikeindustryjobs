@@ -1,9 +1,57 @@
 import React from 'react';
+import Moment from 'moment';
 import { Link } from 'react-router-dom';
 
 
 
 import { Tag, Tags, hasTag } from './Tags';
+
+// <JobList user="" jobs="" companies="" engine="" company="" tags="{}" search=""}
+class JobList extends React.Component {
+	
+	getCompany(company) {
+		return this.props.companies.find(e=>e.company===company)
+	}
+
+	/* if search is empty, directly update,
+	   callback for searchengine */
+	filter(search, company, tags) {
+		if (!search) {
+			this.updateJobs(this.props.jobs, company, tags);
+		} else {
+			this.props.engine.search(search, (d) => {
+				this.updateJobs(d, company, tags);
+			}, function(d) {});
+		}
+		
+	}
+	
+	
+	render() {
+
+		var { jobs, company, user } = this.props;
+
+		if (!jobs || jobs.length === 0) {
+			return <div id="noresults">No results</div>
+		}
+		var last = new Date(0).toDateString();
+		jobs = jobs.filter(job=>!company || job.company === company).map(job => {
+			var cleandate = new Date(job.first_seen).toDateString();
+			var date = cleandate !== last;
+			last = cleandate;
+			return ([
+				date ? <li>{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
+				<JobListItem user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
+			])
+		});
+		
+		return (
+			<ul id="joblist">
+					{jobs}
+			</ul>
+		)
+	}
+}
 
 class JobListItem extends React.Component {
 	
@@ -63,4 +111,4 @@ class Star extends React.Component {
 	}
 }
 
-export default JobListItem
+export default JobList
