@@ -184,7 +184,7 @@ class App extends React.Component {
 					<div id="base2">
 						<div className="listthing">
 							<Route exact={true} path="/" render={() => (
-								<Index/>
+								<Index {...this.state}/>
 							)}/>
 							<Route exact={true} path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>

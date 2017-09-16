@@ -37,14 +37,16 @@
 #joblist img { display: inline-block; float: left;}
 */
 #homeheader {
-  /*background-image: url(http://i.imgur.com/HFhHjrI.jpg);*/
-  background-image: url(http://imgur.com/R1uP1Km.jpg);
+  background-image: url(https://i.imgur.com/07aqlZV.jpg);
+  /* GOOD-ish background-image: url(http://imgur.com/R1uP1Km.jpg);*/
+  /*background-image: url(https://i.imgur.com/cVLJWX9.jpg);*/
   background-repeat: no-repeat;
   background-position-x: center;
   background-size: cover;
-  height: 185px;
+  height: 150px;
     vertical-align: text-bottom;
-    position: relative;
+	position: relative;
+	display: flex;
 
 }
 #homeheader div {
@@ -154,6 +156,8 @@ ul { padding-left: 40px; }
 	#joblist ul li a.title {
 		font-size:14pt;
 	}
+
+	#homeheader { height: 400px; }
 
 }
 @media screen and (min-width: 992px) { 

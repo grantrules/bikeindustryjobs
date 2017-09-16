@@ -5,7 +5,7 @@ var Star = require('../models/company');
 
 // GET /api/companies
 exports.getCompanies = (req, res) => {
-	Company.find({}).sort('title').exec((err,companies)=>res.json(err ? {err: "error fetching companies"} : companies))
+	Company.find({}).sort('title').select('title company location website logo').exec((err,companies)=>res.json(err ? {err: "error fetching companies"} : companies))
 }
 
 

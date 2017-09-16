@@ -22,19 +22,13 @@ const CompanyInfo = ({company}) => (
 const Company = ({company, onClick, tags, tagsEnabled, user, jobs, companies, engine, search}) => (
     <div>
     <CompanyInfo company={company}/>
-    <Tags
-        onClick={onClick}
-        tags={tags}
-        tagsEnabled={tagsEnabled}
-    />
     {!jobs ? <Loading/> :
         <div className="list">
-            <span className="tagblap">Bike Mechanic</span>
-            <span className="tagblap">Customer Service</span>
-            <span className="tagblap">Marketing</span>
-            <span className="tagblap">Design</span>
-            <span className="tagblap">Labor</span>
-            <span className="tagblap">Outside Rep</span>
+            <Tags
+                onClick={onClick}
+                tags={tags}
+                tagsEnabled={tagsEnabled}
+             />
             <JobList
                 user={user}
                 jobs={jobs}

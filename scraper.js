@@ -51,6 +51,16 @@ var companyCompleted = () => Object.keys(companyComplete).every(e=>companyComple
 
 
 
+var tags = [
+	{name: "mechanic", label: "Mechanic"},
+	{name: "engineering", label: "Engineering"},
+	{name: "accounting", label: "Accounting"},
+	{name: "executive", label: "Executive"},
+	{name: "customer service", label: "Customer Service"},
+]
+
+var getTag = () => tags[Math.floor(Math.random() * tags.length)]
+
 class jobsaver {
 	constructor(completedCallback) {
 		this.jobQueue = [];
@@ -93,6 +103,8 @@ class jobsaver {
 		
 		
 		if (job == undefined) { this.stop(); return; }
+
+		job.tags = [getTag()]
 		
 		Job.findOneAndUpdate(
 			{'url':job.url},
