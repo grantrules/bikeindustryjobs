@@ -1,26 +1,20 @@
 import Service from './service';
-import { Tags, hasTag, getTags } from '../Tags';
+import { getTags } from '../components/Tags';
 
 class JobService extends Service {
 
     getCompanies(callback) {
-        this.client({
-            method: 'GET',
-            path: `${this.testinghost}/api/companies`
-        }).then(callback);
+        this.fetch(`${this.testinghost}/api/companies`, {method: 'GET'}, callback);
     }
 
     getJobs(callback) {
-        this.client({
-            method: 'GET',
-            path: `${this.testinghost}/api/jobs`
-        }).then(callback);
+        this.fetch(`${this.testinghost}/api/jobs`, {method: 'GET'}, callback);
     }
 
     callback(func) {
         return {
-            receiveJobs: (response) => {
-                var jobs = response.entity;
+            receiveJobs: (err, data) => {
+                var jobs = data;
                 var tags = getTags(jobs);
                 var tagsEnabled = tags.map(e=>e.name);
                 var engine = null;//this.startEngine(jobs);
@@ -32,25 +26,11 @@ class JobService extends Service {
                     engine,
                 });
             },
-            receiveCompanies: (response) => {
-                func({companies: response.entity});
+            receiveCompanies: (err, data) => {
+                func({companies: data});
             }
         }
     }
-
-    receiveJobs(response) {
-		var jobs = response.entity;
-		var tags = getTags(jobs);
-		var tagsEnabled = tags.map(e=>e.name);
-		var engine = this.startEngine(jobs);
-		
-		this.setState({
-			jobs,
-			tags,
-			tagsEnabled,
-			engine,
-		});
-	}
 }
 
 export default new JobService();

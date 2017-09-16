@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 
 
-import { Tag, Tags, hasTag } from './Tags';
+import { Tag, hasTag } from './Tags';
 
 // <JobList user="" jobs="" companies="" engine="" company="" tags="{}" search=""}
 class JobList extends React.Component {
