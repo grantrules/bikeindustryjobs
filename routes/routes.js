@@ -18,6 +18,7 @@ module.exports = app => {
     router.route('/companies')
         .get(controller.getCompanies);
 
+    // STARS
     router.route('/stars')
         .get(jwtAuth, controller.getStars);
     

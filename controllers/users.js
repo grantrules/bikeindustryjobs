@@ -17,15 +17,23 @@ exports.postUsers = function(req,res) {
     
     console.log(`registering user ${user.email}`);
 
-    User.create(user, function(user, err) {
-        if (err)
-            res.send(err);
+    User.create(user, function(err, user) {
+        if (err) {
+            if (err.errmsg.match(/dup key/)) {
+                res.status(400);
+                res.json({err: "account exists"});
+            } else {
+                res.send(err);
+                console.log(err);
+                console.log(user);
+            }
+        }
         else {
             user.hashed_password = null;
 
-            var refresh_token = jwt.sign({refresh_token: true, user: req.user, date: new Date()}, config.JWTsecret);
+            var refresh_token = jwt.sign({refresh_token: true, user: user, date: new Date()}, config.JWTsecret);
             var client = new Client({
-                user_id: req.user._id,
+                user_id: user._id,
                 refresh_token,
                 login_date: new Date(),                
                 user_agent: req.headers['user-agent'] ? req.headers['user-agent'] : null,
