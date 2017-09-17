@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, Route } from 'react-router-dom';
 
 
+/* OLD, TO BE DELETED */
+
 const Test = ({logout}) => (
     <ul id="userdropdown" className="hidden">
         <li>Your profile</li>
