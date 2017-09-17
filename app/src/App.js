@@ -137,7 +137,6 @@ class App extends React.Component {
 	
 	/* implemented from react.component */
 	componentDidMount() {
-		console.log("what");
 		JobService.getCompanies(JobService.callback(this.setState.bind(this)).receiveCompanies);
 		JobService.getJobs(JobService.callback(this.setState.bind(this)).receiveJobs);
 
@@ -157,6 +156,29 @@ class App extends React.Component {
 				}
 			});
 		}
+
+		window.addEventListener('scroll', () => {
+			var y = window.pageYOffset || window.pageYOffset==0 ? window.pageYOffset : window.scrollY;
+			var getPosition = (el) => {
+				var yPos = 0;
+			   
+				while (el) {
+				  if (el.tagName === "BODY") {
+					var yScroll = el.scrollTop || document.documentElement.scrollTop;
+					yPos += (el.offsetTop - yScroll + el.clientTop);
+				  } else {
+					yPos += (el.offsetTop - el.scrollTop + el.clientTop);
+				  }
+				  el = el.offsetParent;
+				}
+				return yPos;
+			}
+			var headerPos = document.getElementById('slideinheaderpos');
+			var header = document.getElementById('slideinheader');
+			if (headerPos && (y > getPosition(headerPos) + y == !header.classList.contains('visible'))) {
+				header.classList.toggle('visible')
+			}
+		})
 	}
 		
 	render() {
@@ -166,7 +188,7 @@ class App extends React.Component {
 		return (
 			<Router>
 				<div>
-					<Header user={user} toggleNav={toggleNav} searchCallback={this.search.bind(this)} companies={companies} logout={this.logout.bind(this)}/>
+					{/*<Header user={user} toggleNav={toggleNav} searchCallback={this.search.bind(this)} companies={companies} logout={this.logout.bind(this)}/>*/}
 
 					<div id="companyList" className="companyList hider">
 						<div id="companyListLeft">
@@ -193,16 +215,9 @@ class App extends React.Component {
 								<Route path="/company/:companyName" render={({ match }) => {
 									var company = companies.find(g => g.company === match.params.companyName);
 									return (
-										<Company
+										<Company {...this.state}
 											company={company}
 											onClick={this.toggleTag.bind(this)}
-											tags={tags}
-											tagsEnabled={tagsEnabled}
-											user={user}
-											jobs={jobs}
-											companies={companies}
-											engine={engine}
-											search={search}
 										/>
 									)
 								}}/>
@@ -212,7 +227,7 @@ class App extends React.Component {
 								<Route path="/job/:jobId" render={({ match }) => {
 									var job = jobs.find(g => g._id === match.params.jobId);
 									return (
-										<Job job={job} company={companies.find(g => g.company === job.company)}/>
+										<Job {...this.state} job={job} company={companies.find(g => g.company === job.company)}/>
 									)
 								}} />
 							}
@@ -221,29 +236,7 @@ class App extends React.Component {
 				</div>
 			</Router>
 		);
-	  
   	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// ========================================
-/*
-ReactDOM.render(
-	<Router>
-		<Jobs />
-	</Router>,
-	document.getElementById('root')
-);
-*/
 
 export default App;

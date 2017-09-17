@@ -1,3 +1,20 @@
+.scrollHeader {
+	background-color: black;
+	position: fixed;
+	left: 0;
+	top: -100px;
+	right: 0;
+	color: white;
+	overflow: hidden;
+	transition: top .3s ease-in;
+}
+
+.visible {
+	top: 0;
+}
+
+
+
 .userForm input, .userForm button {
 	display: block;
 	width: 100%;
@@ -9,7 +26,7 @@
 	margin-bottom: 0 !important;
 }
 
-#loginForm button, .navbutton button {
+#loginForm button, .navbutton button, .top button {
 	background-image: linear-gradient(-180deg, #8530D0 0%, #6E27AE 90%);
 	border-radius: 5px;
 	color: white;
@@ -36,6 +53,18 @@
 
 #joblist img { display: inline-block; float: left;}
 */
+
+.headtext {
+	position: absolute;
+	top: 20%;
+	right: 20%;
+	font-size: 36pt;
+	font-weight: 800;
+	text-indent: -25px;
+	color: white;
+	text-shadow: 3px 3px 1px rgba(0,0,0,0.5);
+}
+
 #homeheader {
   background-image: url(https://i.imgur.com/07aqlZV.jpg);
   /* GOOD-ish background-image: url(http://imgur.com/R1uP1Km.jpg);*/
@@ -49,7 +78,13 @@
 	display: flex;
 
 }
-#homeheader div {
+
+#homeheader .top button { float: right; }
+#homeheader div.top {
+	padding: 5px 12.5%;
+	width: 100%;
+}
+#homeheader div.bottom {
   position: absolute;
 bottom: 0px;
 color: white;
@@ -141,8 +176,9 @@ ul { padding-left: 0; }
 	text-align: center;
 	margin: 100px 0;
 }
-
+/*
 .listthing { padding-top: 60px; }
+*/
 /*
 #base2 {
 		display: none;
@@ -172,7 +208,7 @@ ul { padding-left: 40px; }
 		height: 100vh;
 	}
 	#base2 {
-		padding-top:39px;
+		xpadding-top:39px;
 		xfloat: right;
 		width:100%;
 		clear: both;

@@ -19,24 +19,16 @@ const CompanyInfo = ({company}) => (
     </div>
 )
 
-const Company = ({company, onClick, tags, tagsEnabled, user, jobs, companies, engine, search}) => (
+const Company = ({...props}) => (
     <div>
-    <CompanyInfo company={company}/>
-    {!jobs ? <Loading/> :
+    <CompanyInfo company={props.company}/>
+    {!props.jobs ? <Loading/> :
         <div className="list">
-            <Tags
-                onClick={onClick}
-                tags={tags}
-                tagsEnabled={tagsEnabled}
+            <Tags {...props}
              />
             <JobList
-                user={user}
-                jobs={jobs}
-                companies={companies}
-                engine={engine}
-                company={company.company}
-                tags={tagsEnabled}
-                search={search}
+                {...props}
+                company={props.company.company}
             />
         </div>
     }

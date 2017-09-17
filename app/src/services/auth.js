@@ -9,8 +9,6 @@ class AuthService extends Service {
     fetchSecure(url, options, callback, refreshed) {
         var jwt = localStorage.getItem("jwt");
 
-               
-
         if (!jwt) {
             callback({err: "Not logged in"});
         } else {

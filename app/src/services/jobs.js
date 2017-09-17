@@ -14,11 +14,14 @@ class JobService extends Service {
     callback(func) {
         return {
             receiveJobs: (err, data) => {
+                if (err) {
+                    console.log(`error receiving jobs ${err}`);
+                }
+                console.log(`hmmmmmm ${data}`);
                 var jobs = data;
                 var tags = getTags(jobs);
                 var tagsEnabled = tags.map(e=>e.name);
                 var engine = null;//this.startEngine(jobs);
-                
                 func({
                     jobs,
                     tags,
