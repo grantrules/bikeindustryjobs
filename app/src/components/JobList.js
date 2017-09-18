@@ -14,7 +14,11 @@ class JobList extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {...props, initLoad: this.props.initLoad || 10, loadedJobs: [], hasMore: true};
+		this.state = {...props,
+			initLoad: this.props.initLoad || 10,
+			loadedJobs: [], 
+			hasMore: true
+		};
 		this.perPage = 10;
 	}
 
@@ -73,9 +77,6 @@ class JobList extends React.Component {
 		)
 	}
 
-
-
-
 }
 
 
@@ -103,25 +104,24 @@ class JobListItem extends React.Component {
 	
 			<li className="job" id={'job'+this.props.job._id}>
 				{this.props.user ?
-					<Star/>
+					<Star jobId={this.props.job._id}/>
 					: '' }	
 				{this.titleOrLogo()}
 				<div className="jobdata">
-					<Link onClick={this.props.onJobClick} className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link>
+					<h1><Link onClick={this.props.onJobClick} className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link></h1>
 
-					<div className="location">
+					<span className="location">
 						{this.props.job.location || this.props.company.location}
-					</div>
-				<ul className="tags">
-					{tagsreact}
-				</ul>
-			
-				
-			</div>
-		  </li>
-	);
+					</span>
 
-  }
+					<ul style={{display: 'inline-block'}} className="tags">
+						{tagsreact}
+					</ul>
+				</div>
+			</li>
+		);
+
+  	}
 
 }
 
@@ -134,9 +134,9 @@ class Star extends React.Component {
 		var enabled = !this.state.enabled;
 		this.setState({enabled});
 		if (enabled) {
-			StarService.star();
+			StarService.star(this.state.jobId);
 		} else {
-			StarService.unstar();
+			StarService.unstar(this.state.jobId);
 		}
 	}
 	render() {

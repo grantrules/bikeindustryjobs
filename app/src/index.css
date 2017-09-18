@@ -5,8 +5,23 @@
 */
 
 .loginlink::before { content: "🚪"}
-.scrollHeader {
-	background-color: rgba(41, 41, 41, 0.98);
+
+.companydata {
+	float: right;
+	box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+	padding: 10px;
+	margin-left: 15px;
+	margin-bottom: 10px;
+	color: #757575;
+	line-height: 190%;
+}
+
+.companydata ul {
+	list-style: none;
+}
+
+
+#slideinheader {
 	position: fixed;
 	left: 0;
 	top: -100px;
@@ -15,16 +30,22 @@
 	overflow: hidden;
 	transition: top .3s ease-in;
 }
-.scrollHeader > * { display: inline-block; width: 50%; }
-.scrollHeader > div, .scrollHeader > ul { vertical-align: middle; }
 
-.scrollHeader div { padding-top: 3px; }
 
-.scrollHeader ul { list-style-type: none; text-align: right; padding-right: 12.5%; }
-.scrollHeader ul > li { vertical-align: middle; display: inline-block; }
+.header {
+	background-color: rgba(41, 41, 41, 0.98);	
+}
+
+.header > * { display: inline-block; width: 50%; }
+.header > div, #slideinheader > ul { vertical-align: middle; }
+
+.header div { padding-top: 3px; }
+
+.header ul { list-style-type: none; text-align: right; padding-right: 12.5%; }
+.header ul > li { vertical-align: middle; display: inline-block; margin-left: 10px; }
 
 .visible {
-	top: 0;
+	top: 0 !important;
 }
 
 
@@ -54,7 +75,7 @@
 	color: white;
 	border: 1px solid rgba(36, 36, 36, 0.20);
 }
-.list {
+.list, .main {
 	width: 75%;
 	margin: 0 auto;
 }
@@ -171,7 +192,7 @@ ul { padding-left: 0; }
 	width: 100px;
 	float: left;
 }
-#joblist li {
+#joblist > li {
     display:block;
     padding:5px;
 	margin-bottom:10px;
@@ -193,11 +214,11 @@ ul { padding-left: 0; }
 		display: none;
 	}*/
 @media screen and (min-width: 620px) { 
-ul { padding-left: 40px; }
+	ul#joblist { padding-left: 40px; list-style: none; }
 	#joblist img.logo {
 		width: 200px;
 	}
-	.jobdata { padding-left:215px;}
+	#joblist .jobdata { padding-left:215px;}
 	#joblist ul li a.title {
 		font-size:14pt;
 	}

@@ -1,19 +1,28 @@
 import React from 'react';
 import { html, safeHtml } from 'common-tags';
 import JobList from '../components/JobList';
-import { SlideHeader } from '../components/SlideHeader';
+import { SlideHeader, RegularHeader } from '../components/SlideHeader';
 
 
 
 const Job = ({ job, company, ...props }) => (
-	<article className="jobpage">
+	<section>
+	<RegularHeader/>
+	<main className="jobpage main">
+		<section className="companydata">
 		{company.logo ?
 			<img alt={`${company.title} logo`} className="logo" src={company.logo}/>
 			:
 			<h2>{company.title}</h2>
 		}
-
-		<div className="jobdata">
+		<ul>
+			<li>👨‍💼 50-150 Employees</li>
+			<li>📅 Founded 2003</li>
+			<li>🏢 Headquarters: London, UK</li>
+			<li>🏭 Fashion</li>
+			</ul>
+		</section>
+		<section className="jobdata">
 			<h1>{job.title}</h1>
 
 			<div className="location">
@@ -25,10 +34,11 @@ const Job = ({ job, company, ...props }) => (
 				<div className="descriptiontext"
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			
-		</div>
+		</section>
 		<SlideHeader/>
 		<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
-	</article>
+	</main>
+	</section>
 );
 
 export { Job }

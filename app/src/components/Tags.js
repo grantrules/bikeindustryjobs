@@ -58,7 +58,7 @@ class Tag extends React.Component {
 	
 	render() {
 		return (
-			<span className={"tagblap "+(this.state.enabled ? "enabled" : "disabled")} onClick={this.props.onClick ? (e)=>{this.props.onClick(this.toggleState(),this.props.tag) } : null}>{this.props.tag.label}</span>
+			<li className={"tagblap "+(this.state.enabled ? "enabled" : "disabled")} onClick={this.props.onClick ? (e)=>{this.props.onClick(this.toggleState(),this.props.tag) } : null}>{this.props.tag.label}</li>
 		)
 	}
 }
