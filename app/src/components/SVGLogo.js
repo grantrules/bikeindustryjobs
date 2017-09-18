@@ -1,15 +1,14 @@
 import React from 'react'
 
 const SVGLogo = () => (
-    <div style={{width: "180px", height: '80px'}}>
 
     <svg
     xmlns="http://www.w3.org/1999/xlink"
     id="svg5618"
     version="1.1"
     viewBox="0 3 54 6"
-    height="60"
-    width="230">
+    className="logo"
+    >
    <defs
       id="defs5612">
       <linearGradient gradientUnits="userSpaceOnUse"
@@ -153,7 +152,6 @@ const SVGLogo = () => (
  </svg>
  
 
-</div>
 
 
 );
