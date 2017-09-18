@@ -53,6 +53,7 @@
 
 .visible {
 	top: 0 !important; /* need to override id style */
+	overflow: visible !important;
 }
 
 
@@ -191,15 +192,25 @@ font-size: 18pt;
 
 ul { padding-left: 0; }
 
-#joblist a.title {
-   font-size:14pt;
+#joblist .jobdata {
+	margin-left: 10px;
+}
+
+#joblist h1 {
+   font-size:12pt;
+   margin: 0; padding: 0;
+   
+}
+
+#joblist .tagblap {
+	padding: 1px 6px;
+	border-radius: 4px;
 }
 
 #joblist img.logo {
 	width: 100px;
-	float: left;
 }
-#joblist > li {
+li.job {
     display:block;
     padding:5px;
 	margin-bottom:10px;
@@ -220,14 +231,25 @@ ul { padding-left: 0; }
 #base2 {
 		display: none;
 	}*/
+
+	#joblist img.logo {
+		width: 100px;
+	}
+
+
+
 @media screen and (min-width: 620px) { 
 	ul#joblist { padding-left: 40px; list-style: none; }
+	#joblist h1 {
+		font-size: 14pt;
+	}
 	#joblist img.logo {
 		width: 200px;
 	}
-	#joblist .jobdata { padding-left:215px;}
-	#joblist ul li a.title {
-		font-size:14pt;
+
+	li.job > * {
+		display: inline-block;
+		vertical-align: middle;
 	}
 
 	#homeheader { height: 400px; }
@@ -296,6 +318,7 @@ body {
 }
 
 .star {
+	display: inline-block;
 	content: "★"
 }
 .starEnabled {
@@ -339,14 +362,8 @@ input[type="text"], input[type="password"], input[type="date"], input[type="date
 		position: absolute; width:100%;background-color: black;
 	}
 	*/
-	
-.navbutton {
-	vertical-align: middle;height:36px; background-color: red; float: right;text-align: center;
-}
 
-#header h1 {
-	margin:0; padding:0;float: left;
-}
+
 #searchNav {
 	background-color: black;margin-top:5px;margin-left:25%;
 }
