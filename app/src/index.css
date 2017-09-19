@@ -189,15 +189,18 @@ font-size: 18pt;
 
 
 
-
+ul#joblist {
+	list-style: none;
+}
 ul { padding-left: 0; }
 
 #joblist .jobdata {
 	margin-left: 10px;
+	font-size: 8pt;
 }
 
 #joblist h1 {
-   font-size:12pt;
+   font-size:10pt;
    margin: 0; padding: 0;
    
 }
@@ -212,14 +215,14 @@ ul { padding-left: 0; }
 }
 li.job {
     display:block;
-    padding:5px;
-	margin-bottom:10px;
-	clear: both;
+	padding:5px;
+	margin-bottom:30px;
 }
 
 #joblist .moment {
 	border-bottom: solid 1px #ccc;
-	margin-top: 30px;
+	padding-top: 15px;
+	margin-bottom: 20px;
 }
 
 
@@ -239,14 +242,18 @@ li.job {
 
 	#joblist img.logo {
 		width: 100px;
+		height: auto;
 	}
 
 
 
 @media screen and (min-width: 620px) { 
-	ul#joblist { padding-left: 40px; list-style: none; }
+	ul#joblist { padding-left: 40px; }
 	#joblist h1 {
 		font-size: 14pt;
+	}
+	#joblist .jobdata {
+		font-size: 12pt;
 	}
 	#joblist img.logo {
 		width: 200px;
@@ -255,6 +262,9 @@ li.job {
 	li.job > * {
 		display: inline-block;
 		vertical-align: middle;
+	}
+	li.job:hover {
+		box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 	}
 
 	#homeheader { height: 400px; }
@@ -322,29 +332,42 @@ body {
 	transition: max-height .15s ease-in-out;
 }
 
-.star, .star:visited {
-	color: #ccc;
-	content: "★"	
+.star {
+	
 }
 .star:link {
+	color: #ccc;
+	content: "★";
 	text-decoration: none;
 	display: inline-block;
 }
 .star:hover {
-	color: yellow;
+	color: yellow !important;
 	transition: color 0.1s ease-in-out;
+	text-shadow: 1px 1px 3px rgba(0,0,0,0.3);	
 }
 .star:active {
 	text-shadow: 1px 1px 1px black;
 }
 .star:visited {
-	color: inherit;
+	color: #ccc;
+}
+.starEnabled:link {
+	text-decoration: none;
 }
 .starEnabled, .starEnabled:visited {
 	color: yellow;
 }
 .starEnabled {
 	color: yellow;
+	text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+	
+}
+.starEnabled:hover {
+	color: #ccc !important;
+	transition: color 0.1s ease-in-out;	
+	text-shadow: none;
+	
 }
 	/*
 img { width: 200px; }
