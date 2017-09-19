@@ -13,7 +13,7 @@ const Job = ({ job, company, ...props }) => (
 		{company.logo ?
 			<img alt={`${company.title} logo`} className="logo" src={company.logo}/>
 			:
-			<h2>{company.title}</h2>
+			<h2 className="logo">{company.title}</h2>
 		}
 		<ul>
 			<li>👨‍💼 50-150 Employees</li>
@@ -24,6 +24,10 @@ const Job = ({ job, company, ...props }) => (
 		</section>
 		<section className="jobdata">
 			<h1>{job.title}</h1>
+			<div className="buttons">
+				<a className="tagblap" href="#">Apply</a>
+				<a className="tagblap" href="#">Share</a>
+			</div>
 
 			<div className="location">
 				{job.location || company.location}

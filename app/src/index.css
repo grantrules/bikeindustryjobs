@@ -12,6 +12,10 @@
 	height: 35px;
 }
 
+.jobpage #joblist img.logo {
+	display: none;
+}
+
 
 .companydata {
 	float: right;
@@ -131,20 +135,35 @@
 font-size: 18pt;
 }
 
-.tagblap {
+#taglist .tagblap {
     padding: 8px 12px;
     margin-left: 5px;
+    background-color: #c64087;
+    color: #fff;
+    margin-top:5px;
+    
+}
+#taglist .tagblap {
+	text-decoration: none;
+    border-radius: 2px;
+    transition: background-color .3s ease-in;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.tagblap:hover{background-color:#3c424d !important;}
+
+.buttons .tagblap {
+	padding: 2px 8px;
+	margin-right: 10px;
     background-color: #c64087;
     color: #fff;
     text-decoration: none;
     border-radius: 2px;
     transition: background-color .3s ease-in;
     font-weight: bold;
-    display: inline-block;
-    margin-top:5px;
-    
+    display: inline-block;    
 }
-.tagblap:hover{background-color:#3c424d}
 
 
 /* thanks github */
@@ -210,13 +229,13 @@ ul { padding-left: 0; }
 	border-radius: 4px;
 }
 
-#joblist img.logo {
-	width: 100px;
-}
 li.job {
-    display:block;
 	padding:5px;
 	margin-bottom:30px;
+	display: flex;
+	flex-flow: row nowrap;
+	align-items: center; 
+	
 }
 
 #joblist .moment {

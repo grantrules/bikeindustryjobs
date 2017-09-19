@@ -35,7 +35,9 @@ const SlideHeader = ({...props}) => (
 const RegularHeader = ({id,...props}) => (
     <div className="header" id={id || "regularheader"}>
         <div>
-            <SVGLogo/>
+            <Link to="/">
+                <SVGLogo/>
+            </Link>
         </div>
         <ul>
             <li>
@@ -50,4 +52,4 @@ const RegularHeader = ({id,...props}) => (
     </div>
 )
 
-export { SlideHeader, RegularHeader }
+export { SlideHeader, RegularHeader, LoginLink }
