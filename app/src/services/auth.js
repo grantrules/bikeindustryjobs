@@ -105,4 +105,7 @@ class AuthService extends Service {
     }
 }
 
-export default new AuthService();
+var service = new AuthService();
+service.Component = AuthService;
+
+export default service;

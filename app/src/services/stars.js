@@ -1,11 +1,11 @@
-import Service from './service';
+import AuthService from './auth';
 
-class StarService extends Service {
-    /*
+class StarService extends AuthService.Component {
 
     star(job_id,callback) {
         var data = new FormData();
         data.append("job_id", job_id);
+        console.log(`${job_id} job`);
 
         this.fetchSecure(
             `${this.testinghost}/api/stars`,
@@ -40,7 +40,6 @@ class StarService extends Service {
             callback
         );
     }
-    */
 
 }
 

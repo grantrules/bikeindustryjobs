@@ -23,11 +23,8 @@ module.exports = (app) => {
 
             User.findOne({'email': email}, function(err, user) {
                 if (err) { return done(err); }
-                if (!user) {
-                    return done(null, false, { message: 'Incorrect email.' });
-                }
-                if (!user.validatePassword(password)) {
-                    return done(null, false, { message: 'Incorrect password.' });
+                if (!user || !user.validatePassword(password)) {
+                    return done(null, false, { message: 'Incorrect email/password.' });
                 }
                 return done(null, user);
             });
@@ -41,9 +38,10 @@ module.exports = (app) => {
             secretOrKey: config.JWTsecret
         },
         function(jwt_payload, done) {
+            // TODO, token expiration
             // expires in in jwt_payload.exp stores as unixtime
 
-            done(null, jwt_payload);
+            done(null, jwt_payload.user);
         }
     ));
 }

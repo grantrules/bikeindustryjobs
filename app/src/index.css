@@ -217,6 +217,11 @@ li.job {
 	clear: both;
 }
 
+#joblist .moment {
+	border-bottom: solid 1px #ccc;
+	margin-top: 30px;
+}
+
 
 #loading {
 	width: 100%;
@@ -317,9 +322,26 @@ body {
 	transition: max-height .15s ease-in-out;
 }
 
-.star {
+.star, .star:visited {
+	color: #ccc;
+	content: "★"	
+}
+.star:link {
+	text-decoration: none;
 	display: inline-block;
-	content: "★"
+}
+.star:hover {
+	color: yellow;
+	transition: color 0.1s ease-in-out;
+}
+.star:active {
+	text-shadow: 1px 1px 1px black;
+}
+.star:visited {
+	color: inherit;
+}
+.starEnabled, .starEnabled:visited {
+	color: yellow;
 }
 .starEnabled {
 	color: yellow;

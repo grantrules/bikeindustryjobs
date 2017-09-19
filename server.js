@@ -9,6 +9,8 @@ var mongo = require('./db/mongo')
 var routes = require('./routes/routes');
 var passport = require('./auth/passport');
 
+log.enableAll();
+
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));

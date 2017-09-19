@@ -20,7 +20,8 @@ module.exports = app => {
 
     // STARS
     router.route('/stars')
-        .get(jwtAuth, controller.getStars);
+        .get(jwtAuth, controller.getStars)
+        .post(jwtAuth, controller.postStars)
     
     router.route('/star')
         .delete(jwtAuth, controller.deleteStar);

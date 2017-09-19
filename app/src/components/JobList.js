@@ -59,7 +59,7 @@ class JobList extends React.Component {
 			var date = cleandate !== last;
 			last = cleandate;
 			return ([
-				date ? <li>{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
+				date ? <li className="moment">{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
 				<JobListItem onJobClick={this.state.onJobClick} user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
 			])
 		});
@@ -103,12 +103,12 @@ class JobListItem extends React.Component {
 		
 	
 			<li className="job" id={'job'+this.props.job._id}>
-				{this.props.user ?
-					<Star jobId={this.props.job._id}/>
-					: '' }	
+			
 				{this.titleOrLogo()}
 				<div className="jobdata">
-					<h1><Link onClick={this.props.onJobClick} className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link></h1>
+					<h1><Link onClick={this.props.onJobClick} className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link> {this.props.user ?
+					<Star jobId={this.props.job._id}/>
+					: '' }</h1>
 
 					<span className="location">
 						{this.props.job.location || this.props.company.location}
@@ -131,6 +131,7 @@ class Star extends React.Component {
 		this.state = props;
 	}
 	onClick(e) {
+		e.preventDefault();
 		var enabled = !this.state.enabled;
 		this.setState({enabled});
 		if (enabled) {
@@ -141,7 +142,7 @@ class Star extends React.Component {
 	}
 	render() {
 		return (
-			<div onClick={this.onClick.bind(this)} className={this.state.enabled ? 'starEnabled' : 'star' }>★</div>
+			<a href="#" onClick={this.onClick.bind(this)} className={this.state.enabled ? 'starEnabled' : 'star' }>★</a>
 		)
 	}
 }
