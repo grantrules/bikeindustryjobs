@@ -2,6 +2,24 @@
 
 .loginlink::before { content: "🚪"}
 
+.loginlink, .loggedin {
+	position:absolute;
+	padding-right:12.5%;
+	top: 25px;
+	color:white;
+	right:0;
+}
+
+.loggedin #userdropdown {
+	right: 12.5vw;
+}
+
+.loggedin ul {
+	padding: 10px;
+	color: #555;
+	list-style: none;
+}
+
 .logo {
 	height: 50px;
 	width: 200px;

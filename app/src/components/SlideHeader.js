@@ -5,7 +5,7 @@ import SVGLogo from './SVGLogo'
 const LoginLink = ({user, logout}) => {
     if (user) {
         return (
-            <div onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test logout={logout}/></div>            
+            <div className="loggedin" onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test logout={logout}/></div>            
         )
     }
     return (

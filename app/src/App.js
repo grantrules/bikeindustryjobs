@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
+import { Router, Link, Route } from 'react-router-dom';
 
 import { UserLogin } from './routes/UserLogin';
 import { Header } from './components/Header';
@@ -14,6 +14,16 @@ import Bloodhound from 'bloodhound-js';
 import JobService from './services/jobs';
 import AuthService from './services/auth';
 
+import { createBrowserHistory } from 'history';
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-105678-5'); // add your UA code 
+
+const history = createBrowserHistory();
+history.listen((location) => {
+		ReactGA.set({ page: window.location.pathname + window.location.search });
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	}
+);
 /*
 var NavLink = React.createClass({
     contextTypes: {
@@ -186,7 +196,7 @@ class App extends React.Component {
 		const { jobs, companies, tagsEnabled, engine, search, user, tags } = this.state;
 	  
 		return (
-			<Router>
+			<Router history={history}>
 				<div>
 					{/*<Header user={user} toggleNav={toggleNav} searchCallback={this.search.bind(this)} companies={companies} logout={this.logout.bind(this)}/>*/}
 
