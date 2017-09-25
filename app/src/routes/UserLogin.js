@@ -1,7 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route, Link } from 'react-router-dom';
 
 import { Login, Logout, RecoverPassword, Register } from '../components/User';
+import SVGLogo from '../components/SVGLogo';
 
 const HistoryLink = withRouter(({history, ...props}) => {
 
@@ -9,7 +10,7 @@ const HistoryLink = withRouter(({history, ...props}) => {
 	var link = `https://www.strava.com/oauth/authorize?client_id=20313&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=write&state=mystate&approval_prompt=force`
 	console.log(history)
 
-	return (<a href={link}>Strava</a>);
+	return (<a className="auth strava" href={link}>Log in with Strava</a>);
 
 
 })
@@ -34,13 +35,33 @@ class UserLogin extends React.Component {
 		}
 
 		return (
-			<div>
-				<HistoryLink strategy="strava"/>
-				<Login setUserData={this.props.setUserData}/>
-				<Register setUserData={this.props.setUserData}/>
-			</div>
+			<section className="login">
+				<div className="logocenter">
+				<SVGLogo/>
+				</div>
+				<Route exact={true} path="/login" render={() => (
+					<LoginFrag setUserData={this.props.setUserData}/>
+				)}/>
+				<Route exact={true} path="/login/register" render={() => (
+					<RegisterFrag setUserData={this.props.setUserData}/>
+				)}/>
+				
+			</section>
 		)
 	}
 }
+
+const LoginFrag = ({setUserData}) => (
+	<div>
+		<HistoryLink strategy="strava"/>
+		<Login setUserData={setUserData}/>
+		<Link className="register" to="/login/register">Register with email</Link>
+	</div>
+
+)
+
+const RegisterFrag = ({setUserData}) => (
+	<Register setUserData={setUserData}/>
+)
 
 export { UserLogin }

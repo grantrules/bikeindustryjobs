@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router, Link, Route, withRouter } from 'react-router-dom';
 
-import { UserLogin } from './routes/UserLogin';
+import { UserLogin, UserRegister } from './routes/UserLogin';
 import { Index } from './routes/Index';
 import { Job } from './routes/Job';
 import { Company } from './routes/Company';
@@ -25,20 +25,7 @@ history.listen((location) => {
 		ReactGA.pageview(window.location.pathname + window.location.search);
 	}
 );
-/*
-var NavLink = React.createClass({
-    contextTypes: {
-        router: React.PropTypes.object
-    },
 
-    render() {   
-		//console.log(this.context.router);
-        return (
-            <Link {...this.props}></Link>
-        );
-    }
-});
-*/
 
 var toggleNav = () => {
 	document.getElementById('companyList').classList.toggle('hider');
@@ -224,7 +211,7 @@ class App extends React.Component {
 							<Route exact={true} path="/" render={() => (
 								<Index {...this.state}/>
 							)}/>
-							<Route exact={true} path="/login" render={() => (
+							<Route path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
 							)}/>
 
