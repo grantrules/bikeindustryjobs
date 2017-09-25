@@ -12,7 +12,7 @@ const Index = ({jobs, ...props}) => (
         <div id="homeheader">
             <div className="top">
                 <SVGLogo/>
-                <LoginLink user={props.user} logout={()=>{}}/>
+                <LoginLink user={props.user} logout={props.logout}/>
             </div>
             <span className="headtext">Find your dream job<br/>in the cycling industry</span>
         </div>
@@ -21,11 +21,11 @@ const Index = ({jobs, ...props}) => (
             <h1>Jobs</h1>
             {!jobs ? <Loading/> :
                 [
-                <Tags
+                <Tags key="tags1"
                     onClick={()=>{}}
                     {...props}
                 />,
-                <JobList
+                <JobList key="jobs1"
                     jobs={jobs}
                     {...props}
                 />]
