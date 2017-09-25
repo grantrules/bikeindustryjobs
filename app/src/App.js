@@ -209,7 +209,7 @@ class App extends React.Component {
 					<div id="base2">
 						<div className="listthing">
 							<Route exact={true} path="/" render={() => (
-								<Index {...this.state}/>
+								<Index {...this.state} logout={this.logout.bind(this)}/>
 							)}/>
 							<Route path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
@@ -223,7 +223,7 @@ class App extends React.Component {
 								<Route path="/company/:companyName" render={({ match }) => {
 									var company = companies.find(g => g.company === match.params.companyName);
 									return (
-										<Company {...this.state}
+										<Company logout={this.logout.bind(this)} {...this.state}
 											company={company}
 											onClick={this.toggleTag.bind(this)}
 										/>
@@ -235,7 +235,7 @@ class App extends React.Component {
 								<Route path="/job/:jobId" render={({ match }) => {
 									var job = jobs.find(g => g._id === match.params.jobId);
 									return (
-										<Job {...this.state} job={job} company={companies.find(g => g.company === job.company)}/>
+										<Job logout={this.logout.bind(this)} {...this.state} job={job} company={companies.find(g => g.company === job.company)}/>
 									)
 								}} />
 							}

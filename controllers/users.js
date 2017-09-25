@@ -70,13 +70,6 @@ exports.postRefreshToken = (req,res) => {
     })
 }
 
-exports.getOauth2 = (req, res) => { 
-    res.json({
-        user: req.user,
-        token: jwt.sign({user: req.user, created: new Date()},config.JWTsecret,{expiresIn: "2h"})
-    });
-}
-
 exports.postLogin = (req, res) => {
     var refresh_token = jwt.sign({refresh_token: true, user: req.user, date: new Date()}, config.JWTsecret);
 

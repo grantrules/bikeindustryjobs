@@ -39,7 +39,7 @@ const Job = ({ job, company, ...props }) => (
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			
 		</section>
-		<SlideHeader/>
+		<SlideHeader logout={this.props.logout}/>
 		<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
 	</main>
 	</section>

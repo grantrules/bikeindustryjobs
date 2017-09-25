@@ -46,7 +46,7 @@ const RegularHeader = ({id,...props}) => (
                 </a>
             </li>
             <li>
-                <LoginLink user={props.user}/>
+                <LoginLink user={props.user} logout={props.logout}/>
             </li>
         </ul>
     </div>
