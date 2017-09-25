@@ -14,6 +14,8 @@ import Bloodhound from 'bloodhound-js';
 
 import JobService from './services/jobs';
 import AuthService from './services/auth';
+import StarService from './services/stars';
+
 
 import { createBrowserHistory } from 'history';
 import ReactGA from 'react-ga';
@@ -79,6 +81,8 @@ class App extends React.Component {
 			search: '',
 			modalIsOpen: false,
 			user: null,
+			stars: [],
+			toggleStar: this.toggleStar.bind(this),
 		};
 	}
 	/*
@@ -119,6 +123,30 @@ class App extends React.Component {
 		this.setState({user: data.user, jwt: data.token});
 		localStorage.setItem("refresh_token", data.refresh_token);
 		localStorage.setItem("jwt", data.token);
+		this.login();
+	}
+
+	login() {
+		console.log("logging in");
+		StarService.getStars((err, data) => {
+			console.log('shit');
+			if (!err) {
+				console.log(data);
+				this.setState({stars: data});
+			} else {
+				console.log(`ewwow ${err}`);
+			}
+		})
+	}
+
+	toggleStar(jobId, data) {
+		var stars = this.state.stars;
+		if (stars.find(e=>e.job_id===jobId)) {
+			stars = stars.filter(e=>e.job_id!==jobId);
+		} else {
+			stars.push(data);
+		}
+		this.setState({stars});
 	}
 	
 	
@@ -133,6 +161,11 @@ class App extends React.Component {
 		engine.initialize();
 
 		return engine;
+	}
+	
+	componentWillReceiveProps(nextProps) {
+		console.log('will receive props');
+		console.log(nextProps.user);
 	}
 	
 
@@ -155,6 +188,7 @@ class App extends React.Component {
 				if (!err) {
 					this.setState({user: data.user});
 					AuthService.setToken(data.token);
+					this.login();
 				}
 			});
 		}
@@ -209,7 +243,7 @@ class App extends React.Component {
 					<div id="base2">
 						<div className="listthing">
 							<Route exact={true} path="/" render={() => (
-								<Index {...this.state} logout={this.logout.bind(this)}/>
+									<Index {...this.state} logout={this.logout.bind(this)}/>
 							)}/>
 							<Route path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>

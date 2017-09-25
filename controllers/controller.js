@@ -48,12 +48,16 @@ exports.postStars = (req, res) => {
 }
 
 exports.deleteStar = (req, res) => {
+	var job_id = req.body.job_id;
+	if (!job_id) {
+		return res.json({err: "no job_id"});
+	}
 	Star.remove({user_id: req.user._id, job_id: req.body.job_id}).exec(err => {
 		if (err) {
 			console.log(err);
 			return res.json({err: "error removing star"});
 		}
-		log.debug(`star deleted: job_id: ${job_id}, user: ${user.id}`);		
+		log.debug(`star deleted: job_id: ${req.body.job_id}, user: ${req.user._id}`);		
 		res.json({success:"success"})
 	})
 }

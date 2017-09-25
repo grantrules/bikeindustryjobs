@@ -60,7 +60,7 @@ class JobList extends React.Component {
 			last = cleandate;
 			return ([
 				date ? <li className="moment">{ Moment(new Date(job.first_seen)).format('dddd, MMMM DD, YYYY')}</li> : null,
-				<JobListItem onJobClick={this.state.onJobClick} user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
+				<JobListItem stars={this.props.stars} toggleStar={this.state.toggleStar} onJobClick={this.state.onJobClick} user={user} key={job._id} job={job} updatedate={date} company={this.getCompany(job.company)}/>
 			])
 		});
 		
@@ -100,8 +100,8 @@ class JobListItem extends React.Component {
 	
 	render() {
 		
-		
 		var tagsreact = this.props.job.tags ? this.props.job.tags.map((e) => { return (<Tag key={e.name} tag={e}/>)}) : [];
+		var starEnabled = (this.props.stars || []).find(e=>this.props.job._id===e.job_id)
 		
 		return (
 		
@@ -111,7 +111,7 @@ class JobListItem extends React.Component {
 				{this.titleOrLogo()}
 				<div className="jobdata">
 					<h1><Link onClick={this.props.onJobClick} className="title" to={`/job/${this.props.job._id}`}>{this.props.job.title}</Link> {this.props.user ?
-					<Star jobId={this.props.job._id}/>
+					<Star toggleStar={this.props.toggleStar} jobId={this.props.job._id} enabled={starEnabled}/>
 					: '' }</h1>
 
 					<span className="location">
@@ -136,17 +136,16 @@ class Star extends React.Component {
 	}
 	onClick(e) {
 		e.preventDefault();
-		var enabled = !this.state.enabled;
-		this.setState({enabled});
+		var enabled = !this.props.enabled;
 		if (enabled) {
-			StarService.star(this.state.jobId);
+			StarService.star(this.state.jobId,(err,data) => { this.props.toggleStar(this.state.jobId, data) });
 		} else {
-			StarService.unstar(this.state.jobId);
+			StarService.unstar(this.state.jobId, (err,data) => { this.props.toggleStar(this.state.jobId) })
 		}
 	}
 	render() {
 		return (
-			<a href="#" onClick={this.onClick.bind(this)} className={this.state.enabled ? 'starEnabled' : 'star' }>★</a>
+			<a href="#" onClick={this.onClick.bind(this)} className={this.props.enabled ? 'starEnabled' : 'star' }>★</a>
 		)
 	}
 }

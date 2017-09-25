@@ -8,7 +8,7 @@ class AuthService extends Service {
 
     fetchSecure(url, options, callback, refreshed) {
         var jwt = localStorage.getItem("jwt");
-
+    
         if (!jwt) {
             callback({err: "Not logged in"});
         } else {
@@ -22,8 +22,8 @@ class AuthService extends Service {
             this.fetch(
                 `${this.testinghost}${url}`,options,(err, data) => {
                     // TODO finish this
-                    console.log("got something");
-                    console.log(data);
+                    console.log("fetch secure: got something");
+                    callback(err, data);
                     // if jwt is expired do something here
                     /*
                     if (refreshed) {
