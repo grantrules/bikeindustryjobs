@@ -5,10 +5,10 @@ import { UserLogin } from './routes/UserLogin';
 import { Index } from './routes/Index';
 import { Job } from './routes/Job';
 import { Company } from './routes/Company';
+import AuthRoute from './routes/Auth';
 
 
 import Bloodhound from 'bloodhound-js';
-import queryString from 'query-string';
 
 
 
@@ -76,24 +76,8 @@ class CompanyList extends React.Component {
 	}
 }
 
-const AuthRoute = withRouter(({match, location, history, setUserData}) => {
 
-	var strategy = match.params.strategy;
 
-	var { state, code, redirect_to } = queryString.parse(location.search);
-
-	// so there should be a redirect url in here somewhere
-	//history.push("/");
-	AuthService.oauth2login(strategy, state, code, (err, data) => {
-		if (err || !data.user) {
-			console.log(`error logging in oauth via ${strategy}`);
-		} else {
-			setUserData(data);
-			history.push("/");
-		}
-	})
-	return null;
-})
 
 
 
