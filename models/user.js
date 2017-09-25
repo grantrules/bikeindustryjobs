@@ -16,6 +16,7 @@ var config = require('../config');
         hashed_password: String,
         role: String,
         date_added: Date,
+        apilogin: Object,
     });
 
     userSchema.statics.hashPassword = function(password,callback) {
@@ -28,7 +29,8 @@ var config = require('../config');
     }
     
     userSchema.methods.validatePassword = function(password) {
-        return this.hashed_password == userSchema.statics.hashPassword(password);
+        // convert to boolean !!"" === !!null === false
+        return !!this.hashed_password && this.hashed_password === userSchema.statics.hashPassword(password);
     }
     
     userSchema.statics.ROLES = {

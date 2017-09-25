@@ -1,14 +1,15 @@
 import React from 'react';
-import { Router, Link, Route } from 'react-router-dom';
+import { Router, Link, Route, withRouter } from 'react-router-dom';
 
 import { UserLogin } from './routes/UserLogin';
-import { Header } from './components/Header';
 import { Index } from './routes/Index';
 import { Job } from './routes/Job';
 import { Company } from './routes/Company';
 
 
 import Bloodhound from 'bloodhound-js';
+import queryString from 'query-string';
+
 
 
 import JobService from './services/jobs';
@@ -74,6 +75,27 @@ class CompanyList extends React.Component {
 		);
 	}
 }
+
+const AuthRoute = withRouter(({match, location, history, setUserData}) => {
+
+	var strategy = match.params.strategy;
+
+	var { state, code, redirect_to } = queryString.parse(location.search);
+
+	// so there should be a redirect url in here somewhere
+	//history.push("/");
+	AuthService.oauth2login(strategy, state, code, (err, data) => {
+		if (err || !data.user) {
+			console.log(`error logging in oauth via ${strategy}`);
+		} else {
+			setUserData(data);
+			history.push("/");
+		}
+	})
+	return null;
+})
+
+
 
 
 class App extends React.Component {
@@ -160,7 +182,6 @@ class App extends React.Component {
 			console.log("found login info");
 			AuthService.refresh_token(null, (err, data) => {
 				if (!err) {
-					console.log(data);
 					this.setState({user: data.user});
 					AuthService.setToken(data.token);
 				}
@@ -168,7 +189,7 @@ class App extends React.Component {
 		}
 
 		window.addEventListener('scroll', () => {
-			var y = window.pageYOffset || window.pageYOffset==0 ? window.pageYOffset : window.scrollY;
+			var y = window.pageYOffset || window.pageYOffset===0 ? window.pageYOffset : window.scrollY;
 			var getPosition = (el) => {
 				var yPos = 0;
 			   
@@ -185,7 +206,7 @@ class App extends React.Component {
 			}
 			var headerPos = document.getElementById('slideinheaderpos');
 			var header = document.getElementById('slideinheader');
-			if (headerPos && (y > getPosition(headerPos) + y == !header.classList.contains('visible'))) {
+			if (headerPos && ((y > getPosition(headerPos) + y) === !header.classList.contains('visible'))) {
 				header.classList.toggle('visible')
 			}
 		})
@@ -193,12 +214,13 @@ class App extends React.Component {
 		
 	render() {
 
-		const { jobs, companies, tagsEnabled, engine, search, user, tags } = this.state;
+		console.log('app rendering');
+
+		const { jobs, companies, user } = this.state;
 	  
 		return (
 			<Router history={history}>
 				<div>
-					{/*<Header user={user} toggleNav={toggleNav} searchCallback={this.search.bind(this)} companies={companies} logout={this.logout.bind(this)}/>*/}
 
 					<div id="companyList" className="companyList hider">
 						<div id="companyListLeft">
@@ -221,6 +243,11 @@ class App extends React.Component {
 							<Route exact={true} path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
 							)}/>
+
+							<Route path="/auth/:strategy" render={({match }) =>
+								<AuthRoute setUserData={this.setUserData.bind(this)}/>
+							}/>
+
 							{companies &&
 								<Route path="/company/:companyName" render={({ match }) => {
 									var company = companies.find(g => g.company === match.params.companyName);

@@ -8,10 +8,20 @@ var ExtractJwt = require('passport-jwt').ExtractJwt;
 var config = require('../config');
 var User = require('../models/user');
 
+var Strava = require('./strava');
+
 
 module.exports = (app) => {
 
     app.use(passport.initialize());
+
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+      
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
 
     // LOCAL LOGIN
     passport.use(new LocalStrategy({
@@ -44,4 +54,9 @@ module.exports = (app) => {
             done(null, jwt_payload.user);
         }
     ));
+
+    // STRAVA
+    Strava.init(app);
+
+
 }

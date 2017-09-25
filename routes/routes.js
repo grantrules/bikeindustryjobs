@@ -42,4 +42,7 @@ module.exports = app => {
 
     router.route('/refresh_token')
         .post(userController.postRefreshToken)
+
+    router.route('/oauth2/strava')
+        .get(passport.authenticate('strava', { failureRedirect: '/login' }),userController.getOauth2)
 }

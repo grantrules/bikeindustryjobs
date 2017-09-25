@@ -76,6 +76,16 @@ class AuthService extends Service {
         );
     }
 
+    oauth2login(strategy, state, code, callback) {
+        this.fetch(
+            `${this.testinghost}/api/oauth2/${strategy}?state=${state}&code=${code}`,
+            {
+                method: "GET",
+            },
+            callback
+        )
+    }
+
     // error first callback
     login(data, callback) {
         this.fetch(
