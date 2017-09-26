@@ -119,7 +119,7 @@ describe('Routing', () => {
 
     describe('Stars', () => {
 
-      it('should add a star', done => {
+      it('should add a star (with jwt)', done => {
         var star = {
           job_id: "abc123"
         }
@@ -136,7 +136,7 @@ describe('Routing', () => {
         })
       })
 
-      it('should remove a star', done => {
+      it('should remove a star (with jwt)', done => {
         var star = {
           job_id: "abc123"
         }
