@@ -99,7 +99,6 @@ class App extends React.Component {
 	login() {
 		console.log("logging in");
 		StarService.getStars((err, data) => {
-			console.log('shit');
 			if (!err) {
 				console.log(data);
 				this.setState({stars: data});
@@ -132,13 +131,6 @@ class App extends React.Component {
 
 		return engine;
 	}
-	
-	componentWillReceiveProps(nextProps) {
-		console.log('will receive props');
-		console.log(nextProps.user);
-	}
-	
-
 	
 	
 	/* implemented from react.component */

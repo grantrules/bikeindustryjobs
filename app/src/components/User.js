@@ -36,9 +36,6 @@ class Login extends React.Component {
         handleSubmit(event) {
             event.preventDefault();
             const data = new FormData(event.nativeEvent.target);
-            for (var v of data) {
-                console.log(v);
-            }
             AuthService.login(data,this.loginCallback.bind(this));
     
         }

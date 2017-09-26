@@ -17,7 +17,6 @@ class JobService extends Service {
                 if (err) {
                     console.log(`error receiving jobs ${err}`);
                 }
-                console.log(`hmmmmmm ${data}`);
                 var jobs = data;
                 var tags = getTags(jobs);
                 var tagsEnabled = tags.map(e=>e.name);

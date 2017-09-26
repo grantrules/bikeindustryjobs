@@ -49,7 +49,6 @@ module.exports = {
                         if (false) {
                             user = new User({email, first_name, last_name, apilogin});
                             User.create(user, (err,user)=>{
-                                console.log("done1");
                                 return done(null, user);
                             })
                         }
@@ -63,8 +62,6 @@ module.exports = {
                         if (!apilogin.strava) {
                             apilogin.strava = profile._json;
                             User.update(user, {apilogin}, (err,user) => {
-                                console.log("done2");
-                                
                                 return done(err,user)
                             })
                         } else {                            

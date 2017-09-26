@@ -53,7 +53,6 @@ exports.postUsers = function(req,res) {
 
 exports.postRefreshToken = (req,res) => {
     var refresh_token = req.body.refresh_token;
-    console.log(req.body);
     Client.findOne({refresh_token}, (err, client) => {
         if (client) {
             User.findOne({_id:client.user_id}, (err, user) => {

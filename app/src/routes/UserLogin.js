@@ -8,7 +8,6 @@ const HistoryLink = withRouter(({history, ...props}) => {
 
 	var redirect_uri = `${window.location.protocol}//${window.location.host}/auth/${props.strategy}?redirect_to=${encodeURIComponent(props.last_url)}`
 	var link = `https://www.strava.com/oauth/authorize?client_id=20313&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=write&state=mystate&approval_prompt=force`
-	console.log(history)
 
 	return (<a className="auth strava" href={link}>Log in with Strava</a>);
 
@@ -29,7 +28,6 @@ class UserLogin extends React.Component {
 	}
 
 	render() {
-        console.log(this.props.route);
 		if (this.state.user) {
 			return ( <Logout logoutCallback={this.logout.bind(this)}/> )
 		}
