@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Link, Route, withRouter } from 'react-router-dom';
 
 import { UserLogin, UserRegister } from './routes/UserLogin';
 import { Index } from './routes/Index';
@@ -21,12 +21,12 @@ import { createBrowserHistory } from 'history';
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105678-5'); // add your UA code 
 
-const history = createBrowserHistory();
-history.listen((location) => {
-		ReactGA.set({ page: window.location.pathname + window.location.search });
-		ReactGA.pageview(window.location.pathname + window.location.search);
-	}
-);
+var logPageView = () => {
+	ReactGA.set({ page: window.location.pathname + window.location.search });
+	ReactGA.pageview(window.location.pathname + window.location.search);
+}
+  
+var app = document.getElementById('app');
 
 /*
 function getHashQueryString() {
@@ -186,7 +186,7 @@ class App extends React.Component {
 		const { jobs, companies, user } = this.state;
 	  
 		return (
-			<Router history={history}>
+			<Router onUpdate={logPageView}>
 				<div>		
 					<div id="base2">
 						<div className="listthing">
