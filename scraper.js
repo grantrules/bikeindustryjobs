@@ -104,7 +104,8 @@ class jobsaver {
 		
 		if (job == undefined) { this.stop(); return; }
 
-		job.tags = [getTag()]
+		//insert made up tag
+		//job.tags = [getTag()]
 		
 		Job.findOneAndUpdate(
 			{'url':job.url},
