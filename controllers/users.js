@@ -42,7 +42,7 @@ exports.postUsers = function(req,res) {
             client.save((err, client) => {
                 res.json({
                     user: user,
-                    token: jwt.sign({user_id: user._id, created: new Date()},config.JWTsecret,{expiresIn: "2h"}),
+                    token: jwt.sign({user: user, created: new Date()},config.JWTsecret,{expiresIn: "2h"}),
                     refresh_token: refresh_token
                 });
             });
@@ -84,7 +84,7 @@ exports.postLogin = (req, res) => {
         if (client) {
             res.json({
                 user: req.user,
-                token: jwt.sign(req.user,config.JWTsecret, {expiresIn: "2h"}),
+                token: jwt.sign({user:req.user},config.JWTsecret, {expiresIn: "2h"}),
                 refresh_token: refresh_token
             });
         } else {

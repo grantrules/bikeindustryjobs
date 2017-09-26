@@ -9,6 +9,7 @@ var mongoose = require('mongoose');
 describe('Routing', () => {
     var url = 'http://localhost:9004';
     var token = null;
+    var user = null;
 
     before(done => {
       //mongoose.connect(config.mongodb);
@@ -88,6 +89,7 @@ describe('Routing', () => {
               res.body.should.have.property('token');
               res.body.should.have.property('refresh_token');
               token = res.body.token;
+              user = res.body.user;
               
               done();
           })
@@ -102,5 +104,51 @@ describe('Routing', () => {
           done();
         })
       })
+
+      it('should return 200 trying to access private area with jwt', done => {
+        request(url)
+        .get('/api/stars')
+        .set('Authorization', `BEARER ${token}`)
+        .send()
+        .end((err, res) => {
+          res.should.have.property("status", 200);
+          done();
+        })
+      })
+    });
+
+    describe('Stars', () => {
+
+      it('should add a star', done => {
+        var star = {
+          job_id: "abc123"
+        }
+        request(url)
+        .post('/api/stars')
+        .set('Authorization', `BEARER ${token}`)
+        .send(star)
+        .end((err, res) => {
+          if (err) {
+            throw err;
+          }
+          res.body.should.have.property('job_id');
+          done();
+        })
+      })
+
+      it('should remove a star', done => {
+        var star = {
+          job_id: "abc123"
+        }
+        request(url)
+        .delete('/api/stars')
+        .set('Authorization', `BEARER ${token}`)
+        .send(star)        
+        .end((err, res) => {
+          //todo
+          done();
+        })
+      })
+
     });
   });
