@@ -25,8 +25,6 @@ var logPageView = () => {
 	ReactGA.set({ page: window.location.pathname + window.location.search });
 	ReactGA.pageview(window.location.pathname + window.location.search);
 }
-  
-var app = document.getElementById('app');
 
 /*
 function getHashQueryString() {
