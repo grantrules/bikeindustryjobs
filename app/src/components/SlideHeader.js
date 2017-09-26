@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SVGLogo from './SVGLogo'
 
-const LoginLink = ({user, logout}) => {
+const LoginLink = ({name, user, logout}) => {
     if (user) {
         return (
-            <div className="loggedin" onClick={()=>{document.getElementById('userdropdown').classList.toggle('hidden')}}>Logged In<Test logout={logout}/></div>            
+            <div className="loggedin" onClick={()=>{document.getElementById(`${name}userdropdown`).classList.toggle('hidden')}}>
+                Logged In
+                <Test name={`${name}userdropdown`} logout={logout}/>
+            </div>            
         )
     }
     return (
@@ -14,8 +17,8 @@ const LoginLink = ({user, logout}) => {
     
 }
 
-const Test = ({logout}) => (
-    <ul id="userdropdown" className="hidden">
+const Test = ({name, logout}) => (
+    <ul id={name} className="userdropdown hidden">
         <li>Your profile</li>
         <li>Starred Jobs</li>
         <li><a href="#" onClick={e=>{
@@ -46,7 +49,7 @@ const RegularHeader = ({id,...props}) => (
                 </a>
             </li>
             <li>
-                <LoginLink user={props.user} logout={props.logout}/>
+                <LoginLink name={id || "regularheader"} user={props.user} logout={props.logout}/>
             </li>
         </ul>
     </div>

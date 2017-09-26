@@ -7,7 +7,7 @@ import { SlideHeader, RegularHeader } from '../components/SlideHeader';
 
 const Job = ({ job, company, ...props }) => (
 	<section>
-	<RegularHeader/>
+    <RegularHeader {...props}/>
 	<main className="jobpage main">
 		<section className="companydata">
 		{company.logo ?
@@ -39,7 +39,7 @@ const Job = ({ job, company, ...props }) => (
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			
 		</section>
-		<SlideHeader logout={this.props.logout}/>
+		<SlideHeader logout={props.logout} user={props.user}/>
 		<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
 	</main>
 	</section>

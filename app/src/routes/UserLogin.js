@@ -45,6 +45,9 @@ class UserLogin extends React.Component {
 				<Route exact={true} path="/login/register" render={() => (
 					<RegisterFrag setUserData={this.props.setUserData}/>
 				)}/>
+				<Route exact={true} path="/login/recover" render={() => (
+					<RecoverPassword/>
+				)}/>
 				
 			</section>
 		)
@@ -55,6 +58,7 @@ const LoginFrag = ({setUserData}) => (
 	<div>
 		<HistoryLink strategy="strava"/>
 		<Login setUserData={setUserData}/>
+		<Link to="/login/recover">Forgot password?</Link>
 		<Link className="register" to="/login/register">Register with email</Link>
 	</div>
 

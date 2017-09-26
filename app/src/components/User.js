@@ -56,6 +56,24 @@ class Login extends React.Component {
 
     class RecoverPassword extends React.Component {
 
+        recoverCallback() {
+
+        }
+
+        handleSubmit(event) {
+            event.preventDefault();
+            const data = new FormData(event.nativeEvent.target);
+            AuthService.recover(data,this.recoverCallback.bind(this));            
+
+        }
+        render() {
+            return (
+                <form className="userForm" id="recoverForm" onSubmit={this.handleSubmit.bind(this)}>
+                    <label htmlFor="email">Email </label><input id="email" name="email" type="email" placeholder="email"/>
+                    <button type="submit">Recover account</button>
+                </form>
+            )
+        }
     }
 
     class Register extends React.Component {

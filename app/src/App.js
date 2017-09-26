@@ -28,11 +28,6 @@ history.listen((location) => {
 	}
 );
 
-
-var toggleNav = () => {
-	document.getElementById('companyList').classList.toggle('hider');
-}
-
 /*
 function getHashQueryString() {
 	var result = {}, queryString = window.location.hash.slice(1), re = /([^&=]+)=([^&]*)/g, m;
@@ -44,31 +39,6 @@ function getHashQueryString() {
 	return result;
 }
 */
-
-
-
-
-
-class CompanyList extends React.Component {
-	
-	render() {
-		var companies = this.props.companies.map(company=>(
-				<Link key={company.company} onClick={toggleNav} to={`/company/${company.company}`}><img alt="" className="logo" src={company.logo}/></Link>
-			)
-		);
-		
-		return (
-			<div>
-				{companies}
-			</div>
-		);
-	}
-}
-
-
-
-
-
 
 
 class App extends React.Component {
@@ -225,21 +195,7 @@ class App extends React.Component {
 	  
 		return (
 			<Router history={history}>
-				<div>
-
-					<div id="companyList" className="companyList hider">
-						<div id="companyListLeft">
-							Companies --&gt;
-						</div>
-						<div id="companyListRight">
-							{companies &&
-								<CompanyList
-									companies={companies}
-								/>
-							}
-						</div>
-					</div>
-		
+				<div>		
 					<div id="base2">
 						<div className="listthing">
 							<Route exact={true} path="/" render={() => (

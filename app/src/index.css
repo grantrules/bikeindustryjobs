@@ -1,5 +1,31 @@
 /* css is my personal hell */
 
+#companies {
+	width: 100%
+}
+
+/* homepage "company v" link */
+#companies > a { 
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	padding: 5px;
+	font-size: 140%;
+}
+#companies > a:hover {
+	background-color: rgba(0,0,0,0.7);
+	color: white;
+	transition: color .15s ease-in,background-color .15s ease-in;
+}
+
+/* actual list */
+.companyList {
+	padding: 0 12.5%;
+	max-height: 500px;
+	transition: max-height .15s ease-in-out;	
+}
+
+/* login box */
 section.login {
 	position: absolute;
 	left: 50%;
@@ -10,6 +36,7 @@ section.login {
 	width: 320px;
 }
 
+/* login box register link */
 a.register {
 	display: block;
 	background-image: linear-gradient(-180deg, #307ED0 0%, #2868AB 90%);
@@ -21,12 +48,14 @@ a.register {
 
 }
 
+/* login box centered svg */
 section.login .logocenter {
 	width: 100%;
 	text-align: center;
 	margin-bottom: 25px;
 }
 
+/* oauth login buttons */
 section.login a.auth {
 	display: block;
 	padding: 5px;
@@ -36,9 +65,12 @@ section.login .strava {
 	background-color: orangered;
 }
 
+/* door emoji for login /register link */
 .loginlink::before { content: "🚪"}
 
-.loginlink, .loggedin {
+/* login link in homepage banner */
+#homeheader .loginlink,
+#homeheader .loggedin {
 	position:absolute;
 	padding-right:12.5%;
 	top: 25px;
@@ -46,31 +78,43 @@ section.login .strava {
 	right:0;
 }
 
-.loggedin #userdropdown {
+/* slidein header right nav list */
+#slideinheader > ul {
+	padding-right: 12.5%;
+	margin: 0;
+}
+
+/* login link in headers */
+#slideinheader .loggedin,
+#regularheader .loggedin {
+	color: white;
+}
+
+/* login link dropdown */
+.loggedin .userdropdown {
 	right: 12.5vw;
 }
 
+/* list in user dropdown */
 .loggedin ul {
 	padding: 10px;
 	color: #555;
 	list-style: none;
 }
 
+/* logo not in header */
 .logo {
 	height: 50px;
 	width: 200px;
 }
 
+/* logo in header */
 .header .logo {
 	width: 150px;
 	height: 35px;
 }
 
-.jobpage #joblist img.logo {
-	display: none;
-}
-
-
+/* company info table on job page */
 .companydata {
 	float: right;
 	box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
@@ -106,8 +150,8 @@ section.login .strava {
 
 .header div { padding-top: 3px; }
 
-.header ul { list-style-type: none; text-align: right; padding-right: 12.5%; }
-.header ul > li { vertical-align: middle; display: inline-block; margin-left: 10px; }
+.header > ul { list-style-type: none; text-align: right; padding-right: 12.5%; }
+.header > ul > li { vertical-align: middle; display: inline-block; margin-left: 10px; }
 
 .visible {
 	top: 0 !important; /* need to override id style */
@@ -222,7 +266,7 @@ font-size: 18pt;
 
 /* thanks github */
 
-#userdropdown {
+.userdropdown {
 	position: absolute;
 	right: 0;
 	left: auto;
@@ -231,30 +275,30 @@ font-size: 18pt;
 	z-index: 100;
 	box-shadow: 0 0 3px rgba(0,0,0,0.5);
 }
-#userdropdown::before {
+.userdropdown::before {
     top: -16px;
     right: 9px;
     left: auto;
 }
-#userdropdown::before {
+.userdropdown::before {
     border: 8px solid transparent;
     border-bottom-color: rgba(27,31,35,0.15);
 }
-#userdropdown::before, #userdropdown::after {
+.userdropdown::before, .userdropdown::after {
     position: absolute;
     display: inline-block;
     content: "";
 }
-#userdropdown::after {
+.userdropdown::after {
     top: -14px;
     right: 10px;
     left: auto;
 }
-#userdropdown::after {
+.userdropdown::after {
     border: 7px solid transparent;
     border-bottom-color: #fff;
 }
-#userdropdown::before, #userdropdown::after {
+.userdropdown::before, .userdropdown::after {
     position: absolute;
     display: inline-block;
     content: "";
@@ -380,24 +424,9 @@ body {
 }
 
 
-.companyList {   
-	max-height:500px;
-    background-color: rgba(220, 220, 220, 0.9);
-	position: absolute;
-    top: 39px;
-    box-shadow: 2px 2px 10px #999;
-    z-index: 500;
-}
 
 .companyList img {
 	padding: 5px;
-}
-  
-#companyListLeft {
-	float: left;
-}
-#companyListRight {
-	padding-left: 150px;
 }
 .hider {
 	max-height: 0;
