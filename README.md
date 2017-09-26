@@ -29,8 +29,7 @@ server {
 
         server_name careers.bike;
 
-        root /home/grant/careers.bike/bikeindustryjobs/app/build;
-        index index.html;
+        
 
         gzip            on;
         gzip_min_length 1000;
@@ -45,5 +44,12 @@ server {
           proxy_cache_use_stale  error timeout invalid_header updating
                                    http_500 http_502 http_503 http_504;
         }
+        
+        location / {
+                root /home/grant/careers.bike/bikeindustryjobs/app/build;
+                index index.html;
+                try_files $uri $uri/ /index.html;
+        }
+        
 }
 ```
