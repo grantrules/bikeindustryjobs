@@ -12,7 +12,7 @@ const LoginLink = ({name, user, logout}) => {
         )
     }
     return (
-        <Link className="loginlink" to="/login">Log In / Register</Link>
+        <Link className="loginlink" to="/login">Log In</Link>
     )
     
 }
