@@ -33,6 +33,7 @@ class UserLogin extends React.Component {
 		}
 
 		return (
+			<div id="loginBg">
 			<section className="login">
 				<div className="logocenter">
 				<SVGLogo/>
@@ -48,6 +49,7 @@ class UserLogin extends React.Component {
 				)}/>
 				
 			</section>
+			</div>
 		)
 	}
 }
