@@ -20,7 +20,7 @@ class scraper extends Scraper.HTMLScraper {
 		this.relativelinks = false;
 		this.jobscraper = {
 			title: { selector: "title", convert: x => x.replace(" | Bike New York","")},
-			description: { selector: ".layoutArea", how: "html" },		
+			description: { selector: ".paragraph", how: "html" },		
 		}
 	}
 }
