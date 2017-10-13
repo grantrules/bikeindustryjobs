@@ -8,7 +8,7 @@ class scraper extends Scraper.HTMLScraper {
 		this.jobs_url = 'http://www.bike.nyc/jobs/';
 		this.listscraper = {
 					urls: {
-						listItem: ".inner p",
+						listItem: ".paragraph p",
 						data: {
 							url: {
 								selector: "a",
@@ -19,8 +19,8 @@ class scraper extends Scraper.HTMLScraper {
 		 };
 		this.relativelinks = false;
 		this.jobscraper = {
-			title: { selector: ".cutout_text", convert: x => x.replace("Job Description: ","")},
-			description: { selector: ".column", how: "html" },		
+			title: { selector: "title", convert: x => x.replace(" | Bike New York","")},
+			description: { selector: ".layoutArea", how: "html" },		
 		}
 	}
 }
