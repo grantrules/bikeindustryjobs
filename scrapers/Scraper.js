@@ -78,10 +78,12 @@ class HTMLScraper extends Scraper {
 			console.log(`error scraping job list from ${this.company}`);
 			return console.log(err);
 		}
-		console.log(`found ${page.urls.length} ${this.company} jobs`);
 
-		var urls = page.urls.map(this.fixUrl.bind(this));
+		var urls = page.urls.filter(url => url.url);
+		urls = urls.map(this.fixUrl.bind(this));
 
+		console.log(`found ${urls.length} ${this.company} jobs`);
+		
 		this.urlsIterator = urls[Symbol.iterator]();
 		
 		this.scrapeJobLoop();
