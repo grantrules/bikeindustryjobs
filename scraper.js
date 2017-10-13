@@ -134,8 +134,13 @@ class jobsaver {
 
 /* pull companies from db with hasScraper */
 
+var params = {'hasScraper': true}
 
-Company.find({'hasScraper': true},(err,res)=>{
+if (process.argv[2]) {
+	params['company'] = process.argv[2];
+}
+
+Company.find(params,(err,res)=>{
 	if (res) {
 		var js = new jobsaver(()=>process.exit());
 		
@@ -153,3 +158,5 @@ Company.find({'hasScraper': true},(err,res)=>{
 		})
 	}
 })
+
+
