@@ -44,29 +44,29 @@ module.exports = {
                 User.findOne({email}, (err, user) => {
                     if (err) {
                         console.log(err);
+                    } else {
 
-                        // not sure how to check if it doesn't exist
-                        if (false) {
+                        if (!user) {
+                            // create user if it doesn't exist
                             user = new User({email, first_name, last_name, apilogin});
                             User.create(user, (err,user)=>{
                                 return done(null, user);
                             })
-                        }
-                    } else {
+                        } else {
+                            // if user exists & has never signed on with strava before
+                            // add strava profile to apilogin and update user
 
-                        // if user has never signed on with strava before
-                        // add strava profile to apilogin and update user
+                            apilogin = user.apilogin || {};
 
-                        apilogin = user.apilogin || {};
-
-                        if (!apilogin.strava) {
-                            apilogin.strava = profile._json;
-                            User.update(user, {apilogin}, (err,user) => {
-                                return done(err,user)
-                            })
-                        } else {                            
-                            
-                            return done(null, user);
+                            if (!apilogin.strava) {
+                                apilogin.strava = profile._json;
+                                User.update(user, {apilogin}, (err,user) => {
+                                    return done(err,user)
+                                })
+                            } else {                            
+                                
+                                return done(null, user);
+                            }
                         }
                     }
                 })
