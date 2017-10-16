@@ -24,6 +24,7 @@ ReactGA.initialize('UA-105678-5'); // add your UA code
 var logPageView = () => {
 	ReactGA.set({ page: window.location.pathname + window.location.search });
 	ReactGA.pageview(window.location.pathname + window.location.search);
+	window.scrollTo(0,0);
 }
 
 /*
