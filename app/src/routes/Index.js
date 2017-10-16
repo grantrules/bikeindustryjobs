@@ -40,7 +40,7 @@ const Index = ({jobs, ...props}) => (
                 />,
                 <JobList key="jobs1"
                     jobs={jobs}
-                    onJobUpdate={()=>window.scrollTo(0,0)}
+                    onJobClick={()=>window.scrollTo(0,0)}
                     {...props}
                 />]
             }
