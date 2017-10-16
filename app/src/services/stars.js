@@ -35,7 +35,7 @@ class StarService extends AuthService.Component {
 
     getStars(callback) {
         this.fetchSecure(
-            `/api/stars`,
+            `/api/stars?nocache=${(new Date()).getTime()}`,
             { method: "GET" },
             callback
         );
