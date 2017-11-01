@@ -71,7 +71,7 @@ exports.deleteJob = (req,res) => {
 				return res.json({err: "no permissions"});
 			}
 		})
-	}
+	})
 }
 
 exports.getStars = (req, res) => {
