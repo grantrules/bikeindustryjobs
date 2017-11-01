@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
-var controller = require('../controllers/controller');
+var jobController = require('../controllers/jobs');
+var companyController = require('../controllers/companies');
 var userController = require('../controllers/users');
 
 var jwtAuth = passport.authenticate('jwt', {session:false});
@@ -13,18 +14,26 @@ module.exports = app => {
 
     // JOBS
     router.route('/jobs')
-        .get(controller.getJobs);
+        .get(jobController.getJobs)
+        .post(jwtAuth, jobController.postJobs)
+        .delete(jwtAuth, jobController.deleteJob);
 
     router.route('/companies')
-        .get(controller.getCompanies);
+        .get(companyController.getCompanies)
+        .post(jwtAuth, companyController.postCompanies);
 
+    router.route('/companies/my')
+        .get(jwtAuth, companyController.getMyCompanies)
+        
     // STARS
     router.route('/stars')
-        .get(jwtAuth, controller.getStars)
-        .post(jwtAuth, controller.postStars)
+        .get(jwtAuth, jobController.getStars)
+        .post(jwtAuth, jobController.postStars)
     
     router.route('/star')
-        .delete(jwtAuth, controller.deleteStar);
+        .delete(jwtAuth, jobController.deleteStar);
+
+    
 
     // USER
     router.route('/users')
@@ -34,6 +43,7 @@ module.exports = app => {
 
     router.route('/client')
         .delete(jwtAuth, userController.deleteClient);
+
 
 
     // LOGIN

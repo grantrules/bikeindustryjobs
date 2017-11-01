@@ -151,4 +151,40 @@ describe('Routing', () => {
       })
 
     });
+
+
+
+
+    describe('Companies', () => {
+      
+      it('should add a company (with jwt)', done => {
+        var company = {
+            title: "Hot Bikes Inc.",
+            location: "Brooklyn, NY",
+            website: "http://careers.bike",
+            about: "Bikes n stuff",
+            logo: "https://e.thumbs.redditmedia.com/3j0csAQenNLKSn0v.png",
+            hasScraper: false,
+            details: {
+              numEmployees: 10,
+              founded: 2005,
+              headquarters: "",
+              industry: "Retail",
+            }
+          }
+        request(url)
+        .post('/api/companies')
+        .set('Authorization', `BEARER ${token}`)
+        .send(company)
+        .end((err, res) => {
+          if (err) {
+            throw err;
+          }
+          res.body.should.have.property('_id');
+          done();
+        })
+      })
+
+    });
+
   });
