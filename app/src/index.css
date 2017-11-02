@@ -115,6 +115,7 @@ section.login .strava {
 /* list in user dropdown */
 .loggedin ul {
 	padding: 10px;
+	width: 150px;
 	color: #555;
 	list-style: none;
 }
