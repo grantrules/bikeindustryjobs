@@ -74,13 +74,13 @@ const Job = ({ job, company, ...props }) => (
 
 		{company.about &&
 		<section className="companyInfo">
-			<h3>About {company.name}</h3>
+			<h3>About {company.title}</h3>
 			<p>{company.about}</p>
 		</section>}
 
 		<section className="otherJobs">
 			<SlideHeader logout={props.logout} user={props.user}/>
-			<h2>More jobs from {company.name}</h2>
+			<h2>More jobs from {company.title}</h2>
 			<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
 		</section>
 	</main>
