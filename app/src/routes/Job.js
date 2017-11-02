@@ -2,9 +2,29 @@ import React from 'react';
 import { html, /* safeHtml */ } from 'common-tags';
 import JobList from '../components/JobList';
 import { SlideHeader, RegularHeader } from '../components/SlideHeader';
+import {
+	ShareButtons,
+	ShareCounts,
+	generateShareIcon
+} from 'react-share';
 
+const {
+	FacebookShareButton,
+	GooglePlusShareButton,
+	LinkedinShareButton,
+	TwitterShareButton,
+	TelegramShareButton,
+	WhatsappShareButton,
+	PinterestShareButton,
+	VKShareButton,
+	OKShareButton,
+	RedditShareButton,
+	EmailShareButton,
+  } = ShareButtons;
 
-
+  const FacebookIcon = generateShareIcon('facebook');
+  const EmailIcon = generateShareIcon('email');
+  
 const Job = ({ job, company, ...props }) => (
 	<section>
     <RegularHeader {...props}/>
@@ -27,6 +47,23 @@ const Job = ({ job, company, ...props }) => (
 			<div className="buttons">
 				<a className="tagblap" href="#apply">Apply</a>
 				<a className="tagblap" href="#share">Share</a>
+				<FacebookShareButton
+            url={window.location.href}
+            quote={job.title}
+            className="Demo__some-network__share-button">
+            <FacebookIcon
+              size={32}
+              round />
+          </FacebookShareButton>
+		  <EmailShareButton
+            url={window.location.href}
+            subject={job.title}
+            body="body"
+            className="Demo__some-network__share-button">
+            <EmailIcon
+              size={32}
+              round />
+          </EmailShareButton>
 			</div>
 
 			<div className="location">

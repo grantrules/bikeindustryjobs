@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 
 var User = mongoose.model('User');
 
+var email = require('../email');
+
 module.exports = {
 
 
@@ -13,11 +15,8 @@ module.exports = {
 
         // http://strava.github.io/api/v3/oauth/
 
-        var STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
-        var STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
-
-        STRAVA_CLIENT_ID = 20313;
-        STRAVA_CLIENT_SECRET = "b8046aee95520c8d559904d7ee00ded65aba8665";
+        var STRAVA_CLIENT_ID = config.STRAVA_CLIENT_ID;
+        var STRAVA_CLIENT_SECRET = config.STRAVA_CLIENT_SECRET;
 
         // Use the StravaStrategy within Passport.
         //   Strategies in Passport require a `verify` function, which accept
@@ -50,6 +49,7 @@ module.exports = {
                             // create user if it doesn't exist
                             user = new User({email, first_name, last_name, apilogin});
                             User.create(user, (err,user)=>{
+                                email(`${first_name} ${last_name} <${email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) })
                                 return done(null, user);
                             })
                         } else {

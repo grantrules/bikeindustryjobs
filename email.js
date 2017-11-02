@@ -1,0 +1,33 @@
+var nodemailer = require('nodemailer');
+var config = require('./config');
+
+var mail = (to, subject, text, html, callback) => {
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: 'localhost',
+        port: 25,
+        secure: false, // true for 465, false for other ports
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: config.fromEmail, // sender address
+        to, subject, text, html
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+            callback(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        callback(false, info);
+        
+    });
+}
+

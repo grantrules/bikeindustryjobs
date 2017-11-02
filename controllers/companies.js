@@ -5,6 +5,8 @@ var aws = require('aws-sdk');
 var crypto = require('crypto');
 var config = require('../config');
 
+var sanitizeHtml = require('sanitize-html');
+
 var s3_bucket = 'derp';
 var secret = "the snozzberries taste like snozzberries";
 
@@ -28,7 +30,7 @@ exports.postCompanies = (req, res) => {
 		title: req.body.title,
 		location: req.body.location,
 		website: req.body.website,
-		about: req.body.about,
+		about: sanitizeHtml(req.body.about),
 		logo: req.body.logo,
 		hasScraper: false,
 		details: {

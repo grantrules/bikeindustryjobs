@@ -2,6 +2,8 @@ var Job = require('../models/job');
 var Company = require('../models/company');
 var Star = require('../models/star');
 var log = require('loglevel');
+var sanitizeHtml = require('sanitize-html');
+
 
 
 
@@ -28,7 +30,7 @@ exports.postJobs = (req,res) => {
 			var job = new Job({
 				title: req.body.title,
 				url: req.body.url,
-				description: req.body.description,
+				description: sanitizeHtml(req.body.description),
 				company: req.body.company,
 				location: req.body.location,
 			})

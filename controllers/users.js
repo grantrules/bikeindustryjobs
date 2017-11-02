@@ -5,6 +5,8 @@ var config = require('../config');
 var User = require('../models/user');
 var Client = require('../models/auth/client');
 
+var email = require('../email');
+
 // POST /api/users
 // register
 exports.postUsers = function(req,res) {
@@ -29,6 +31,9 @@ exports.postUsers = function(req,res) {
             }
         }
         else {
+
+            email(`${user.first_name} ${user.last_name} <${user.email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) });
+            
             user.hashed_password = null;
 
             var refresh_token = jwt.sign({refresh_token: true, user: user, date: new Date()}, config.JWTsecret);
@@ -40,11 +45,16 @@ exports.postUsers = function(req,res) {
             });
     
             client.save((err, client) => {
-                res.json({
-                    user: user,
-                    token: jwt.sign({user: user, created: new Date()},config.JWTsecret,{expiresIn: "2h"}),
-                    refresh_token: refresh_token
-                });
+                if (err) {
+                    console.log("error creating client");
+                    console.log(err);
+                } else {
+                    res.json({
+                        user: user,
+                        token: jwt.sign({user: user, created: new Date()},config.JWTsecret,{expiresIn: "2h"}),
+                        refresh_token: refresh_token
+                    });
+                }
             });
         }
     });
