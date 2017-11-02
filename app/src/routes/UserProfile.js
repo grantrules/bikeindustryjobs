@@ -2,10 +2,11 @@ import React from 'react';
 import { /*withRouter,*/ Route, Link } from 'react-router-dom';
 
 import SVGLogo from '../components/SVGLogo';
-import Image from '../components/Image';
 
 import CompanyService from '../services/companies';
 import JobService from '../services/jobs';
+
+import ReactS3Uploader from 'react-s3-uploader';
 
 
 class UserProfile extends React.Component {
@@ -16,7 +17,6 @@ class UserProfile extends React.Component {
     
     componentDidMount() {
         CompanyService.getMyCompanies((err,usercompanies) => {
-            console.log(`companies ${usercompanies}`);
             this.setState({usercompanies})
         })
 
@@ -94,7 +94,15 @@ class AddCompany extends React.Component {
                             <textarea id="companyAbout" name="about"></textarea>
 
                             <label htmlFor="companyLogo">Company Logo </label>
-                            <Image/>
+                            <ReactS3Uploader
+                                signingUrl="http://localhost:9004/api/imageUploadUrl"
+                                signingUrlMethod="GET"
+                                signingUrlHeaders={{"Authorization": `BEARER ${localStorage.getItem('jwt')}`}}
+                                accept="image/*"
+                                scrubFilename={(filename) => `${(new Date()).getMilliseconds()}${filename}`.replace(/[^\w\d_\-.]+/ig, '')}
+                                uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
+                                contentDisposition="auto"
+                            />
 
                             <label htmlFor="companyNumEmployees">Number of Employees </label>
                             <input id="companyNumEmployees" name="numEmployees" type="text"/>

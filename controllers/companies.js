@@ -58,11 +58,12 @@ exports.getImageUploadUrl = function(req,res) {
 	var accesskeyid = config.AWSACCESSKEYID;
 	var secretaccesskey = config.AWSSECRETACCESSKEY;
 	var s3_bucket = config.AWSS3BUCKET;
-	aws.config.update({accessKeyId: accesskeyid, secretAccessKey: secretaccesskey})
+	aws.config.update({accessKeyId: accesskeyid, secretAccessKey: secretaccesskey, region: 'us-east-1'})
 	const s3 = new aws.S3();
 
-    var fileName = crypto.createHash('sha256').update(`${new Date().getMilliseconds()}`).digest('base64').toString();
-	var contentType = req.params.contentType;
+	var fileName = req.query.objectName;
+	var contentType = req.query.contentType;
+	console.log(contentType);
 
     var s3params = {
         Bucket: s3_bucket,
@@ -81,9 +82,9 @@ exports.getImageUploadUrl = function(req,res) {
         var url = `https://${s3_bucket}.s3.amazonaws.com/${fileName}`
         
         res.json({
-            secret: crypto.createHash('sha256').update(url + "shabadoo" + config.secret)
-            .digest('base64').toString(),
-            signedRequest: data,
+            /*secret: crypto.createHash('sha256').update(url + "shabadoo" + config.secret)
+            .digest('hex').toString(),*/
+			signedUrl: data,
             fileName:  url
         });
         

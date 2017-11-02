@@ -16,6 +16,7 @@ class Image extends React.Component {
 	}
 
 	fileChange(event) {
+		alert('derp');
 		var target = event.target.files;
 		var file = event.target.files[0];
 
@@ -24,6 +25,11 @@ class Image extends React.Component {
 				this.setState({url: data.fileName});
 				var postUrl = data.signedRequest;
 
+				CompanyService.putAWSImage(postUrl, file, (err, data) => {
+					console.log(err||data);
+				})
+
+				/*
 
 				const reader = new FileReader();
 			
@@ -33,9 +39,14 @@ class Image extends React.Component {
 						filename: file.name,
 						filetype: file.type
 					});
+
+
+
+					
 				};
 			
 				reader.readAsDataURL(file);
+				*/
 
 			}
 			console.log(err||data);

@@ -12,6 +12,21 @@ class CompanyService extends AuthService.Component {
 
     }
 
+    putAWSImage(url, file, callback) {
+        var body = new FormData();
+        body.append('file', file);
+
+        this.fetch(
+            url,
+            {
+                method: "PUT",
+                body: body,
+                headers: new Headers({'x-amz-acl':'public-read'})
+            },
+            callback
+        )
+    }
+
     getImageUploadUrl(file, callback) {
         var contentType = file.type;
         this.fetchSecure(
