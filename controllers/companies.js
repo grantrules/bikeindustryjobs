@@ -26,7 +26,6 @@ exports.getMyCompanies = (req, res) => {
 exports.postCompanies = (req, res) => {
 	var company = new Company({
 		owners: [{user_id: req.user._id}],
-		company: req.body.company,
 		title: req.body.title,
 		location: req.body.location,
 		website: req.body.website,
@@ -54,7 +53,6 @@ exports.postCompany = (req, res) => {
 	var id = req.params.id;
 
 	var update = {
-		company: req.body.company,
 		title: req.body.title,
 		location: req.body.location,
 		website: req.body.website,

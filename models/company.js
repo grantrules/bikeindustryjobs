@@ -1,8 +1,14 @@
 var mongoose = require('mongoose');
 
 var companySchema = new mongoose.Schema({
-	company: String,
-    title: String,
+	company: {
+		type: String,
+		required: true,
+		index: {
+		  unique: true,
+		  sparse: true
+		}
+	},    title: String,
 	location: String,
 	website: String,
     about: String,

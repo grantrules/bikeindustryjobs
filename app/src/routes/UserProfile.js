@@ -79,7 +79,10 @@ class AddCompany extends React.Component {
 
         if (props.company) {
             var c = props.company;
-            var d = c.details || {};
+            var d = {} 
+            if (c) {
+                d = c.details || {};
+            }
             this.state = {
                 title: c.title,
                 location: c.location,
@@ -126,7 +129,10 @@ class AddCompany extends React.Component {
 
     render() {
         var company = this.state;
-        var details = company.details || {};
+        var details = {};
+        if (company) {
+            details = company.details || {};
+        }
         return (
             <section id="addCompany">
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
@@ -151,6 +157,7 @@ class AddCompany extends React.Component {
                                 scrubFilename={(filename) => `${(new Date()).getMilliseconds()}${filename}`.replace(/[^\w\d_\-.]+/ig, '')}
                                 uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
                                 contentDisposition="auto"
+                                onFinish={result=>console.log(result)}
                             />
                             <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
 
