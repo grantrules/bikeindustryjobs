@@ -53,15 +53,15 @@ exports.postCompanies = (req, res) => {
 
 
 
-// GET /api/restaurantimagesign/?contentType=
-exports.getRestaurantImageSign = function(req,res) {
+// GET /api/imageUploadUrl/?contentType=
+exports.getImageUploadUrl = function(req,res) {
 	var accesskeyid = config.AWSACCESSKEYID;
 	var secretaccesskey = config.AWSSECRETACCESSKEY;
 	var s3_bucket = config.AWSS3BUCKET;
 	aws.config.update({accessKeyId: accesskeyid, secretAccessKey: secretaccesskey})
 	const s3 = new aws.S3();
 
-    var fileName = crypto.createHash('sha256').update(new Date().getMilliseconds());
+    var fileName = crypto.createHash('sha256').update(`${new Date().getMilliseconds()}`).digest('base64').toString();
 	var contentType = req.params.contentType;
 
     var s3params = {
@@ -78,7 +78,7 @@ exports.getRestaurantImageSign = function(req,res) {
             return res.json(err);
         }
         
-        var url = "https://${s3_bucket}.s3.amazonaws.com/${fileName}"
+        var url = `https://${s3_bucket}.s3.amazonaws.com/${fileName}`
         
         res.json({
             secret: crypto.createHash('sha256').update(url + "shabadoo" + config.secret)

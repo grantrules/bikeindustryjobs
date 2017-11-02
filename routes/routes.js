@@ -33,6 +33,9 @@ module.exports = app => {
     router.route('/star')
         .delete(jwtAuth, jobController.deleteStar);
 
+    router.route('/imageUploadUrl')
+        .get(jwtAuth, companyController.getImageUploadUrl);
+
     
 
     // USER
