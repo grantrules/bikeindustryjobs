@@ -3,6 +3,20 @@ import { getTags } from '../components/Tags';
 
 class JobService extends AuthService.Component {
 
+    postJob(form,callback) {
+        
+        
+        this.fetchSecure(
+            `/api/jobs`,
+            {
+                method: "POST",
+                body: this.urlencodeFormData(form),
+                headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})
+            },
+            callback
+        );
+    }
+
     getCompanies(callback) {
         this.fetch(`${this.testinghost}/api/companies`, {method: 'GET'}, callback);
     }

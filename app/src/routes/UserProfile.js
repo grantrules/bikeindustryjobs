@@ -4,6 +4,7 @@ import { /*withRouter,*/ Route, Link } from 'react-router-dom';
 import SVGLogo from '../components/SVGLogo';
 
 import CompanyService from '../services/companies';
+import JobService from '../services/jobs';
 
 
 class UserProfile extends React.Component {
@@ -37,12 +38,21 @@ class UserProfile extends React.Component {
                     <Route exact={true} path="/profile/manage/newcompany" render={() => (
                         <AddCompany {...this.props}/>
                     )}/>
+
+                    <Route exact={true} path="/profile/company/:company" render={({match}) => (
+                        <ListJobs company={match.params.company} {...this.props}/>
+                    )}/>
+
+                    <Route exact={true} path="/profile/company/:company/add" render={({match}) => (
+                        <AddJob company={match.params.company} {...this.props}/>
+                    )}/>
                     
                 </section>
                 </div>
             )
+        } else {
+            return (<div>Not logged in</div>);
         }
-        return (<div>Not logged in</div>);
 	}
 }
 
@@ -97,6 +107,42 @@ class AddCompany extends React.Component {
                             <input id="companyIndustry" name="industry" type="text"/>
 
                             <button type="submit">Add Company</button>
+                </form>
+            </section>
+        )
+    }
+}
+
+class AddJob extends React.Component {
+    
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.nativeEvent.target);
+        JobService.postJob(data, (err,company) => {
+            alert(err||company);
+        })        
+
+    }
+
+    render() {
+        var props = this.props;
+        return (
+            <section id="addCompany">
+                <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
+
+                            <input type="hidden" name="company" value={props.company}/>
+
+                            <label htmlFor="jobName">Job Title </label>
+                            <input id="jobName" name="title" type="text"/>
+
+                            <label htmlFor="jobLocation">Location </label>
+                            <input id="jobLocation" name="location" type="text"/>
+
+                            <label htmlFor="jobDescription">Job Description </label>
+                            <textarea id="jobDescription" name="description" type="text"></textarea>
+
+                            <button type="submit">Add Job</button>
                 </form>
             </section>
         )

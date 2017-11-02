@@ -16,7 +16,6 @@ exports.getCompanies = (req, res) => {
 // GET /api/companies/my
 exports.getMyCompanies = (req, res) => {
 	Company.find({'owners.user_id': req.user._id})
-	.where('owners.user_id')
 	.sort('title')
 	.select('title company location website about jobs_url logo details owners')
 	.exec((err,companies)=>res.json(err ? {err: "error fetching companies"} : companies))
