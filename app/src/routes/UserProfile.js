@@ -59,8 +59,6 @@ class UserProfile extends React.Component {
 const ManageJobs = ({...props}) => (
     <section>
         <ListCompanies usercompanies={props.usercompanies} companies={props.companies}/>
-
-        <ListJobs usercompanies={props.usercompanies} jobs={props.jobs} companies={props.companies}/>
     </section>
 )
 
@@ -162,7 +160,7 @@ const ListCompanies = ({usercompanies, companies}) => (
             {!usercompanies &&
                 <li>No companies</li>}
             {usercompanies.map(
-                company => (<li>{company.title}</li>)
+                company => (<li><Link to={`/profile/company/${company.company}`}>{company.title}</Link></li>)
             )}
 
             <li><Link to="/profile/manage/newcompany">Add Company</Link></li>
@@ -177,7 +175,13 @@ const ListJobs = ({company, companies, jobs}) => {
 
     return (
         <ul>
-            
+            {!jobs &&
+                <li>No jobs</li>
+            }
+            {jobs.map(
+                job => (<li><Link to={`/profile/job/${job._id}`}>{job.title}</Link></li>)
+            )}
+            <li><Link to={`/profile/company/${company}/add`}>Add job</Link></li>
         </ul>
     )
 }
