@@ -71,6 +71,13 @@ const Job = ({ job, company, ...props }) => (
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			
 		</section>
+		
+		{company.about &&
+		<section className="companyInfo">
+			<h3>About {company.company}</h3>
+			<p>{company.about}</p>
+		</section>}
+
 		<section className="otherJobs">
 			<SlideHeader logout={props.logout} user={props.user}/>
 			<h2>More jobs from {company.company}</h2>
