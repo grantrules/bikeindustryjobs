@@ -47,6 +47,12 @@ class UserProfile extends React.Component {
                     <Route exact={true} path="/profile/company/:company/add" render={({match}) => (
                         <AddJob company={match.params.company} {...this.props}/>
                     )}/>
+                    <Route exact={true} path="/profile/company/:company/edit" render={({match}) => {
+                        var company = this.props.companies.find(g => g.company === match.params.company);
+                                                            
+                        return <AddCompany company={company} {...this.props}/>
+                    }
+                    }/>
                     
                 </section>
                 </div>
@@ -65,33 +71,76 @@ const ManageJobs = ({...props}) => (
 
 
 class AddCompany extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.handleInputChange = this.handleInputChange.bind(this);
+
+        if (props.company) {
+            var c = props.company;
+            var d = c.details || {};
+            this.state = {
+                title: c.title,
+                location: c.location,
+                website: c.website,
+                about: c.about,
+                logo: c.logo,
+
+                details: {
+                    numEmployees: d.numEmployees,
+                    founded: d.founded,
+                    industry: d.industry,
+                    headquarters: d.headquarters
+                }
+
+            }
+        }
+    }
     
     
 
     handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.nativeEvent.target);
-        CompanyService.postCompany(data, (err,company) => {
-            alert(err||company);
-        })        
-
+        if (this.props.company) {
+            CompanyService.updateCompany(this.props.company._id, data, (err,company) => {
+                alert(err||company);
+            });
+        } else {
+            CompanyService.postCompany(data, (err,company) => {
+                alert(err||company);
+            })        
+        }
     }
 
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+          [name]: value
+        });
+      }
+
     render() {
+        var company = this.state;
+        var details = company.details || {};
         return (
             <section id="addCompany">
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
                             <label htmlFor="companyName">Company Name </label>
-                            <input id="companyName" name="title" type="text"/>
+                            <input id="companyName" name="title" type="text" value={company.title} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyLocation">Location </label>
-                            <input id="companyLocation" name="location" type="text"/>
+                            <input id="companyLocation" name="location" type="text" value={company.location} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyWebsite">Website URL </label>
-                            <input id="companyWebsite" name="website" type="text"/>
+                            <input id="companyWebsite" name="website" type="text" value={company.website} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyAbout">Short Description </label>
-                            <textarea id="companyAbout" name="about"></textarea>
+                            <textarea id="companyAbout" name="about" value={company.about} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyLogo">Company Logo </label>
                             <ReactS3Uploader
@@ -103,17 +152,18 @@ class AddCompany extends React.Component {
                                 uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
                                 contentDisposition="auto"
                             />
+                            <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyNumEmployees">Number of Employees </label>
-                            <input id="companyNumEmployees" name="numEmployees" type="text"/>
+                            <input id="companyNumEmployees" name="numEmployees" type="text" value={details.numEmployees} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyFounded">Year Founded </label>
-                            <input id="companyFounded" name="founded" type="text"/>
+                            <input id="companyFounded" name="founded" type="text" value={details.founded} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyIndustry">Industry </label>
-                            <input id="companyIndustry" name="industry" type="text"/>
+                            <input id="companyIndustry" name="industry" type="text" value={details.industry} onChange={this.handleInputChange}/>
 
-                            <button type="submit">Add Company</button>
+                            <button type="submit">{company && "Save"}{!company && "Add"} Company</button>
                 </form>
             </section>
         )
@@ -169,7 +219,7 @@ const ListCompanies = ({usercompanies, companies}) => (
             {!usercompanies &&
                 <li>No companies</li>}
             {usercompanies.map(
-                company => (<li><Link to={`/profile/company/${company.company}`}>{company.title}</Link></li>)
+                company => (<li><Link to={`/profile/company/${company.company}`}>{company.title}</Link> - <Link to={`/profile/company/${company.company}/edit`}>edit</Link></li>)
             )}
 
             <li><Link to="/profile/manage/newcompany">Add Company</Link></li>

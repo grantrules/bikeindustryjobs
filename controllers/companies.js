@@ -36,18 +36,41 @@ exports.postCompanies = (req, res) => {
 		details: {
 			numEmployees: req.body.numEmployees,
 			founded: req.body.founded,
-			headquarters: "",
+			headquarters: req.body.headquarters,
 			industry: req.body.industry,
 		}
 	});
 	company.save((err, company) => {
 		if (err) {
 			log.error(err);
-			return resizeBy.json({err: "error saving company"});
+			return res.json({err: "error saving company"});
 		}
 		log.debug(`company saved: company_id: ${company._id}, user: ${req.user._id}`);
 		res.json(company);
 	});
+}
+
+exports.postCompany = (req, res) => {
+	var id = req.params.id;
+
+	var update = {
+		company: req.body.company,
+		title: req.body.title,
+		location: req.body.location,
+		website: req.body.website,
+		about: sanitizeHtml(req.body.about),
+		logo: req.body.logo,
+		details: {
+			numEmployees: req.body.numEmployees,
+			founded: req.body.founded,
+			headquarters: req.body.headquarters,
+			industry: req.body.industry,
+		}
+	}
+
+	Company.update({_id: id, "owners.user_id": req.user._id}, update, {}, (err,company) => {
+		res.json(err||company);
+	})
 }
 
 

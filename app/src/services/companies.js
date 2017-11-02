@@ -55,6 +55,20 @@ class CompanyService extends AuthService.Component {
         );
     }
 
+    updateCompany(id, form, callback) {
+
+        this.fetchSecure(
+            `/api/company/${id}`,
+            {
+                method: "POST",
+                body: this.urlencodeFormData(form),
+                headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})                
+            },
+            callback
+        )
+
+    }
+
 }
 
 export default new CompanyService();
