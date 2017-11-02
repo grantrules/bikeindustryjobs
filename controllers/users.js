@@ -32,7 +32,7 @@ exports.postUsers = function(req,res) {
         }
         else {
 
-            email(`${user.first_name} ${user.last_name} <${user.email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) });
+            email(`"${user.first_name} ${user.last_name}" <${user.email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) });
             
             user.hashed_password = null;
 
