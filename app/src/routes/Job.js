@@ -45,25 +45,27 @@ const Job = ({ job, company, ...props }) => (
 		<section className="jobdata">
 			<h1>{job.title}</h1>
 			<div className="buttons">
-				<a className="tagblap" href="#apply">Apply</a>
+				<a className="tagblap" href={job.url}>Apply</a>
+				{/*
 				<a className="tagblap" href="#share">Share</a>
+				*/}
 				<FacebookShareButton
-            url={window.location.href}
-            quote={job.title}
-            className="Demo__some-network__share-button">
-            <FacebookIcon
-              size={32}
-              round />
-          </FacebookShareButton>
-		  <EmailShareButton
-            url={window.location.href}
-            subject={job.title}
-            body="body"
-            className="Demo__some-network__share-button">
-            <EmailIcon
-              size={32}
-              round />
-          </EmailShareButton>
+            		url={window.location.href}
+					quote={`Position available: ${job.title} at ${company.title}`}
+					className="facebook-share share-button">
+					<FacebookIcon
+						size={32}
+						round />
+				</FacebookShareButton>
+				<EmailShareButton
+					url={window.location.href}
+					subject={`Position available: ${job.title} at ${company.title}`}
+					body={window.location.href}
+					className="email-share share-button">
+					<EmailIcon
+						size={32}
+						round />
+				</EmailShareButton>
 			</div>
 
 			<div className="location">
