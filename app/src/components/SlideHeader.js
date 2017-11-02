@@ -21,7 +21,7 @@ const Test = ({name, logout}) => (
     <ul id={name} className="userdropdown hidden">
         <li><Link to="/profile">Your profile</Link></li>
         <li><Link to="/profile/saved">Starred Jobs</Link></li>
-        <li><a href="#" onClick={e=>{
+        <li><a href="#logoutfailed" onClick={e=>{
             e.preventDefault();
             logout();
         }}>Log Out</a></li>

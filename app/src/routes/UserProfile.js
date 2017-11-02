@@ -2,6 +2,7 @@ import React from 'react';
 import { /*withRouter,*/ Route, Link } from 'react-router-dom';
 
 import SVGLogo from '../components/SVGLogo';
+import Image from '../components/Image';
 
 import CompanyService from '../services/companies';
 import JobService from '../services/jobs';
@@ -65,6 +66,7 @@ const ManageJobs = ({...props}) => (
 
 class AddCompany extends React.Component {
     
+    
 
     handleSubmit(event) {
         event.preventDefault();
@@ -76,7 +78,6 @@ class AddCompany extends React.Component {
     }
 
     render() {
-        var props = this.props;
         return (
             <section id="addCompany">
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
@@ -93,7 +94,7 @@ class AddCompany extends React.Component {
                             <textarea id="companyAbout" name="about"></textarea>
 
                             <label htmlFor="companyLogo">Company Logo </label>
-                            <input id="companyLogo" name="logo" type="file"/>
+                            <Image/>
 
                             <label htmlFor="companyNumEmployees">Number of Employees </label>
                             <input id="companyNumEmployees" name="numEmployees" type="text"/>
@@ -171,7 +172,7 @@ const ListCompanies = ({usercompanies, companies}) => (
 
 const ListJobs = ({company, companies, jobs}) => {
 
-   var jobs = jobs.filter(j => j.company === company);
+   jobs = jobs.filter(j => j.company === company);
 
     return (
         <ul>

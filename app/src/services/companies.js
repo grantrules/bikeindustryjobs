@@ -12,6 +12,20 @@ class CompanyService extends AuthService.Component {
 
     }
 
+    getImageUploadUrl(file, callback) {
+        var contentType = file.type;
+        this.fetchSecure(
+            `/api/imageUploadUrl?contentType=${contentType}`,
+            {
+                method: "GET"
+            },
+            (err,data) => {
+                // { secret, signedRequest, fileName }
+                callback(err,data)
+            }
+        );
+    }
+
     postCompany(form,callback) {
 
 

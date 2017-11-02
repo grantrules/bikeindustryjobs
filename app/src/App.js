@@ -53,6 +53,13 @@ class App extends React.Component {
 			stars: [],
 			toggleStar: this.toggleStar.bind(this),
 		};
+
+		console.log("%c🍕🍕🍕 Welcome to http://careers.bike 🍕🍕🍕", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 16pt;');
+		console.log("%c       I'm %cGrant%c and this is my project",'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: regular');
+		console.log("%c       You can find the source of it here:", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;');
+		console.log("%c       https://github.com/grantrules/bikeindustryjobs/",'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold');
+		console.log("%c       I'm looking for a cool job, if you have one, let me know!", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;');
+		console.log("%c       You can reach me at %cgrant@careers.bike", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold');
 	}
 	/*
 	checkQueryString() {
@@ -96,10 +103,10 @@ class App extends React.Component {
 	}
 
 	login() {
-		console.log("logging in");
+		//console.log("logging in");
 		StarService.getStars((err, data) => {
 			if (!err) {
-				console.log(data);
+				//console.log(data);
 				this.setState({stars: data});
 			} else {
 				console.log(`ewwow ${err}`);
@@ -144,7 +151,7 @@ class App extends React.Component {
 		*/
 
 		if (AuthService.getRefreshToken()) {
-			console.log("found login info");
+			//console.log("found login info");
 			AuthService.refresh_token(null, (err, data) => {
 				if (!err) {
 					this.setState({user: data.user});
@@ -180,7 +187,7 @@ class App extends React.Component {
 		
 	render() {
 
-		console.log('app rendering');
+		//console.log('app rendering');
 
 		const { jobs, companies, user } = this.state;
 	  

@@ -13,7 +13,7 @@ class AuthRoute extends React.Component {
 
         var strategy = this.props.match.params.strategy;
         
-        var { state, code, redirect_to, error } = queryString.parse(this.props.location.search);
+        var { state, code, /* redirect_to, */ error } = queryString.parse(this.props.location.search);
 
         if (error) {
             this.props.history.push("/login");

@@ -22,7 +22,7 @@ class AuthService extends Service {
             this.fetch(
                 `${this.testinghost}${url}`,options,(err, data) => {
                     // TODO finish this
-                    console.log("fetch secure: got something");
+                    //console.log("fetch secure: got something");
                     callback(err, data);
                     // if jwt is expired do something here
                     /*

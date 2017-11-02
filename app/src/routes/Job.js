@@ -1,5 +1,5 @@
 import React from 'react';
-import { html, safeHtml } from 'common-tags';
+import { html, /* safeHtml */ } from 'common-tags';
 import JobList from '../components/JobList';
 import { SlideHeader, RegularHeader } from '../components/SlideHeader';
 
@@ -16,17 +16,17 @@ const Job = ({ job, company, ...props }) => (
 			<h2 className="logo">{company.title}</h2>
 		}
 		<ul>
-			<li>👨‍💼 50-150 Employees</li>
-			<li>📅 Founded 2003</li>
-			<li>🏢 Headquarters: London, UK</li>
-			<li>🏭 Fashion</li>
+			<li><span role="img" aria-label="Number of employees">👨‍💼</span> 50-150 Employees</li>
+			<li><span role="img" aria-label="Founded">📅</span> Founded 2003</li>
+			<li><span role="img" aria-label="Headquarters">🏢</span> Headquarters: London, UK</li>
+			<li><span role="img" aria-label="Industry">🏭</span> Fashion</li>
 			</ul>
 		</section>
 		<section className="jobdata">
 			<h1>{job.title}</h1>
 			<div className="buttons">
-				<a className="tagblap" href="#">Apply</a>
-				<a className="tagblap" href="#">Share</a>
+				<a className="tagblap" href="#apply">Apply</a>
+				<a className="tagblap" href="#share">Share</a>
 			</div>
 
 			<div className="location">

@@ -23,7 +23,7 @@ class JobList extends React.Component {
 	}
 
 	componentDidMount() {
-		var { jobs, company, user } = this.state;
+		var { jobs, company } = this.state;
 		jobs =  jobs.filter(job=>!company || job.company === company);
 		var loadedJobs = jobs.slice(0,this.state.initLoad);
 		this.setState({jobs, loadedJobs});
@@ -45,7 +45,7 @@ class JobList extends React.Component {
 	
 	render() {
 
-		var { loadedJobs, jobs, company, user } = this.state;
+		var { loadedJobs, jobs, user } = this.state;
 
 		jobs = loadedJobs;
 
@@ -145,7 +145,7 @@ class Star extends React.Component {
 	}
 	render() {
 		return (
-			<a href="#" onClick={this.onClick.bind(this)} className={this.props.enabled ? 'starEnabled' : 'star' }>★</a>
+			<a href="#starfailed" onClick={this.onClick.bind(this)} className={this.props.enabled ? 'starEnabled' : 'star' }>★</a>
 		)
 	}
 }
