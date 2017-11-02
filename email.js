@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 var config = require('./config');
 
-var mail = (to, subject, text, html, callback) => {
+module.exports = (to, subject, text, html, callback) => {
 
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
