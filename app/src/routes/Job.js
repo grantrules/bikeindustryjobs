@@ -10,15 +10,6 @@ import {
 
 const {
 	FacebookShareButton,
-	GooglePlusShareButton,
-	LinkedinShareButton,
-	TwitterShareButton,
-	TelegramShareButton,
-	WhatsappShareButton,
-	PinterestShareButton,
-	VKShareButton,
-	OKShareButton,
-	RedditShareButton,
 	EmailShareButton,
   } = ShareButtons;
 
@@ -35,12 +26,14 @@ const Job = ({ job, company, ...props }) => (
 			:
 			<h2 className="logo">{company.title}</h2>
 		}
+		{company.details &&
 		<ul>
-			<li><span role="img" aria-label="Number of employees">👨‍💼</span> 50-150 Employees</li>
-			<li><span role="img" aria-label="Founded">📅</span> Founded 2003</li>
-			<li><span role="img" aria-label="Headquarters">🏢</span> Headquarters: London, UK</li>
-			<li><span role="img" aria-label="Industry">🏭</span> Fashion</li>
-			</ul>
+			{company.details.numEmployees && <li><span role="img" aria-label="Number of employees">👨‍💼</span> {company.details.numEmployees} Employees</li>}
+			{company.details.founded && <li><span role="img" aria-label="Founded">📅</span> Founded {company.details.founded}</li>}
+			{company.details.headquarters && <li><span role="img" aria-label="Headquarters">🏢</span> Headquarters: {company.details.headquarters}</li>}
+			{company.details.industry && <li><span role="img" aria-label="Industry">🏭</span> {company.details.industry}</li>}
+		</ul>
+		}
 		</section>
 		<section className="jobdata">
 			<h1>{job.title}</h1>
@@ -78,8 +71,11 @@ const Job = ({ job, company, ...props }) => (
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			
 		</section>
-		<SlideHeader logout={props.logout} user={props.user}/>
-		<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
+		<section className="otherJobs">
+			<SlideHeader logout={props.logout} user={props.user}/>
+			<h2>More jobs from {company.company}</h2>
+			<JobList {...props} onJobClick={()=>{window.scrollTo(0,0)}} company={company.company} initLoad="1"/>
+		</section>
 	</main>
 	</section>
 );
