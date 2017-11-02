@@ -1,7 +1,7 @@
-import Service from './service';
+import AuthService from '../services/auth';
 import { getTags } from '../components/Tags';
 
-class JobService extends Service {
+class JobService extends AuthService.Component {
 
     getCompanies(callback) {
         this.fetch(`${this.testinghost}/api/companies`, {method: 'GET'}, callback);

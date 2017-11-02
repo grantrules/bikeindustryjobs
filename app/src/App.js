@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Link, Route, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import { UserLogin, UserRegister } from './routes/UserLogin';
+import { UserLogin } from './routes/UserLogin';
+import { UserProfile } from './routes/UserProfile';
 import { Index } from './routes/Index';
 import { Job } from './routes/Job';
 import { Company } from './routes/Company';
@@ -17,7 +18,7 @@ import AuthService from './services/auth';
 import StarService from './services/stars';
 
 
-import { createBrowserHistory } from 'history';
+//import { createBrowserHistory } from 'history';
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105678-5'); // add your UA code 
 
@@ -194,10 +195,15 @@ class App extends React.Component {
 							<Route path="/login" render={() => (
 								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
 							)}/>
-
 							<Route path="/auth/:strategy" render={({match }) =>
 								<AuthRoute setUserData={this.setUserData.bind(this)}/>
 							}/>
+
+							{user &&
+								<Route path="/profile" render={() => (
+									<UserProfile {...this.state}/>
+								)}/>
+							}
 
 							{companies &&
 								<Route path="/company/:companyName" render={({ match }) => {
