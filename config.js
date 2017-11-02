@@ -13,5 +13,6 @@ module.exports = {
     'AWSACCESSKEYID': process.env.AWSACCESSKEYID,
     'AWSSECRETACCESSKEY': process.env.AWSSECRETACCESSKEY,
     'AWSS3BUCKET': process.env.AWSS3BUCKET,
+    'STRAVA_CLIENT_ID': process.env.STRAVA_CLIENT_ID,
     'STRAVA_CLIENT_SECRET': process.env.STRAVA_CLIENT_SECRET,
 };
