@@ -59,7 +59,7 @@ exports.postJob = (req, res) => {
 		description: sanitizeHtml(req.body.description),
 		location: req.body.location,
 	}
-	console.log(update);
+
 	// to confirm the user has access, we have to look up the company for the job
 	Job.findOne({_id: id}, (err,job) => {
 		if (job) {

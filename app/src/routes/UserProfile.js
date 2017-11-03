@@ -75,8 +75,21 @@ const ManageJobs = ({...props}) => (
     </section>
 )
 
+class Editable extends React.Component {
 
-class AddCompany extends React.Component {
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+            [name]: value
+        });
+    }
+    
+}
+
+class AddCompany extends Editable {
 
     constructor(props) {
         super(props);
@@ -128,16 +141,6 @@ class AddCompany extends React.Component {
                 alert(err||company);
             })        
         }
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-    
-        this.setState({
-            [name]: value
-        });
     }
 
     render() {
@@ -194,7 +197,7 @@ class AddCompany extends React.Component {
     }
 }
 
-class AddJob extends React.Component {
+class AddJob extends Editable {
 
     constructor(props) {
         super(props);
@@ -221,16 +224,6 @@ class AddJob extends React.Component {
             })
         }        
 
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-    
-        this.setState({
-            [name]: value
-        });
     }
 
     render() {
