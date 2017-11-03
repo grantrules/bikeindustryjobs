@@ -18,98 +18,98 @@ class Logout extends React.Component {
 
 class Login extends React.Component {
     
-        loginCallback(err,data) {
-            if (data && data.user) {
-                console.log(`logged in ${data}`);  
+    loginCallback(err,data) {
+        if (data && data.user) {
+            console.log(`logged in ${data}`);  
 
-                // store refresh_token in local storage,
-                // everything else in the state
-                this.props.setUserData(data);
-                this.props.history.push("/");
-            }
-            else {
-                this.props.error("Login failed. Confirm your email and password");
-                console.log("Login failed");
-            }
+            // store refresh_token in local storage,
+            // everything else in the state
+            this.props.setUserData(data);
+            this.props.history.push("/");
         }
-    
-        handleSubmit(event) {
-            event.preventDefault();
-            const data = new FormData(event.nativeEvent.target);
-            AuthService.login(data,this.loginCallback.bind(this));
-    
-        }
-    
-        render() {
-            return (
-                <form className="userForm" id="loginForm" onSubmit={this.handleSubmit.bind(this)}>
-                    <label htmlFor="email">Email </label><input id="email" name="email" type="email" placeholder="email"/>
-                    <label htmlFor="password">Password </label><input id="password" name="password" type="password"/>
-                    <button type="submit">Log in</button>
-                </form>
-            )
+        else {
+            this.props.error("Login failed. Confirm your email and password");
+            console.log("Login failed");
         }
     }
 
-    class RecoverPassword extends React.Component {
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.nativeEvent.target);
+        AuthService.login(data,this.loginCallback.bind(this));
 
-        recoverCallback() {
-
-        }
-
-        handleSubmit(event) {
-            event.preventDefault();
-            const data = new FormData(event.nativeEvent.target);
-            AuthService.recover(data,this.recoverCallback.bind(this));            
-
-        }
-        render() {
-            return (
-                <form className="userForm" id="recoverForm" onSubmit={this.handleSubmit.bind(this)}>
-                    <label htmlFor="email">Email </label><input id="email" name="email" type="email" placeholder="email"/>
-                    <button type="submit">Recover account</button>
-                </form>
-            )
-        }
     }
 
-    class Register extends React.Component {
-        
-        registerCallback(err,data) {
-            if (err) {
-                console.log(err);
+    render() {
+        return (
+            <form className="userForm" id="loginForm" onSubmit={this.handleSubmit.bind(this)}>
+                <label htmlFor="email">Email </label><input id="email" name="email" type="email" placeholder="email"/>
+                <label htmlFor="password">Password </label><input id="password" name="password" type="password"/>
+                <button type="submit">Log in</button>
+            </form>
+        )
+    }
+}
+
+class RecoverPassword extends React.Component {
+
+    recoverCallback() {
+
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.nativeEvent.target);
+        AuthService.recover(data,this.recoverCallback.bind(this));            
+
+    }
+    render() {
+        return (
+            <form className="userForm" id="recoverForm" onSubmit={this.handleSubmit.bind(this)}>
+                <label htmlFor="email">Email </label><input id="email" name="email" type="email" placeholder="email"/>
+                <button type="submit">Recover account</button>
+            </form>
+        )
+    }
+}
+
+class Register extends React.Component {
+    
+    registerCallback(err,data) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (data.user) {
+                this.props.setUserData(data);                    
+                console.log(`logged in`);
+                this.props.history.push("/");                    
             } else {
-                if (data.user) {
-                    this.props.setUserData(data);                    
-                    console.log(`logged in`);
-                    this.props.history.push("/");                    
-                } else {
-                    console.log("error registering");
-                }
+                console.log("error registering");
             }
-        }
-    
-        handleSubmit(event) {
-            event.preventDefault();
-            const data = new FormData(event.nativeEvent.target);
-            AuthService.register(data,this.registerCallback.bind(this));
-    
-        }
-    
-        render() {
-            return (
-                <form className="userForm" id="registerForm" onSubmit={this.handleSubmit.bind(this)}>
-                    <label htmlFor="registerFirstName">First Name </label><input id="registerFirstName" name="first_name" type="text"/>
-                    <label htmlFor="registerLastName">Last Name </label><input id="registerLastName" name="last_name" type="text"/>
-                    <label htmlFor="registerEmail">Email </label><input id="registerEmail" name="email" type="email"/>
-                    <label htmlFor="registerPassword">Password </label><input id="registerPassword" name="password" type="password"/>
-                    <label htmlFor="registerPasswordConfirm">Confirm Password </label><input id="registerPasswordpasswordConfirm" name="passwordConfirm" type="password"/>
-                    <button type="submit">Register</button>
-                </form>
-            )
         }
     }
 
-    Login = withRouter(Login);
-    Register = withRouter(Register);
-    export { Login, Logout, RecoverPassword, Register }
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.nativeEvent.target);
+        AuthService.register(data,this.registerCallback.bind(this));
+
+    }
+
+    render() {
+        return (
+            <form className="userForm" id="registerForm" onSubmit={this.handleSubmit.bind(this)}>
+                <label htmlFor="registerFirstName">First Name </label><input id="registerFirstName" name="first_name" type="text"/>
+                <label htmlFor="registerLastName">Last Name </label><input id="registerLastName" name="last_name" type="text"/>
+                <label htmlFor="registerEmail">Email </label><input id="registerEmail" name="email" type="email"/>
+                <label htmlFor="registerPassword">Password </label><input id="registerPassword" name="password" type="password"/>
+                <label htmlFor="registerPasswordConfirm">Confirm Password </label><input id="registerPasswordpasswordConfirm" name="passwordConfirm" type="password"/>
+                <button type="submit">Register</button>
+            </form>
+        )
+    }
+}
+
+Login = withRouter(Login);
+Register = withRouter(Register);
+export { Login, Logout, RecoverPassword, Register }
