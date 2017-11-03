@@ -111,4 +111,5 @@ class Login extends React.Component {
     }
 
     Login = withRouter(Login);
+    Register = withRouter(Register);
     export { Login, Logout, RecoverPassword, Register }

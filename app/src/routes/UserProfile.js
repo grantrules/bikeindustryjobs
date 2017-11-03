@@ -222,8 +222,9 @@ class AddJob extends Editable {
     render() {
         var props = this.props;
         return (
-            <section id="addCompany">
-                <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
+            <section id="addJob">
+                <h2>{props.job && `Edit ${props.job.title}`}{!props.job && `Add job for ${props.company}`}</h2>
+                <form className="jobForm" id="jobForm" onSubmit={this.handleSubmit.bind(this)}>
 
                             <input type="hidden" name="company" value={props.company}/>
 
@@ -233,7 +234,7 @@ class AddJob extends Editable {
                             <label htmlFor="jobLocation">Location </label>
                             <input id="jobLocation" name="location" type="text" value={this.state.location} onChange={this.handleInputChange}/>
 
-                            <label htmlFor="jobDescription">Job Description </label>
+                            <label htmlFor="jobDescription">Job Description (HTML okay)</label>
                             <textarea id="jobDescription" name="description" value={this.state.description} onChange={this.handleInputChange}/>
 
                             <button type="submit">{props.job && "Save"}{!props.job && "Add"} Job</button>
@@ -245,7 +246,7 @@ class AddJob extends Editable {
 
 const Profile = ({setUserData}) => (
     <section class="profile">
-        Your account
+        <h2>Your account</h2>
         <ul>
             <li><Link to="/profile/saved">View your saved jobs</Link></li>
             <li><Link to="/profile/manage">Manage job postings</Link></li>
