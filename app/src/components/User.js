@@ -84,6 +84,7 @@ class Register extends React.Component {
                 console.log(`logged in`);
                 this.props.history.push("/");                    
             } else {
+                this.props.error("Error with registration");
                 console.log("error registering");
             }
         }

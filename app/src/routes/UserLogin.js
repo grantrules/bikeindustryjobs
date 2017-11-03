@@ -19,7 +19,7 @@ class UserLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = props;
-		this.loginError = this.loginError.bind(this);
+		this.error = this.error.bind(this);
 	}
 
 	logout() {
@@ -29,7 +29,7 @@ class UserLogin extends React.Component {
 		}
 	}
 
-	loginError(error) {
+	error(error) {
 		this.setState({error});
 	}
 
@@ -47,10 +47,10 @@ class UserLogin extends React.Component {
 				{this.state.error &&
 					<div className="error"><span role="img" aria-label="error">⚠️</span> {this.state.error}</div>}
 				<Route exact={true} path="/login" render={() => (
-					<LoginFrag setUserData={this.props.setUserData} loginError={this.loginError}/>
+					<LoginFrag setUserData={this.props.setUserData} error={this.error}/>
 				)}/>
 				<Route exact={true} path="/login/register" render={() => (
-					<RegisterFrag setUserData={this.props.setUserData}/>
+					<RegisterFrag error={this.error} setUserData={this.props.setUserData}/>
 				)}/>
 				<Route exact={true} path="/login/recover" render={() => (
 					<RecoverPassword/>
@@ -62,18 +62,18 @@ class UserLogin extends React.Component {
 	}
 }
 
-const LoginFrag = ({setUserData, loginError}) => (
+const LoginFrag = ({setUserData, error}) => (
 	<div>
 		<HistoryLink strategy="strava"/>
-		<Login setUserData={setUserData} error={loginError}/>
+		<Login setUserData={setUserData} error={error}/>
 		<Link to="/login/recover">Forgot password?</Link>
 		<Link className="register" to="/login/register">Register with email</Link>
 	</div>
 
 )
 
-const RegisterFrag = ({setUserData}) => (
-	<Register setUserData={setUserData}/>
+const RegisterFrag = ({setUserData, error}) => (
+	<Register setUserData={setUserData} error={error}/>
 )
 
 export { UserLogin }
