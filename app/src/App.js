@@ -55,7 +55,7 @@ class App extends React.Component {
 		};
 
 		console.log("%c🍕🍕🍕 Welcome to http://careers.bike 🍕🍕🍕", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-size: 16pt;');
-		console.log("%c       I'm %cGrant%c and this is my project",'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: regular');
+		console.log("%c       I'm %cGrant🤓⛰️🍔%c and this is my project",'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold', 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: regular');
 		console.log("%c       You can find the source of it here:", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;');
 		console.log("%c       https://github.com/grantrules/bikeindustryjobs/",'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;font-weight: bold');
 		console.log("%c       I'm looking for a cool job, if you have one, let me know!", 'font-family: \'Helvetica Neue\', Helvetica, Arial, sans-serif;');
