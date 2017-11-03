@@ -156,7 +156,7 @@ class AddCompany extends React.Component {
 
 
                             {company.logo &&
-                                <img className="edit-logo" src={company.logo}/>
+                                <img alt="Company logo" className="edit-logo" src={company.logo}/>
                             }
                             <label htmlFor="companyLogo">Company Logo </label>
                             <ReactS3Uploader
