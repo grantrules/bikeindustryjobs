@@ -6,6 +6,11 @@
 	height: auto !important;
 }
 
+.edit-logo {
+	max-width: 100%;
+	max-height: 200px;
+}
+
 #companies {
 	width: 100%
 }
@@ -460,9 +465,14 @@ body {
 }
 
 
+.companyList .logo {
+	display: inline-block;
+}
 
 .companyList img {
 	padding: 5px;
+	height: 100%;
+	width: auto !important;
 }
 .hider {
 	max-height: 0;

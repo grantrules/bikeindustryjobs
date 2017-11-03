@@ -76,6 +76,7 @@ class AddCompany extends React.Component {
         super(props);
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.updateLogo = this.updateLogo.bind(this);
 
         if (props.company) {
             var c = props.company;
@@ -99,6 +100,11 @@ class AddCompany extends React.Component {
 
             }
         }
+    }
+
+    updateLogo(data) {
+        alert(data.fileName);
+        this.setState({logo: data.fileName});
     }
     
     
@@ -148,6 +154,10 @@ class AddCompany extends React.Component {
                             <label htmlFor="companyAbout">Short Description </label>
                             <textarea id="companyAbout" name="about" value={company.about} onChange={this.handleInputChange}/>
 
+
+                            {company.logo &&
+                                <img className="edit-logo" src={company.logo}/>
+                            }
                             <label htmlFor="companyLogo">Company Logo </label>
                             <ReactS3Uploader
                                 signingUrl="http://localhost:9004/api/imageUploadUrl"
@@ -157,7 +167,7 @@ class AddCompany extends React.Component {
                                 scrubFilename={(filename) => `${(new Date()).getMilliseconds()}${filename}`.replace(/[^\w\d_\-.]+/ig, '')}
                                 uploadRequestHeaders={{ 'x-amz-acl': 'public-read' }}  // this is the default
                                 contentDisposition="auto"
-                                onFinish={result=>console.log(result)}
+                                onFinish={this.updateLogo}
                             />
                             <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
 
