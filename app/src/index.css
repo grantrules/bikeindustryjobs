@@ -1,5 +1,11 @@
 /* css is my personal hell */
 
+.searchInput {
+	width: 100%;
+	padding: 10px !important;
+	height: auto !important;
+}
+
 #companies {
 	width: 100%
 }

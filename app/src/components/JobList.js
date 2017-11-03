@@ -28,6 +28,14 @@ class JobList extends React.Component {
 		var loadedJobs = jobs.slice(0,this.state.initLoad);
 		this.setState({jobs, loadedJobs});
 	}
+
+	componentWillReceiveProps(nextProps) {
+		var jobs = nextProps.jobs.filter(job=>!this.state.company || job.company === this.state.company);
+		
+		if (this.state.jobs.length !== jobs.length) {
+			this.setState({jobs: nextProps.jobs, loadedJobs: nextProps.jobs.slice(0,this.state.initLoad)})
+		}
+	}
 	
 	getCompany(company) {
 		return this.props.companies.find(e=>e.company===company)

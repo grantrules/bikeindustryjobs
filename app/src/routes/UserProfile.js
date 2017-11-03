@@ -123,9 +123,9 @@ class AddCompany extends React.Component {
         const name = target.name;
     
         this.setState({
-          [name]: value
+            [name]: value
         });
-      }
+    }
 
     render() {
         var company = this.state;
