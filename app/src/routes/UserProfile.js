@@ -47,12 +47,18 @@ class UserProfile extends React.Component {
                     <Route exact={true} path="/profile/company/:company/add" render={({match}) => (
                         <AddJob company={match.params.company} {...this.props}/>
                     )}/>
+                    <Route exact={true} path="/profile/job/:id/edit" render={({match}) => {
+                        var job = this.props.jobs.find(g => g._id === match.params.id);
+                                                            
+                        return <AddJob job={job} {...this.props}/>
+                    }}/>
+
+
                     <Route exact={true} path="/profile/company/:company/edit" render={({match}) => {
                         var company = this.props.companies.find(g => g.company === match.params.company);
                                                             
                         return <AddCompany company={company} {...this.props}/>
-                    }
-                    }/>
+                    }}/>
                     
                 </section>
                 </div>
@@ -77,6 +83,7 @@ class AddCompany extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateLogo = this.updateLogo.bind(this);
+        this.state = {};
 
         if (props.company) {
             var c = props.company;
@@ -85,17 +92,17 @@ class AddCompany extends React.Component {
                 d = c.details || {};
             }
             this.state = {
-                title: c.title,
-                location: c.location,
-                website: c.website,
-                about: c.about,
-                logo: c.logo,
+                title: c.title || "",
+                location: c.location || "",
+                website: c.website || "",
+                about: c.about || "",
+                logo: c.logo || "",
 
                 details: {
-                    numEmployees: d.numEmployees,
-                    founded: d.founded,
-                    industry: d.industry,
-                    headquarters: d.headquarters
+                    numEmployees: d.numEmployees || "",
+                    founded: d.founded || "",
+                    industry: d.industry || "",
+                    headquarters: d.headquarters || ""
                 }
 
             }
@@ -180,7 +187,7 @@ class AddCompany extends React.Component {
                             <label htmlFor="companyIndustry">Industry </label>
                             <input id="companyIndustry" name="industry" type="text" value={details.industry} onChange={this.handleInputChange}/>
 
-                            <button type="submit">{company && "Save"}{!company && "Add"} Company</button>
+                            <button type="submit">{this.props.company && "Save"}{!this.props.company && "Add"} Company</button>
                 </form>
             </section>
         )
@@ -188,15 +195,42 @@ class AddCompany extends React.Component {
 }
 
 class AddJob extends React.Component {
+
+    constructor(props) {
+        super(props);
+        var job = props.job || {};
+        this.state = {
+            title: job.title || "",
+            location: job.location || "",
+            description: job.description || ""
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+    }
     
 
     handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.nativeEvent.target);
-        JobService.postJob(data, (err,company) => {
-            alert(err||company);
-        })        
+        if (this.props.job) {
+            JobService.updateJob(this.props.job._id, data, (err,job) => {
+                alert(err||job)
+            })
+        } else {
+            JobService.postJob(data, (err,company) => {
+                alert(err||company);
+            })
+        }        
 
+    }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+    
+        this.setState({
+            [name]: value
+        });
     }
 
     render() {
@@ -208,15 +242,15 @@ class AddJob extends React.Component {
                             <input type="hidden" name="company" value={props.company}/>
 
                             <label htmlFor="jobName">Job Title </label>
-                            <input id="jobName" name="title" type="text"/>
+                            <input id="jobName" name="title" type="text" value={this.state.title} onChange={this.handleInputChange}/>
 
                             <label htmlFor="jobLocation">Location </label>
-                            <input id="jobLocation" name="location" type="text"/>
+                            <input id="jobLocation" name="location" type="text" value={this.state.location} onChange={this.handleInputChange}/>
 
                             <label htmlFor="jobDescription">Job Description </label>
-                            <textarea id="jobDescription" name="description" type="text"></textarea>
+                            <textarea id="jobDescription" name="description" value={this.state.description} onChange={this.handleInputChange}/>
 
-                            <button type="submit">Add Job</button>
+                            <button type="submit">{props.job && "Save"}{!props.job && "Add"} Job</button>
                 </form>
             </section>
         )
@@ -255,7 +289,7 @@ const ListJobs = ({company, companies, jobs}) => {
                 <li>No jobs</li>
             }
             {jobs.map(
-                job => (<li><Link to={`/profile/job/${job._id}`}>{job.title}</Link></li>)
+                job => (<li><Link to={`/profile/job/${job._id}/edit`}>{job.title}</Link></li>)
             )}
             <li><Link to={`/profile/company/${company}/add`}>Add job</Link></li>
         </ul>

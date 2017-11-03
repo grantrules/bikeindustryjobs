@@ -17,6 +17,20 @@ class JobService extends AuthService.Component {
         );
     }
 
+    updateJob(id, form, callback) {
+        
+        this.fetchSecure(
+            `/api/job/${id}`,
+            {
+                method: "POST",
+                body: this.urlencodeFormData(form),
+                headers: new Headers({'Content-Type': "application/x-www-form-urlencoded"})                
+            },
+            callback
+        )
+
+    }
+
     getCompanies(callback) {
         this.fetch(`${this.testinghost}/api/companies`, {method: 'GET'}, callback);
     }

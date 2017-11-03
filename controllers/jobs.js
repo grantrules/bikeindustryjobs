@@ -50,6 +50,30 @@ exports.postJobs = (req,res) => {
 
 }
 
+exports.postJob = (req, res) => {
+	var id = req.params.id;
+
+	var update = {
+		title: req.body.title,
+		url: req.body.url,
+		description: sanitizeHtml(req.body.description),
+		location: req.body.location,
+	}
+	console.log(update);
+	// to confirm the user has access, we have to look up the company for the job
+	Job.findOne({_id: id}, (err,job) => {
+		if (job) {
+			Company.findOne({company: job.company, "owners.user_id": req.user._id}, (err,company) => {
+				if (company) {
+					Job.update({_id: id}, update, {}, (err,job) => {
+						res.json(err||job);
+					})
+				}
+			})
+		}
+	})
+}
+
 exports.deleteJob = (req,res) => {
 	// look up job first, make sure user has ownership to company
 	var job_id = req.body.job_id;

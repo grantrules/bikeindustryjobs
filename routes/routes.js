@@ -17,6 +17,9 @@ module.exports = app => {
         .get(jobController.getJobs)
         .post(jwtAuth, jobController.postJobs)
         .delete(jwtAuth, jobController.deleteJob);
+    
+    router.route('/job/:id')
+        .post(jwtAuth, jobController.postJob);
 
     router.route('/company/:id')
         .post(jwtAuth, companyController.postCompany);
