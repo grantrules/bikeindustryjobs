@@ -85,6 +85,36 @@ section.login {
 	animation-timing-function: east-out;
 }
 
+/* profile box */
+section.profile {
+	position: relative;
+	background: rgba(255,255,255,0.8);
+	left: 50%;
+	top: 40px;
+	transform: translate(-50%, 0);
+	box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+	padding: 25px;
+	width: 620px;
+	animation-name: popin;
+	animation-duration: .2s;
+	animation-timing-function: east-out;
+}
+
+section.profile ul {
+	list-style-position: inside;
+	font-size: 150%;
+}
+
+section.profile input {
+	width: 75%;
+	display: block;
+}
+
+section.profile textarea {
+	width: 100%;
+	height: 200px;
+}
+
 /* login box register link */
 a.register {
 	display: block;

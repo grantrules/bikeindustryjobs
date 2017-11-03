@@ -26,7 +26,7 @@ class UserProfile extends React.Component {
 		if (this.props.user && this.state.usercompanies) {
 			return (
                 <div id="loginBg">
-                <section className="login">
+                <section className="profile">
                     <div className="logocenter">
                     <SVGLogo/>
                     </div>
@@ -130,11 +130,11 @@ class AddCompany extends Editable {
         const data = new FormData(event.nativeEvent.target);
         if (this.props.company) {
             CompanyService.updateCompany(this.props.company.company, data, (err,company) => {
-                alert(err||company);
+                //alert(err||company);
             });
         } else {
             CompanyService.postCompany(data, (err,company) => {
-                alert(err||company);
+               // alert(err||company);
             })        
         }
     }
@@ -143,6 +143,7 @@ class AddCompany extends Editable {
         var company = this.state;
         return (
             <section id="addCompany">
+                <h2>{this.props.company && `Edit ${this.props.company.title}`}{!this.props.company && "Add company"}</h2>
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
                             <label htmlFor="companyName">Company Name </label>
                             <input id="companyName" name="title" type="text" value={company.title} onChange={this.handleInputChange}/>
@@ -243,14 +244,18 @@ class AddJob extends Editable {
 }
 
 const Profile = ({setUserData}) => (
-    <ul>
-        <li><Link to="/profile/saved">View your saved jobs</Link></li>
-        <li><Link to="/profile/manage">Post a job</Link></li>
-    </ul>
+    <section class="profile">
+        Your account
+        <ul>
+            <li><Link to="/profile/saved">View your saved jobs</Link></li>
+            <li><Link to="/profile/manage">Manage job postings</Link></li>
+        </ul>
+    </section>
 )
 
 const ListCompanies = ({usercompanies, companies}) => (
 	<div>
+        <h2>Your managed companies</h2>
         <ul>
             {!usercompanies &&
                 <li>No companies</li>}
@@ -258,8 +263,9 @@ const ListCompanies = ({usercompanies, companies}) => (
                 company => (<li><Link to={`/profile/company/${company.company}`}>{company.title}</Link> - <Link to={`/profile/company/${company.company}/edit`}>edit</Link></li>)
             )}
 
-            <li><Link to="/profile/manage/newcompany">Add Company</Link></li>
         </ul>
+        <Link className="btn btn-primary" to="/profile/manage/newcompany">Add Company</Link>
+
 	</div>
 
 )
@@ -267,8 +273,11 @@ const ListCompanies = ({usercompanies, companies}) => (
 const ListJobs = ({company, companies, jobs}) => {
 
    jobs = jobs.filter(j => j.company === company);
+   var c = companies.find(d => d.company === company)
 
     return (
+        <section>
+            <h2>Jobs for {c.title}</h2>
         <ul>
             {!jobs &&
                 <li>No jobs</li>
@@ -276,8 +285,10 @@ const ListJobs = ({company, companies, jobs}) => {
             {jobs.map(
                 job => (<li><Link to={`/profile/job/${job._id}/edit`}>{job.title}</Link></li>)
             )}
-            <li><Link to={`/profile/company/${company}/add`}>Add job</Link></li>
         </ul>
+        <Link className="btn btn-primary" to={`/profile/company/${company}/add`}>Add job</Link>
+
+        </section>
     )
 }
 
