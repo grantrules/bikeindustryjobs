@@ -37,10 +37,13 @@ const Job = ({ job, company, ...props }) => (
 		<section className="jobdata">
 			<h1>{job.title}</h1>
 			<div className="buttons">
-				<a className="tagblap" href={job.url}>Apply</a>
-				{/*
-				<a className="tagblap" href="#share">Share</a>
-				*/}
+
+				{job.url &&
+				<a className="tagblap" href={job.url}>Apply</a>}
+
+				{job.email &&
+					<a className="tagblap" href={`mailto:${job.email}`}>Apply by Email</a>}
+				
 				<FacebookShareButton
             		url={window.location.href}
 					quote={`Position available: ${job.title} at ${company.title}`}
@@ -65,7 +68,6 @@ const Job = ({ job, company, ...props }) => (
 			</div>
 
 			<div className="description">
-				<a href={job.url}>View and apply on company website</a>
 				<div className="descriptiontext"
 					dangerouslySetInnerHTML={{__html: html`${job.description}`}}/>
 			</div>			

@@ -26,6 +26,7 @@ exports.postJobs = (req,res) => {
 			var job = new Job({
 				title: req.body.title,
 				url: req.body.url,
+				email: req.body.email,
 				description: sanitizeHtml(req.body.description),
 				company: req.body.company,
 				location: req.body.location,
@@ -52,6 +53,7 @@ exports.postJob = (req, res) => {
 	var update = {
 		title: req.body.title,
 		url: req.body.url,
+		email: req.body.email,
 		description: sanitizeHtml(req.body.description),
 		location: req.body.location,
 	}

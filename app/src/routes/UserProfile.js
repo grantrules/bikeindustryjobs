@@ -198,6 +198,8 @@ class AddJob extends Editable {
         this.state = {
             title: job.title || "",
             location: job.location || "",
+            url: job.url || "",
+            email: job.email || "",
             description: job.description || ""
         }
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -233,6 +235,13 @@ class AddJob extends Editable {
 
                             <label htmlFor="jobLocation">Location </label>
                             <input id="jobLocation" name="location" type="text" value={this.state.location} onChange={this.handleInputChange}/>
+
+                            <label>Please enter at least one way to apply</label>
+                            <label htmlFor="jobUrl">Job Application URL</label>
+                            <input id="jobUrl" name="url" type="text" value={this.state.url} onChange={this.handleInputChange}/>
+
+                            <label htmlFor="jobEmail">Job Application Email</label>
+                            <input id="jobEmail" name="email" type="text" value={this.state.email} onChange={this.handleInputChange}/>
 
                             <label htmlFor="jobDescription">Job Description (HTML okay)</label>
                             <textarea id="jobDescription" name="description" value={this.state.description} onChange={this.handleInputChange}/>
