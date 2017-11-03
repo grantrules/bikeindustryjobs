@@ -5,10 +5,6 @@ var log = require('loglevel');
 var sanitizeHtml = require('sanitize-html');
 
 
-
-
-
-
 // GET /api/jobs
 exports.getJobs = (req,res) => {
      var daysago = new Date(Date.now() - (60*60*24*1000));
