@@ -86,7 +86,6 @@ exports.getImageUploadUrl = function(req,res) {
 
 	var fileName = req.query.objectName;
 	var contentType = req.query.contentType;
-	console.log(contentType);
 
     var s3params = {
         Bucket: s3_bucket,

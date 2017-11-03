@@ -5,7 +5,6 @@ class StarService extends AuthService.Component {
     star(job_id,callback) {
         var data = new FormData();
         data.append("job_id", job_id);
-        console.log(`${job_id} job`);
 
         this.fetchSecure(
             `/api/stars`,
