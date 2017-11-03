@@ -22,7 +22,7 @@ class Index extends React.Component {
         var engine = new Bloodhound({
             local: props.jobs,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['title','description']),
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace(['title','description','location']),
         });
         engine.initialize();
         this.engine = engine;
