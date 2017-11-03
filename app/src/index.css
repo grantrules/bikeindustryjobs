@@ -236,7 +236,7 @@ section.login .strava {
 	border: 1px solid rgba(36, 36, 36, 0.20);
 }
 .list, .main {
-	width: 75%;
+	width: 95%;
 	margin: 0 auto;
 }
 
@@ -415,6 +415,12 @@ li.job {
 
 
 @media screen and (min-width: 620px) { 
+
+	.list, .main {
+		width: 75%;
+		margin: 0 auto;
+	}
+	
 	ul#joblist { padding-left: 40px; }
 	#joblist h1 {
 		font-size: 14pt;
