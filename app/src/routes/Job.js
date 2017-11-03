@@ -1,10 +1,9 @@
 import React from 'react';
-import { html, /* safeHtml */ } from 'common-tags';
+import { html } from 'common-tags';
 import JobList from '../components/JobList';
 import { SlideHeader, RegularHeader } from '../components/SlideHeader';
 import {
 	ShareButtons,
-	ShareCounts,
 	generateShareIcon
 } from 'react-share';
 
@@ -47,8 +46,8 @@ const Job = ({ job, company, ...props }) => (
 					quote={`Position available: ${job.title} at ${company.title}`}
 					className="facebook-share share-button">
 					<FacebookIcon
-						size={32}
-						round />
+						size={24}
+						square />
 				</FacebookShareButton>
 				<EmailShareButton
 					url={window.location.href}
@@ -56,8 +55,8 @@ const Job = ({ job, company, ...props }) => (
 					body={window.location.href}
 					className="email-share share-button">
 					<EmailIcon
-						size={32}
-						round />
+						size={24}
+						square />
 				</EmailShareButton>
 			</div>
 

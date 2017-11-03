@@ -8,6 +8,14 @@
 	padding-top: 150px;
 }
 
+.buttons > * {
+	vertical-align: middle;
+}
+
+.share-button, .share-button div {
+	display: inline-block; margin-right: 2px;
+}
+
 /* homepage "company v" link */
 #companies > a { 
 	text-align: center;
