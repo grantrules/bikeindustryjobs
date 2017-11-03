@@ -129,7 +129,7 @@ class AddCompany extends Editable {
         event.preventDefault();
         const data = new FormData(event.nativeEvent.target);
         if (this.props.company) {
-            CompanyService.updateCompany(this.props.company._id, data, (err,company) => {
+            CompanyService.updateCompany(this.props.company.company, data, (err,company) => {
                 alert(err||company);
             });
         } else {

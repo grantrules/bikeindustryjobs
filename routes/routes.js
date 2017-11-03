@@ -21,7 +21,7 @@ module.exports = app => {
     router.route('/job/:id')
         .post(jwtAuth, jobController.postJob);
 
-    router.route('/company/:id')
+    router.route('/company/:company')
         .post(jwtAuth, companyController.postCompany);
 
     router.route('/companies')

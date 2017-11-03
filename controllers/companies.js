@@ -50,7 +50,7 @@ exports.postCompanies = (req, res) => {
 }
 
 exports.postCompany = (req, res) => {
-	var id = req.params.id;
+	var company = req.params.company;
 
 	var update = {
 		title: req.body.title,
@@ -66,7 +66,7 @@ exports.postCompany = (req, res) => {
 		}
 	}
 
-	Company.update({_id: id, "owners.user_id": req.user._id}, update, {}, (err,company) => {
+	Company.update({company, "owners.user_id": req.user._id}, update, {}, (err,company) => {
 		res.json(err||company);
 	})
 }

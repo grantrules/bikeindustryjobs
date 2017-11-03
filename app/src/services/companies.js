@@ -55,10 +55,10 @@ class CompanyService extends AuthService.Component {
         );
     }
 
-    updateCompany(id, form, callback) {
+    updateCompany(company, form, callback) {
 
         this.fetchSecure(
-            `/api/company/${id}`,
+            `/api/company/${company}`,
             {
                 method: "POST",
                 body: this.urlencodeFormData(form),
