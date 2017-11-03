@@ -110,14 +110,10 @@ class AddCompany extends Editable {
                 website: c.website || "",
                 about: c.about || "",
                 logo: c.logo || "",
-
-                details: {
-                    numEmployees: d.numEmployees || "",
-                    founded: d.founded || "",
-                    industry: d.industry || "",
-                    headquarters: d.headquarters || ""
-                }
-
+                numEmployees: d.numEmployees || "",
+                founded: d.founded || "",
+                industry: d.industry || "",
+                headquarters: d.headquarters || ""
             }
         }
     }
@@ -145,10 +141,6 @@ class AddCompany extends Editable {
 
     render() {
         var company = this.state;
-        var details = {};
-        if (company) {
-            details = company.details || {};
-        }
         return (
             <section id="addCompany">
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
@@ -182,13 +174,13 @@ class AddCompany extends Editable {
                             <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyNumEmployees">Number of Employees </label>
-                            <input id="companyNumEmployees" name="numEmployees" type="text" value={details.numEmployees} onChange={this.handleInputChange}/>
+                            <input id="companyNumEmployees" name="numEmployees" type="text" value={company.numEmployees} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyFounded">Year Founded </label>
-                            <input id="companyFounded" name="founded" type="text" value={details.founded} onChange={this.handleInputChange}/>
+                            <input id="companyFounded" name="founded" type="text" value={company.founded} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyIndustry">Industry </label>
-                            <input id="companyIndustry" name="industry" type="text" value={details.industry} onChange={this.handleInputChange}/>
+                            <input id="companyIndustry" name="industry" type="text" value={company.industry} onChange={this.handleInputChange}/>
 
                             <button type="submit">{this.props.company && "Save"}{!this.props.company && "Add"} Company</button>
                 </form>
