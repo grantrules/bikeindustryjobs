@@ -197,6 +197,15 @@ section.login .strava {
 	width: 200px;
 }
 
+.logo-container {
+	width: 200px;
+	display: inline-block;
+	text-align: center;
+}
+.company-logo {
+	max-height: 50px;
+	max-width: 200px;
+}
 /* logo in header */
 .header .logo {
 	width: 150px;

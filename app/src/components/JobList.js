@@ -97,11 +97,13 @@ class JobListItem extends React.Component {
 	titleOrLogo() {
 		return (
 			<Link to={`/company/${this.props.company.company}`}>
-				{this.props.company.logo ?
-					<img alt="" className="logo" src={this.props.company.logo}/>
-					:
-					<strong>{this.props.company.title}</strong>
-				}
+				<span className="logo-container">
+					{this.props.company.logo ?
+						<img alt={this.props.company.title} className="company-logo" src={this.props.company.logo}/>
+						:
+						<strong>{this.props.company.title}</strong>
+					}
+				</span>
 			</Link>
 		);
 	}

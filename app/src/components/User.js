@@ -94,7 +94,6 @@ class Register extends React.Component {
         event.preventDefault();
         const data = new FormData(event.nativeEvent.target);
         AuthService.register(data,this.registerCallback.bind(this));
-
     }
 
     render() {

@@ -21,9 +21,9 @@ const Job = ({ job, company, ...props }) => (
 	<main className="jobpage main">
 		<section className="companydata">
 		{company.logo ?
-			<img alt={`${company.title} logo`} className="logo" src={company.logo}/>
+			<img alt={`${company.title} logo`} className="company-logo" src={company.logo}/>
 			:
-			<h2 className="logo">{company.title}</h2>
+			<h2>{company.title}</h2>
 		}
 		{company.details &&
 		<ul>
