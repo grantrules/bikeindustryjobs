@@ -19,21 +19,17 @@ class Logout extends React.Component {
 class Login extends React.Component {
     
         loginCallback(err,data) {
-            if (err) {
-                console.log(err);
-            } else {
-                if (data.user) {
-                    console.log(`logged in ${data}`);  
-                    
+            if (data && data.user) {
+                console.log(`logged in ${data}`);  
 
-                    // store refresh_token in local storage,
-                    // everything else in the state
-                    this.props.setUserData(data);
-                    this.props.history.push("/");
-                    
-                } else {
-                    console.log("Login failed");
-                }
+                // store refresh_token in local storage,
+                // everything else in the state
+                this.props.setUserData(data);
+                this.props.history.push("/");
+            }
+            else {
+                this.props.error("Login failed. Confirm your email and password");
+                console.log("Login failed");
             }
         }
     
@@ -85,7 +81,7 @@ class Login extends React.Component {
             } else {
                 if (data.user) {
                     this.props.setUserData(data);                    
-                    console.log(`logged in ${data.user}`);
+                    console.log(`logged in`);
                     this.props.history.push("/");                    
                 } else {
                     console.log("error registering");

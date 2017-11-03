@@ -19,6 +19,7 @@ class UserLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = props;
+		this.loginError = this.loginError.bind(this);
 	}
 
 	logout() {
@@ -26,6 +27,10 @@ class UserLogin extends React.Component {
 			&& this.state.user.logout()) {
 				this.state.setUser(null);
 		}
+	}
+
+	loginError(error) {
+		this.setState({error});
 	}
 
 	render() {
@@ -39,8 +44,10 @@ class UserLogin extends React.Component {
 				<div className="logocenter">
 				<SVGLogo/>
 				</div>
+				{this.state.error &&
+					<div className="error"><span role="img" aria-label="error">⚠️</span> {this.state.error}</div>}
 				<Route exact={true} path="/login" render={() => (
-					<LoginFrag setUserData={this.props.setUserData}/>
+					<LoginFrag setUserData={this.props.setUserData} loginError={this.loginError}/>
 				)}/>
 				<Route exact={true} path="/login/register" render={() => (
 					<RegisterFrag setUserData={this.props.setUserData}/>
@@ -55,10 +62,10 @@ class UserLogin extends React.Component {
 	}
 }
 
-const LoginFrag = ({setUserData}) => (
+const LoginFrag = ({setUserData, loginError}) => (
 	<div>
 		<HistoryLink strategy="strava"/>
-		<Login setUserData={setUserData}/>
+		<Login setUserData={setUserData} error={loginError}/>
 		<Link to="/login/recover">Forgot password?</Link>
 		<Link className="register" to="/login/register">Register with email</Link>
 	</div>
