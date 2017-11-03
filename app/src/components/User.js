@@ -1,6 +1,9 @@
 import React from 'react';
 import AuthService from '../services/auth';
 
+import { withRouter } from 'react-router'
+
+
 
 
 class Logout extends React.Component {
@@ -26,6 +29,7 @@ class Login extends React.Component {
                     // store refresh_token in local storage,
                     // everything else in the state
                     this.props.setUserData(data);
+                    this.props.history.push("/");
                     
                 } else {
                     console.log("Login failed");
@@ -82,6 +86,7 @@ class Login extends React.Component {
                 if (data.user) {
                     this.props.setUserData(data);                    
                     console.log(`logged in ${data.user}`);
+                    this.props.history.push("/");                    
                 } else {
                     console.log("error registering");
                 }
@@ -112,4 +117,5 @@ class Login extends React.Component {
         }
     }
 
+    Login = withRouter(Login);
     export { Login, Logout, RecoverPassword, Register }
