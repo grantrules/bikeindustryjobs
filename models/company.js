@@ -24,15 +24,12 @@ var companySchema = new mongoose.Schema({
 	owners:[{ user_id: String }]
 });
 
-companySchema.pre('save', function(next) {
-	
+companySchema.pre('validate', function(next) {
 
-	// generate company slug
-	if (typeof this.company === "undefined") {		
+	if (typeof this.title === "string" && (typeof this.company === "undefined" || this.company === "")) {
 		var baseslug = this.title.replace(/[^a-z0-9]/gi, '').toLowerCase();
 		var slug = baseslug;
 		var num = 1;
-
 
 		mongoose.model('Company').find({company: new RegExp(`^${slug}`, "i") }).exec((err, companies) => {
 		
@@ -48,11 +45,12 @@ companySchema.pre('save', function(next) {
 			this.company = slug;
 			next();
 		})
-	}
-	else {
+	} else {
 		next();
 	}
+
 })
+
 
 
 module.exports = mongoose.model('Company', companySchema);

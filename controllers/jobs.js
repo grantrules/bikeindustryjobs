@@ -30,6 +30,7 @@ exports.postJobs = (req,res) => {
 				description: sanitizeHtml(req.body.description),
 				company: req.body.company,
 				location: req.body.location,
+				last_seen: new Date((new Date()).getTime() + 30*24*60*60*1000),
 			})
 
 			job.save((err, job) => {
@@ -37,6 +38,7 @@ exports.postJobs = (req,res) => {
 					console.log(err);
 					return res.json({err: "error saving job"});
 				}
+				console.log(job);
 				return res.json(job);
 			})
 		}

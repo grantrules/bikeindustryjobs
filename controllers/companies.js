@@ -39,14 +39,34 @@ exports.postCompanies = (req, res) => {
 			industry: req.body.industry,
 		}
 	});
-	company.save((err, company) => {
-		if (err) {
-			log.error(err);
-			return res.json({err: "error saving company"});
+	var baseslug = company.title.replace(/[^a-z0-9]/gi, '').toLowerCase();
+	var slug = baseslug;
+	var num = 1;
+
+	company.company = '';
+
+	Company.find({company: new RegExp(`^${slug}`, "i") }).exec((err, companies) => {
+	
+		if (companies) {
+			while (company.company === '') {
+				if (companies.find(c => c.company === slug)) {
+					slug = `${baseslug}${num++}`						
+				} else {
+					company.company = slug;
+				}
+			}
 		}
-		log.debug(`company saved: company_id: ${company._id}, user: ${req.user._id}`);
-		res.json(company);
-	});
+		company.company = slug;
+		company.save((err, company) => {
+			if (err) {
+				log.error(err);
+				return res.json({err: "error saving company"});
+			}
+			log.debug(`company saved: company_id: ${company._id}, user: ${req.user._id}`);
+			return res.json(company);
+		});
+	})
+	
 }
 
 exports.postCompany = (req, res) => {

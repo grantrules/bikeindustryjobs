@@ -1,5 +1,5 @@
 import React from 'react';
-import { /*withRouter,*/ Route, Link } from 'react-router-dom';
+import { withRouter, Route, Link } from 'react-router-dom';
 
 import SVGLogo from '../components/SVGLogo';
 
@@ -119,9 +119,13 @@ class AddCompany extends Editable {
     }
 
     updateLogo(data) {
-        alert(data.fileName);
+        //alert(data.fileName);
         this.setState({logo: data.fileName});
     }
+
+    error(error) {
+		this.setState({error});
+	}
     
     
 
@@ -130,11 +134,19 @@ class AddCompany extends Editable {
         const data = new FormData(event.nativeEvent.target);
         if (this.props.company) {
             CompanyService.updateCompany(this.props.company.company, data, (err,company) => {
+                if (err) {
+                    this.error("Error updating company");
+                }
                 //alert(err||company);
             });
         } else {
             CompanyService.postCompany(data, (err,company) => {
-               // alert(err||company);
+                if (company) {
+                    console.log(company);
+                    this.props.history.push(`/profile/company/${company.company}`);
+                } else {
+                    //this.error("Error saving company");
+                }          
             })        
         }
     }
@@ -144,6 +156,8 @@ class AddCompany extends Editable {
         return (
             <section id="addCompany">
                 <h2>{this.props.company && `Edit ${this.props.company.title}`}{!this.props.company && "Add company"}</h2>
+                {this.state.error &&
+					<div className="error"><span role="img" aria-label="error">⚠️</span> {this.state.error}</div>}
                 <form className="companyForm" id="companyForm" onSubmit={this.handleSubmit.bind(this)}>
                             <label htmlFor="companyName">Company Name </label>
                             <input id="companyName" name="title" type="text" value={company.title} onChange={this.handleInputChange}/>
@@ -190,6 +204,8 @@ class AddCompany extends Editable {
     }
 }
 
+AddCompany = withRouter(AddCompany);
+
 class AddJob extends Editable {
 
     constructor(props) {
@@ -205,17 +221,29 @@ class AddJob extends Editable {
         this.handleInputChange = this.handleInputChange.bind(this);
     }
     
+    error(error) {
+		this.setState({error});
+	}
 
     handleSubmit(event) {
         event.preventDefault();
         const data = new FormData(event.nativeEvent.target);
         if (this.props.job) {
             JobService.updateJob(this.props.job._id, data, (err,job) => {
-                alert(err||job)
+                if (err) {
+                    this.error("Error saving update");
+                } else {
+                    // success add job
+                }
             })
         } else {
-            JobService.postJob(data, (err,company) => {
-                alert(err||company);
+            JobService.postJob(data, (err,job) => {
+                if (err) {
+                    this.error("Error saving update");
+                } else {
+                    this.props.history.push(`/profile/company/${job.company}`);
+                    // success new job
+                }
             })
         }        
 
@@ -226,6 +254,8 @@ class AddJob extends Editable {
         return (
             <section id="addJob">
                 <h2>{props.job && `Edit ${props.job.title}`}{!props.job && `Add job for ${props.company}`}</h2>
+                {this.state.error &&
+					<div className="error"><span role="img" aria-label="error">⚠️</span> {this.state.error}</div>}
                 <form className="jobForm" id="jobForm" onSubmit={this.handleSubmit.bind(this)}>
 
                             <input type="hidden" name="company" value={props.company}/>
@@ -252,6 +282,8 @@ class AddJob extends Editable {
         )
     }
 }
+
+AddJob = withRouter(AddJob);
 
 const Profile = ({setUserData}) => (
     <section class="profile">
