@@ -4,7 +4,7 @@
 require('dotenv').config()
 
 module.exports = {
-    'secret': 'bananaramalamwilliamvalderama',
+    'secret': process.env.SECRET,
     'mongodb': '127.0.0.1/bikeindustryjobs',
     'fromEmail': '"Grant at careers.bike" <info@careers.bike>',
     'JWTsecret': 'whoputthebompinthebompdabompdabomp',
