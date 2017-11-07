@@ -8,6 +8,9 @@ import JobService from '../services/jobs';
 
 import ReactS3Uploader from 'react-s3-uploader';
 
+import RichTextEditor from 'react-rte';
+
+
 
 class UserProfile extends React.Component {
 	constructor(props) {
@@ -96,25 +99,32 @@ class AddCompany extends Editable {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.updateLogo = this.updateLogo.bind(this);
-        this.state = {};
+        var c = {};
+        var d = {} 
+        
 
         if (props.company) {
-            var c = props.company;
-            var d = {} 
+            c = props.company;
             if (c) {
                 d = c.details || {};
             }
-            this.state = {
-                title: c.title || "",
-                location: c.location || "",
-                website: c.website || "",
-                about: c.about || "",
-                logo: c.logo || "",
-                numEmployees: d.numEmployees || "",
-                founded: d.founded || "",
-                industry: d.industry || "",
-                headquarters: d.headquarters || ""
-            }
+        }
+        
+        if (typeof c.about !== "undefined") {
+            c.about = RichTextEditor.createValueFromString(c.about, 'html')
+        } else {
+            c.about = RichTextEditor.createEmptyValue()
+        }
+        this.state = {
+            title: c.title || "",
+            location: c.location || "",
+            website: c.website || "",
+            about: c.about,
+            logo: c.logo || "",
+            numEmployees: d.numEmployees || "",
+            founded: d.founded || "",
+            industry: d.industry || "",
+            headquarters: d.headquarters || ""
         }
     }
 
@@ -131,7 +141,11 @@ class AddCompany extends Editable {
 
     handleSubmit(event) {
         event.preventDefault();
-        const data = new FormData(event.nativeEvent.target);
+        this.state.about = this.state.about.toString("html");
+        const data = new FormData();
+        for ( var key in this.state ) {
+            data.append(key, this.state[key]);
+        }
         if (this.props.company) {
             CompanyService.updateCompany(this.props.company.company, data, (err,company) => {
                 if (err) {
@@ -151,6 +165,11 @@ class AddCompany extends Editable {
         }
     }
 
+    handleEditorChange(value) {
+        this.setState({about: value})
+    }
+
+
     render() {
         var company = this.state;
         return (
@@ -169,8 +188,12 @@ class AddCompany extends Editable {
                             <input id="companyWebsite" name="website" type="text" value={company.website} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyAbout">Short Description </label>
-                            <textarea id="companyAbout" name="about" value={company.about} onChange={this.handleInputChange}/>
-
+                            <RichTextEditor id="companyAbout" name="about"
+                                value={this.state.about}
+                                onChange={this.handleEditorChange.bind(this)}
+                            />
+                            {/*<textarea id="companyAbout" name="about" value={company.about} onChange={this.handleInputChange}/>
+                            */}
 
                             {company.logo &&
                                 <img alt="Company logo" className="edit-logo" src={company.logo}/>
@@ -211,12 +234,17 @@ class AddJob extends Editable {
     constructor(props) {
         super(props);
         var job = props.job || {};
+        if ( typeof job.description !== "undefined") {
+            job.description = RichTextEditor.createValueFromString(job.description, 'html')
+        } else {
+            job.description = RichTextEditor.createEmptyValue()
+        }
         this.state = {
             title: job.title || "",
             location: job.location || "",
             url: job.url || "",
             email: job.email || "",
-            description: job.description || ""
+            description: job.description,
         }
         this.handleInputChange = this.handleInputChange.bind(this);
     }
@@ -227,7 +255,12 @@ class AddJob extends Editable {
 
     handleSubmit(event) {
         event.preventDefault();
-        const data = new FormData(event.nativeEvent.target);
+        this.state.description = this.state.description.toString("html");
+        const data = new FormData();
+        for ( var key in this.state ) {
+            data.append(key, this.state[key]);
+        }
+
         if (this.props.job) {
             JobService.updateJob(this.props.job._id, data, (err,job) => {
                 if (err) {
@@ -247,6 +280,10 @@ class AddJob extends Editable {
             })
         }        
 
+    }
+
+    handleEditorChange(value) {
+        this.setState({description: value})
     }
 
     render() {
@@ -273,8 +310,14 @@ class AddJob extends Editable {
                             <label htmlFor="jobEmail">Job Application Email</label>
                             <input id="jobEmail" name="email" type="text" value={this.state.email} onChange={this.handleInputChange}/>
 
-                            <label htmlFor="jobDescription">Job Description (HTML okay)</label>
+                            <label htmlFor="jobDescription">Job Description</label>
+                            <RichTextEditor id="jobDescription" name="description"
+                                value={this.state.description}
+                                onChange={this.handleEditorChange.bind(this)}
+                            />
+                            {/*
                             <textarea id="jobDescription" name="description" value={this.state.description} onChange={this.handleInputChange}/>
+                            */}
 
                             <button type="submit">{props.job && "Save"}{!props.job && "Add"} Job</button>
                 </form>
@@ -286,7 +329,7 @@ class AddJob extends Editable {
 AddJob = withRouter(AddJob);
 
 const Profile = ({setUserData}) => (
-    <section class="profile">
+    <section>
         <h2>Your account</h2>
         <ul>
             <li><Link to="/profile/saved">View your saved jobs</Link></li>
@@ -302,7 +345,7 @@ const ListCompanies = ({usercompanies, companies}) => (
             {!usercompanies &&
                 <li>No companies</li>}
             {usercompanies.map(
-                company => (<li><Link to={`/profile/company/${company.company}`}>{company.title}</Link> - <Link to={`/profile/company/${company.company}/edit`}>edit</Link></li>)
+                company => (<li key={company.company}><Link to={`/profile/company/${company.company}`}>{company.title}</Link> - <Link to={`/profile/company/${company.company}/edit`}>edit</Link></li>)
             )}
 
         </ul>
@@ -325,7 +368,7 @@ const ListJobs = ({company, companies, jobs}) => {
                 <li>No jobs</li>
             }
             {jobs.map(
-                job => (<li><Link to={`/profile/job/${job._id}/edit`}>{job.title}</Link></li>)
+                job => (<li key={job._id}><Link to={`/profile/job/${job._id}/edit`}>{job.title}</Link></li>)
             )}
         </ul>
         <Link className="btn btn-primary" to={`/profile/company/${company}/add`}>Add job</Link>

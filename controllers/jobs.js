@@ -2,7 +2,7 @@ var Job = require('../models/job');
 var Company = require('../models/company');
 var Star = require('../models/star');
 var log = require('loglevel');
-var sanitizeHtml = require('sanitize-html');
+var sanitizeHtml = require('../utils/sanitize');
 
 
 // GET /api/jobs

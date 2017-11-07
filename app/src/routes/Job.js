@@ -76,7 +76,8 @@ const Job = ({ job, company, ...props }) => (
 		{company.about &&
 		<section className="companyInfo">
 			<h3>About {company.title}</h3>
-			<p>{company.about}</p>
+			<p
+				dangerouslySetInnerHTML={{__html: company.about}}/>
 		</section>}
 
 		<section className="otherJobs">

@@ -5,7 +5,7 @@ var aws = require('aws-sdk');
 var crypto = require('crypto');
 var config = require('../config');
 
-var sanitizeHtml = require('sanitize-html');
+var sanitizeHtml = require('../utils/sanitize');
 
 var s3_bucket = 'derp';
 var secret = "the snozzberries taste like snozzberries";
