@@ -27,9 +27,7 @@ const CompanyInfo = ({company}) => (
             }
         </section>
         {company.about &&
-            <section>
-                {company.about}
-            </section>
+            <section dangerouslySetInnerHTML={{html: company.about}} />
         }
 
     </div>
