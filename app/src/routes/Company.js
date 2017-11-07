@@ -19,6 +19,7 @@ const CompanyInfo = ({company}) => (
             }
             {company.details &&
                 <ul>
+                    {company.website && <li><span role="img" aria-label="website">⚓</span> <a href={company.website}>Company Website</a></li>}
                     {company.details.numEmployees && <li><span role="img" aria-label="Number of employees">👨‍💼</span> {company.details.numEmployees} Employees</li>}
                     {company.details.founded && <li><span role="img" aria-label="Founded">📅</span> Founded {company.details.founded}</li>}
                     {company.details.headquarters && <li><span role="img" aria-label="Headquarters">🏢</span> Headquarters: {company.details.headquarters}</li>}
