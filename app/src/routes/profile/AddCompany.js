@@ -103,10 +103,12 @@ class AddCompany extends ControlledForm {
                             {/*<textarea id="companyAbout" name="about" value={company.about} onChange={this.handleInputChange}/>
                             */}
 
+                            <label htmlFor="companyLogo">Company Logo </label>
+                            <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
+
                             {company.logo &&
                                 <img alt="Company logo" className="edit-logo" src={company.logo}/>
                             }
-                            <label htmlFor="companyLogo">Company Logo </label>
                             <ReactS3Uploader
                                 signingUrl="http://localhost:9004/api/imageUploadUrl"
                                 signingUrlMethod="GET"
@@ -117,7 +119,6 @@ class AddCompany extends ControlledForm {
                                 contentDisposition="auto"
                                 onFinish={this.updateLogo}
                             />
-                            <input id="companylogo" type="hidden" name="logo" value={company.logo} onChange={this.handleInputChange}/>
 
                             <label htmlFor="companyNumEmployees">Number of Employees </label>
                             <input id="companyNumEmployees" name="numEmployees" type="text" value={company.numEmployees} onChange={this.handleInputChange}/>
