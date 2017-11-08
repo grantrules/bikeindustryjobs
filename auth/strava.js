@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 
 var config = require('../config');
-var email = require('../email');
+var email = require('../utils/email');
 
 module.exports = {
 
