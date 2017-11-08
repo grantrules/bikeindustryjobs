@@ -1,12 +1,8 @@
 import React from 'react';
-import { withRouter, Route, Link } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import SVGLogo from '../../components/SVGLogo';
-
 import CompanyService from '../../services/companies';
-import JobService from '../../services/jobs';
-
-
 import AddJob from './AddJob'
 import AddCompany from './AddCompany'
 
