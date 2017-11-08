@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { UserLogin } from './routes/UserLogin';
-import { UserProfile } from './routes/UserProfile';
+import { UserProfile } from './routes/profile/UserProfile';
 import { Index } from './routes/Index';
 import { Job } from './routes/Job';
 import { Company } from './routes/Company';

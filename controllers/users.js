@@ -5,7 +5,7 @@ var config = require('../config');
 var User = require('../models/user');
 var Client = require('../models/auth/client');
 
-var email = require('../email');
+var email = require('../utils/email');
 
 // POST /api/users
 // register
