@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer');
-var config = require('./config');
+var config = require('../config');
 
 module.exports = (to, subject, text, html, callback) => {
 
