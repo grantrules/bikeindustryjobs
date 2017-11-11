@@ -19,7 +19,7 @@ class scraper extends Scraper.HTMLScraper {
 		};
 		this.relativelinks = false;
 		this.jobscraper = {
-			title: { selector: ".article h1", how: "text" },
+			title: { selector: ".container h1", how: "text" },
 			description: { selector: "p", how: "html" }
 		};
 	}
