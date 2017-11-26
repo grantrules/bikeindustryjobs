@@ -21,17 +21,15 @@ exports.postUsers = function(req,res) {
 
     User.create(user, function(err, user) {
         if (err) {
-            res.json({err: "error creating user"})
-            /*
-            if (err.errmsg.match(/dup key/)) {
+            if (err.errmsg && err.errmsg.match(/dup key/)) {
                 res.status(400);
                 res.json({err: "account exists"});
             } else {
-                res.send(err);
+                res.status(400);
+                res.json({err: "account creation failed"});
                 console.log(err);
                 console.log(user);
             }
-            */
         }
         else {
 
