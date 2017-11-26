@@ -21,7 +21,7 @@ describe('Routing', () => {
       it('should return error trying to save duplicate email', done => {
           var profile = {
             email: 'test@test.com',
-            password: 'test',
+            password: 'testamundo',
             first_name: 'Valerio',
             last_name: 'Gheri'
           };
