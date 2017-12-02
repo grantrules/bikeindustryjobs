@@ -8,7 +8,7 @@
     "test": "mocha --reporter nyan",
     "start": "pm2 start server.js"
   },
-  "version": "0.5",
+  "version": "1.0.0",
   "dependencies": {
     "aws-sdk": "^2.142.0",
     "body-parser": "^1.17.2",
@@ -24,6 +24,7 @@
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
     "passport-strava-oauth2": "^0.1.3",
+    "pm2": "^2.8.0",
     "sanitize-html": "^1.15.0",
     "scrape-it": "^3.3.2"
   },
