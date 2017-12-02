@@ -53,13 +53,13 @@ class Index extends React.Component {
 
         return (
             <div id="home">
-                <div id="homeheader">
+                <header>
                     <div className="top">
                         <SVGLogo/>
                         <LoginLink name="home" user={props.user} logout={props.logout}/>
                     </div>
                     <span className="headtext">Find your dream job<br/>in the cycling industry</span>
-                </div>
+                </header>
                 <SlideHeader {...props}/>
                 <div id="companies">
                     <a onClick={toggleNav}>Companies ▼</a>

@@ -162,8 +162,8 @@ section.login .strava {
 .loginlink::before { content: "🚪"}
 
 /* login link in homepage banner */
-#homeheader .loginlink,
-#homeheader .loggedin {
+header .loginlink,
+header .loggedin {
 	position:absolute;
 	padding-right:12.5%;
 	top: 25px;
@@ -304,7 +304,7 @@ section.login .strava {
 	width: 100%;
 }
 
-#homeheader {
+header {
 	background-image: url(https://i.imgur.com/07aqlZV.jpg);
 	/* GOOD-ish background-image: url(http://imgur.com/R1uP1Km.jpg);*/
 	/*background-image: url(https://i.imgur.com/cVLJWX9.jpg);*/
@@ -319,13 +319,13 @@ section.login .strava {
 
 }
 
-#homeheader .top button { float: right; }
-#homeheader div.top {
+header .top button { float: right; }
+header div.top {
 	padding: 5px 12.5%;
 	width: 100%;
 	text-align: left;
 }
-#homeheader div.bottom {
+header div.bottom {
 	position: absolute;
 	bottom: 0px;
 	color: white;
@@ -484,7 +484,7 @@ li.job {
 		box-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 	}
 
-	#homeheader { height: 400px; }
+	header { height: 400px; }
 
 	.headtext {
 		position: absolute;
