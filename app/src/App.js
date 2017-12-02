@@ -193,50 +193,46 @@ class App extends React.Component {
 	  
 		return (
 			<Router onUpdate={logPageView}>
-				<div>		
-					<div id="base2">
-						<div className="listthing">
-							{jobs &&
-							<Route exact={true} path="/" render={() => (
-									<Index {...this.state} logout={this.logout.bind(this)}/>
-							)}/>
-							}
-							<Route path="/login" render={() => (
-								<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
-							)}/>
-							<Route path="/auth/:strategy" render={({match }) =>
-								<AuthRoute setUserData={this.setUserData.bind(this)}/>
-							}/>
+				<main>
+					{jobs &&
+					<Route exact={true} path="/" render={() => (
+							<Index {...this.state} logout={this.logout.bind(this)}/>
+					)}/>
+					}
+					<Route path="/login" render={() => (
+						<UserLogin user={user} setUserData={this.setUserData.bind(this)}/>
+					)}/>
+					<Route path="/auth/:strategy" render={({match }) =>
+						<AuthRoute setUserData={this.setUserData.bind(this)}/>
+					}/>
 
-							{user &&
-								<Route path="/profile" render={() => (
-									<UserProfile {...this.state}/>
-								)}/>
-							}
+					{user &&
+						<Route path="/profile" render={() => (
+							<UserProfile {...this.state}/>
+						)}/>
+					}
 
-							{companies &&
-								<Route path="/company/:companyName" render={({ match }) => {
-									var company = companies.find(g => g.company === match.params.companyName);
-									return (
-										<Company logout={this.logout.bind(this)} {...this.state}
-											company={company}
-											onClick={this.toggleTag.bind(this)}
-										/>
-									)
-								}}/>
-							}
+					{companies &&
+						<Route path="/company/:companyName" render={({ match }) => {
+							var company = companies.find(g => g.company === match.params.companyName);
+							return (
+								<Company logout={this.logout.bind(this)} {...this.state}
+									company={company}
+									onClick={this.toggleTag.bind(this)}
+								/>
+							)
+						}}/>
+					}
 
-							{jobs &&
-								<Route path="/job/:jobId" render={({ match }) => {
-									var job = jobs.find(g => g._id === match.params.jobId);
-									return (
-										<Job logout={this.logout.bind(this)} {...this.state} job={job} company={companies.find(g => g.company === job.company)}/>
-									)
-								}} />
-							}
-						</div>
-					</div>
-				</div>
+					{jobs &&
+						<Route path="/job/:jobId" render={({ match }) => {
+							var job = jobs.find(g => g._id === match.params.jobId);
+							return (
+								<Job logout={this.logout.bind(this)} {...this.state} job={job} company={companies.find(g => g.company === job.company)}/>
+							)
+						}} />
+						}
+				</main>
 			</Router>
 		);
   	}
