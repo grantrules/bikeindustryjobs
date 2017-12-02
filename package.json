@@ -5,8 +5,10 @@
   "license": "MIT",
   "repository": "https://github.com/grantrules/bikeindustryjobs/",
   "scripts": {
-    "test": "mocha --reporter nyan"
+    "test": "mocha --reporter nyan",
+    "start": "pm2 start server.js"
   },
+  "version": "0.5",
   "dependencies": {
     "aws-sdk": "^2.142.0",
     "body-parser": "^1.17.2",

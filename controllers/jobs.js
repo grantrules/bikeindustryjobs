@@ -12,7 +12,8 @@ exports.getJobs = (req,res) => {
 		 .sort('-first_seen')
 		 .exec(function(err, jobs) {
 			if (err) {
-				console.log(err);
+				log.error("Error fetching jobs");
+				log.error(err);
 				return res.json({err: "error fetching jobs"});
 			}
 			res.json(jobs);
@@ -35,10 +36,11 @@ exports.postJobs = (req,res) => {
 
 			job.save((err, job) => {
 				if (err) {
-					console.log(err);
+					log.error("Error saving job");
+					log.error(err);
 					return res.json({err: "error saving job"});
 				}
-				console.log(job);
+				log.debug(`saved job ${job._id}`)
 				return res.json(job);
 			})
 		}
@@ -66,6 +68,7 @@ exports.postJob = (req, res) => {
 			Company.findOne({company: job.company, "owners.user_id": req.user._id}, (err,company) => {
 				if (company) {
 					Job.update({_id: id}, update, {}, (err,job) => {
+						log.debug(`job updated ${job._id}`)
 						res.json(err||job);
 					})
 				}
@@ -86,7 +89,8 @@ exports.deleteJob = (req,res) => {
 			if (company) {
 				Job.remove({_id: job_id}).exec(err => {
 					if (err) {
-						console.log(err);
+						log.error("Error removing job");
+						log.error(err);
 						return res.json({err: "error removing job"});
 					}
 					log.debug(`job deleted: job_id: ${req.body.job_id}, user: ${req.user._id}`);		
@@ -103,7 +107,8 @@ exports.deleteJob = (req,res) => {
 exports.getStars = (req, res) => {
 	Star.find({user_id: req.user._id}).select('job_id').exec((err, stars) => {
 		if (err) {
-			console.log(err);
+			log.error("Error finding stars");
+			log.error(err);
 			return res.json({err: "error fetching stars"});
 		}
 		res.json(stars);
@@ -114,6 +119,7 @@ exports.postStars = (req, res) => {
 	var star = new Star({user_id: req.user._id, job_id: req.body.job_id});
 	star.save((err, star) => {
 		if (err) {
+			log.error("Error saving star");
 			log.error(err);
 			return res.json({err: "error saving star"});
 		}
@@ -129,7 +135,8 @@ exports.deleteStar = (req, res) => {
 	}
 	Star.remove({user_id: req.user._id, job_id: req.body.job_id}).exec(err => {
 		if (err) {
-			console.log(err);
+			log.error("Error removing star");
+			log.error(err);
 			return res.json({err: "error removing star"});
 		}
 		log.debug(`star deleted: job_id: ${req.body.job_id}, user: ${req.user._id}`);		

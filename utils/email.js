@@ -22,12 +22,9 @@ module.exports = (to, subject, text, html, callback) => {
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            console.log(error);
             return callback(error);
         }
-        console.log('Message sent: %s', info.messageId);
         callback(false, info);
-        
     });
 }
 

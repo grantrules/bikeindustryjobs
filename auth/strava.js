@@ -4,6 +4,7 @@ var StravaStrategy = require('passport-strava-oauth2').Strategy;
 var mongoose = require('mongoose');
 
 var User = mongoose.model('User');
+var log = require('loglevel');
 
 var config = require('../config');
 var email = require('../utils/email');
@@ -33,24 +34,35 @@ module.exports = {
             //process.nextTick(() => {
 
                 // create user if email doesn't exist in database
-                console.log(profile);
 
                 var email = profile._json.email;
                 var first_name = profile._json.firstname;
                 var last_name = profile._json.lastname;
                 var apilogin = {strava: profile._json}
 
-                console.log(`found strava user ${email}`)
                 User.findOne({email}, (err, user) => {
                     if (err) {
-                        console.log(err);
+                        log.error("User search error")
+                        log.error(err);
                     } else {
 
                         if (!user) {
                             // create user if it doesn't exist
                             user = new User({email, first_name, last_name, apilogin});
                             User.create(user, (err,user)=>{
-                                email(`"${first_name} ${last_name}" <${email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) })
+                                email(
+                                    `"${first_name} ${last_name}" <${email}>`,
+                                    "Welcome to careers.bike!",
+                                    "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/",
+                                    "",
+                                    (err,info) => {
+                                        if (err) {
+                                            log.error("Error logging in with strava");
+                                            log.error(err);
+                                        } else {
+                                            log.debug(`email sent succesfully ${info.messageId}`)
+                                        }
+                                    })
                                 return done(null, user);
                             })
                         } else {

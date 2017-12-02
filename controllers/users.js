@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
+var log = require('loglevel');
 
 var config = require('../config');
 var User = require('../models/user');
@@ -17,7 +18,7 @@ exports.postUsers = function(req,res) {
         hashed_password: User.hashPassword(req.body.password)
     }
     
-    console.log(`registering user ${user.email}`);
+    log.debug(`registering user ${user.email}`);
 
     User.create(user, function(err, user) {
         if (err) {
@@ -27,13 +28,26 @@ exports.postUsers = function(req,res) {
             } else {
                 res.status(400);
                 res.json({err: "account creation failed"});
-                console.log(err);
-                console.log(user);
+                log.error("User creation failed");
+                log.error(err);
             }
         }
         else {
 
-            email(`"${user.first_name} ${user.last_name}" <${user.email}>`, "Welcome to careers.bike!", "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/","",(err,info) => { console.log(err||info) });
+            email(
+                `"${user.first_name} ${user.last_name}" <${user.email}>`,
+                 "Welcome to careers.bike!",
+                 "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/",
+                 "",
+                 (err,info) => {
+                        if (err) {
+                            log.error("Error sending email")
+                            log.error(err);
+                        } else {
+                            log.debug(`sent registration email to ${user.email}`)
+                        }
+                    }
+            );
             
             user.hashed_password = null;
 
@@ -47,8 +61,8 @@ exports.postUsers = function(req,res) {
     
             client.save((err, client) => {
                 if (err) {
-                    console.log("error creating client");
-                    console.log(err);
+                    log.error("error creating client");
+                    log.error(err);
                 } else {
                     res.json({
                         user: user,
@@ -98,7 +112,8 @@ exports.postLogin = (req, res) => {
                 refresh_token: refresh_token
             });
         } else {
-            console.log(`error creating client on login: ${err}`);
+            log.error(`error creating client on login`);
+            log.error(err);
             res.json({err: "Cannot create client"});
         }
     });
@@ -112,7 +127,7 @@ exports.deleteClient = (req, res) => {
     var id = req.user._id;
     Client.findOneAndRemove({_id: req.body.client_id, user_id: id}, err => {
         if (err) {
-            console.log("error deleting client");
+            log.error("error deleting client");
             res.json({'error': "Error logging out"});
         } else {
             res.json({'success': "Logged out"});

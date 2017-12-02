@@ -117,7 +117,8 @@ exports.getImageUploadUrl = function(req,res) {
     
     s3.getSignedUrl('putObject', s3params, function(err,data) {
         if (err) {
-            console.log(err);
+			log.error("Error storing data in s3");
+			log.error(err);
             return res.json(err);
         }
         
