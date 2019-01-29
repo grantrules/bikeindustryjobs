@@ -5,9 +5,9 @@ require('dotenv').config()
 
 module.exports = {
     'secret': process.env.SECRET,
-    'mongodb': '127.0.0.1/bikeindustryjobs',
-    'fromEmail': '"Grant at careers.bike" <info@careers.bike>',
-    'JWTsecret': 'whoputthebompinthebompdabompdabomp',
+    'mongodb': process.env.MONGO_URL,
+    'fromEmail':  process.env.FROM_EMAIL,
+    'JWTsecret':  process.env.JWT_SECRET,
     'GOOGLE_CLIENT_ID': process.env.GOOGLE_CLIENT_ID,
     'GOOGLE_CLIENT_SECRET': process.env.GOOGLE_CLIENT_SECRET,
     'AWSACCESSKEYID': process.env.AWSACCESSKEYID,
