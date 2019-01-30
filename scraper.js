@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
+var config = require('./config');
 var Job = require('./models/job');
 var Company = require('./models/company');
 
 var test = false;
 
-if (!test) mongoose.connect('mongodb://127.0.0.1/bikeindustryjobs');
+if (!test) mongoose.connect(config.mongodb);
 
 /*
 ^--- seem good to go
