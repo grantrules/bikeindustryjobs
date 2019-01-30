@@ -8,21 +8,15 @@ Currently running http://careers.bike/
 ### to run:
 
 ```
-npm install
-node scraper.js
-node server.js &
-cd app
-npm install
-npm run build
+docker-compose up -d
 ```
 
 node will be running on port 9004
-frontend will be in app/build
+frontend will be running on port 8000
 
 ### nginx config on ubuntu:
 
 ```
-proxy_cache_path  /data/nginx/cache  levels=1:2    keys_zone=STATIC:10m inactive=24h  max_size=1g;
 server {
         listen 80;
         listen [::]:80;
@@ -39,17 +33,10 @@ server {
 
         location /api {
           proxy_pass http://localhost:9004;
-          proxy_cache            STATIC;
-          proxy_cache_valid      200  1h;
-          proxy_cache_use_stale  error timeout invalid_header updating
-                                   http_500 http_502 http_503 http_504;
         }
         
         location / {
-                root /home/grant/careers.bike/bikeindustryjobs/app/build;
-                index index.html;
-                try_files $uri $uri/ /index.html;
-        }
-        
+          proxy_pass http://localhost:8000;
+        }        
 }
 ```
