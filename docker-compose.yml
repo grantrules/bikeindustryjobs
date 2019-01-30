@@ -1,0 +1,19 @@
+version: '3'
+services:
+  api: 
+    image: cbapi 
+    restart: unless-stopped
+    ports:
+      - "9004:9004"
+
+  frontend:
+    image: cbfrontend
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    #ports:
+    #  - "27017:27017"
