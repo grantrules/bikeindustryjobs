@@ -7,7 +7,7 @@ var User = mongoose.model('User');
 var log = require('loglevel');
 
 var config = require('../config');
-var email = require('../utils/email');
+var sendemail = require('../utils/email');
 
 module.exports = {
 
@@ -50,7 +50,7 @@ module.exports = {
                             // create user if it doesn't exist
                             user = new User({email, first_name, last_name, apilogin});
                             User.create(user, (err,user)=>{
-                                email(
+                                sendemail(
                                     `"${first_name} ${last_name}" <${email}>`,
                                     "Welcome to careers.bike!",
                                     "Thanks for registering!\n\nYou can now save jobs or post jobs for free!\n\nhttp://careers.bike/profile/",

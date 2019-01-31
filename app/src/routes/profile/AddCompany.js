@@ -43,7 +43,6 @@ class AddCompany extends ControlledForm {
     }
 
     updateLogo(data) {
-        //alert(data.fileName);
         this.setState({logo: data.fileName});
     }
         
@@ -59,7 +58,6 @@ class AddCompany extends ControlledForm {
                 if (err) {
                     this.error("Error updating company");
                 }
-                //alert(err||company);
             });
         } else {
             CompanyService.postCompany(data, (err,company) => {
