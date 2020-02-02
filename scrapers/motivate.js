@@ -17,7 +17,7 @@ class scraper extends Scraper.HTMLScraper {
 					},
 					title: { selector: ".posting-title a" },
 					description: { selector: ".posting-description" },
-					location: { selector: ".posting-location"}
+					location: { selector: ".location"}
 				}
 			}
 		};
