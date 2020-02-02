@@ -79,7 +79,7 @@ class HTMLScraper extends Scraper {
 			return console.log(err);
 		}
 
-		var urls = page.urls.filter(url => url.url);
+		var urls = page.data.urls.filter(url => url.url);
 		urls = urls.map(this.fixUrl.bind(this));
 
 		console.log(`found ${urls.length} ${this.company} jobs`);
@@ -106,10 +106,10 @@ class HTMLScraper extends Scraper {
 		if (!err) {
 			var jobData = {
 				url: url.url,
-				title: page.title || url.title,
-				description: page.description || url.description,
+				title: page.data.title || url.title,
+				description: page.data.description || url.description,
 				company: this.company,
-				location: page.location || url.location,
+				location: page.data.location || url.location,
 				last_seen: new Date(),
 			};
 			this.saveJobCallback(jobData);

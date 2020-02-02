@@ -8,7 +8,7 @@ const HistoryLink = withRouter(({history, ...props}) => {
 	var domain = `${window.location.protocol}//${window.location.host}`;
 	var redirectAfterAuth = props.last_url || domain;
 	var redirect_uri = `${domain}/auth/${props.strategy}?redirect_to=${encodeURIComponent(redirectAfterAuth)}`
-	var link = `https://www.strava.com/oauth/authorize?client_id=20313&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=write&state=mystate&approval_prompt=force`
+        var link = `https://www.strava.com/oauth/authorize?client_id=20313&response_type=code&redirect_uri=${encodeURIComponent(redirect_uri)}&scope=read&state=mystate&approval_prompt=force`
 
 	return (<a className="auth strava" href={link}>Log in with Strava</a>);
 

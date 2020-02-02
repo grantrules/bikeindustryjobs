@@ -5,25 +5,24 @@ class scraper extends Scraper.HTMLScraper {
 	
 	constructor(company) {
 		super(company);
-		this.jobs_url = 'http://pages.rapha.cc/jobs';
+		this.jobs_url = 'https://boards.greenhouse.io/rapha';
+		this.baseurl = 'https://boards.greenhouse.io/';
 		this.listscraper = {
 			urls: {
-				listItem: ".jobs-block",
+				listItem: ".opening",
 				data: {
 					url: {
 						selector: "a",
 						attr: "href"
-					},
-					location: {
-						selector: "p"
 					}
 				}
 			}
-		};
-		this.relativelinks = false;
+		 };
+		this.relativelinks = true;
 		this.jobscraper = {
-			title: { selector: "h1.app-title"},
-			description: { selector: "#content", how: "html" }
+			title: { selector: ".app-title" },
+			description: { selector: "#content", how: "html" },
+			location: { selector: ".location", how:"html" }
 		};
 	}
 }
